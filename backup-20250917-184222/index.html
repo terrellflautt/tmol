@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terrell K. Flautt | Lead DevOps Engineer</title>
+    <meta name="description" content="Terrell K. Flautt - Lead DevOps Engineer specializing in cloud infrastructure, automation, and innovative web solutions.">
+    <meta name="keywords" content="DevOps, Cloud Infrastructure, AWS, Automation, Web Development">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="easter-eggs.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+    <div class="cursor-follower"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">T.K.</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="particles-container">
+            <canvas id="particles"></canvas>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="title-line">Terrell K. Flautt</span>
+                    <span class="title-line">Lead DevOps</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Building your world with magical design.
+                </p>
+                <div class="hero-cta">
+                    <span class="cta-question">What do you want to build today?</span>
+                    <a href="#contact" class="btn btn-primary">Let's Create</a>
+                    <a href="#projects" class="btn btn-secondary">View Projects</a>
+                    <button class="btn btn-transcendental" id="transcendental-trigger">
+                        <span class="btn-transcendental-text">Begin Your Journey</span>
+                        <span class="btn-transcendental-icon">✨</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About</h2>
+                <div class="section-subtitle">Lead DevOps</div>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <div class="about-intro">
+                    </div>
+                    <div class="skills-grid">
+                        <div class="skill-category">
+                            <h3>Cloud Platforms</h3>
+                            <div class="skill-items">
+                                <span class="skill-item">AWS</span>
+                                <span class="skill-item">GCP</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <h3>Specialty</h3>
+                            <div class="skill-items">
+                                <span class="skill-item">Serverless</span>
+                                <span class="skill-item">Web Apps</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <h3>Automation</h3>
+                            <div class="skill-items">
+                                <span class="skill-item">CI/CD</span>
+                                <span class="skill-item">GitHub Actions</span>
+                            </div>
+                        </div>
+                        <div class="skill-category">
+                            <h3>Development</h3>
+                            <div class="skill-items">
+                                <span class="skill-item">React</span>
+                                <span class="skill-item">Tailwind CSS</span>
+                                <span class="skill-item">Python</span>
+                                <span class="skill-item">JavaScript</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <div class="terminal-controls">
+                                <span class="control close"></span>
+                                <span class="control minimize"></span>
+                                <span class="control maximize"></span>
+                            </div>
+                            <div class="terminal-title">terrell@devops:~$</div>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="terminal-line">
+                                <span class="prompt">$</span>
+                                <span class="command">whoami</span>
+                            </div>
+                            <div class="terminal-output">Lead DevOps Engineer</div>
+                            <div class="terminal-line">
+                                <span class="prompt">$</span>
+                                <span class="command">cat mission.txt</span>
+                            </div>
+                            <div class="terminal-output">Building scalable, beautiful infrastructure that empowers innovation</div>
+                            <div class="terminal-line">
+                                <span class="prompt">$</span>
+                                <span class="command typing">kubectl get inspiration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Projects</h2>
+                <div class="section-subtitle">Portfolio</div>
+            </div>
+
+            <!-- Featured Project -->
+            <div class="featured-project">
+                <div class="project-card flagship">
+                    <div class="project-header">
+                        <h3>nickelpie.com</h3>
+                        <span class="project-type flagship-badge">Flagship Platform</span>
+                    </div>
+                    <p class="project-description">Financial technology platform.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">AWS</span>
+                        <span class="tech-tag">Kubernetes</span>
+                        <span class="tech-tag">CI/CD</span>
+                        <span class="tech-tag">Microservices</span>
+                        <span class="tech-tag">Security</span>
+                    </div>
+                    <a href="https://nickelpie.com" class="project-link" target="_blank">
+                        <span>Explore Platform</span>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Project Categories -->
+            <div class="project-categories">
+                <!-- SnapIt Ecosystem -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <h3 class="category-title">SnapIt Ecosystem</h3>
+                        <p class="category-description">Business automation tools</p>
+                    </div>
+                    <div class="projects-grid snapit-grid">
+                        <div class="project-card snapit-card">
+                            <div class="project-header">
+                                <h4>SnapIt Software</h4>
+                                <span class="project-type">Core Platform</span>
+                            </div>
+                            <p class="project-description">Central hub.</p>
+                            <a href="https://snapitsoftware.com" class="project-link" target="_blank">
+                                <span>Visit</span>
+                                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div class="project-card snapit-card">
+                            <div class="project-header">
+                                <h4>SnapIt SaaS</h4>
+                                <span class="project-type">SaaS Portal</span>
+                            </div>
+                            <p class="project-description">Enterprise portal.</p>
+                            <a href="https://snapitsaas.com" class="project-link" target="_blank">
+                                <span>Visit</span>
+                                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div class="project-card snapit-card">
+                            <div class="project-header">
+                                <h4>SnapIt Forms</h4>
+                                <span class="project-type">Form Builder</span>
+                            </div>
+                            <p class="project-description">Form builder.</p>
+                            <a href="https://snapitforms.com" class="project-link" target="_blank">
+                                <span>Visit</span>
+                                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div class="project-card snapit-card">
+                            <div class="project-header">
+                                <h4>SnapIt QR</h4>
+                                <span class="project-type">QR Generator</span>
+                            </div>
+                            <p class="project-description">QR generator.</p>
+                            <a href="https://snapitqr.com" class="project-link" target="_blank">
+                                <span>Visit</span>
+                                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div class="project-card snapit-card">
+                            <div class="project-header">
+                                <h4>SnapIt URL</h4>
+                                <span class="project-type">URL Shortener</span>
+                            </div>
+                            <p class="project-description">URL shortener.</p>
+                            <a href="https://snapiturl.com" class="project-link" target="_blank">
+                                <span>Visit</span>
+                                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div class="project-card snapit-card">
+                            <div class="project-header">
+                                <h4>SnapIt Analytics</h4>
+                                <span class="project-type">Analytics Engine</span>
+                            </div>
+                            <p class="project-description">Analytics platform.</p>
+                            <a href="https://snapitanalytics.com" class="project-link" target="_blank">
+                                <span>Visit</span>
+                                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div class="project-card snapit-card">
+                            <div class="project-header">
+                                <h4>SnapIt Agent</h4>
+                                <span class="project-type">AI Assistant</span>
+                            </div>
+                            <p class="project-description">AI automation.</p>
+                            <a href="https://snapitagent.com" class="project-link" target="_blank">
+                                <span>Visit</span>
+                                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Specialized Tools -->
+                <div class="category-section">
+                    <div class="category-header">
+                        <h3 class="category-title">Specialized Tools</h3>
+                        <p class="category-description">Purpose-built applications</p>
+                    </div>
+                    <div class="projects-grid tools-grid">
+                        <div class="project-card">
+                            <div class="project-header">
+                                <h4>URL Status Checker</h4>
+                                <span class="project-type">Monitoring</span>
+                            </div>
+                            <p class="project-description">Website monitoring.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">Real-time</span>
+                                <span class="tech-tag">Monitoring</span>
+                                <span class="tech-tag">Alerts</span>
+                            </div>
+                            <a href="https://urlstatuschecker.com" class="project-link" target="_blank">
+                                <span>Check Status</span>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-header">
+                                <h4>HackerQuest</h4>
+                                <span class="project-type">Text RPG</span>
+                            </div>
+                            <p class="project-description">Text-based RPG.</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">Text-based</span>
+                                <span class="tech-tag">RPG</span>
+                                <span class="tech-tag">Adventure</span>
+                            </div>
+                            <a href="https://hackerquest.online" class="project-link" target="_blank">
+                                <span>Play Game</span>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Stats -->
+            <div class="project-stats">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label">Active Projects</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">SnapIt Services</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Cloud Native</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Monitoring</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Contact</h2>
+                <div class="section-subtitle">What do you want to build today?</div>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-label">Email</div>
+                        <div class="contact-links">
+                            <a href="mailto:tkflau@protonmail.com">tkflau@protonmail.com</a>
+                            <a href="mailto:Terrell.Flautt@gmail.com">Terrell.Flautt@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-label">Phone</div>
+                        <a href="tel:+17373000567">(737) 300-0567</a>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-label">Project Inquiries</div>
+                        <a href="mailto:birthmybuild@gmail.com">birthmybuild@gmail.com</a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                        <!-- Web3Forms Access Key -->
+                        <input type="hidden" name="access_key" value="0da4e560-820a-4b81-8b85-91a90e019e01">
+
+                        <!-- Optional: Redirect after successful submission -->
+                        <input type="hidden" name="redirect" value="https://terrellflautt.com#contact">
+
+                        <!-- Optional: Custom subject line -->
+                        <input type="hidden" name="subject" value="New Contact Form Submission from terrellflautt.com">
+
+                        <!-- Optional: From name for email -->
+                        <input type="hidden" name="from_name" value="Terrell Flautt Contact Form">
+
+                        <!-- Honeypot field for spam protection -->
+                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" required>
+                            <label for="name">Your Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" required>
+                            <label for="email">Your Email</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="phone" name="phone" placeholder=" ">
+                            <label for="phone">Phone Number (Optional)</label>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" required placeholder=" "></textarea>
+                            <label for="message">Your Message</label>
+                        </div>
+
+                        <div class="form-status" id="formStatus"></div>
+
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <span class="btn-text">Send Message</span>
+                            <span class="btn-loading" style="display: none;">Sending...</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2025 Terrell K. Flautt</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="easter-eggs.js"></script>
+</body>
+</html>
