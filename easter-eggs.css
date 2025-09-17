@@ -509,6 +509,176 @@
     }
 }
 
+/* AI Wisdom Easter Egg Overlay */
+.ai-wisdom-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(60,60,60,0.9) 100%);
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: transcendentalFadeIn 0.8s ease-out;
+    backdrop-filter: blur(15px);
+}
+
+.ai-wisdom-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border: 3px solid #00ffff;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow:
+        0 0 100px rgba(0, 255, 255, 0.6),
+        0 0 200px rgba(0, 255, 255, 0.3),
+        inset 0 0 60px rgba(0, 255, 255, 0.1);
+    animation: aiWisdomGlow 3s infinite ease-in-out;
+}
+
+.ai-wisdom-header {
+    background: linear-gradient(135deg, #00ffff, #4ecdc4);
+    padding: 1.5rem;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 17px 17px 0 0;
+}
+
+.ai-wisdom-title {
+    color: #000;
+    font-family: var(--font-mono);
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-shadow: 0 0 20px rgba(255,255,255,0.5);
+    animation: titlePulse 2s infinite ease-in-out;
+}
+
+.close-ai-wisdom {
+    background: rgba(0,0,0,0.2);
+    border: none;
+    color: #000;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.close-ai-wisdom:hover {
+    background: rgba(255,0,0,0.8);
+    color: white;
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 0 20px rgba(255,0,0,0.6);
+}
+
+.ai-wisdom-content {
+    padding: 2rem;
+    color: white;
+    font-family: var(--font-primary);
+}
+
+.wisdom-quote {
+    position: relative;
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(0,255,255,0.1), rgba(0,255,255,0.05));
+    border-radius: 15px;
+    border: 1px solid rgba(0,255,255,0.3);
+}
+
+.quote-mark {
+    font-size: 4rem;
+    color: #00ffff;
+    font-family: serif;
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    opacity: 0.6;
+}
+
+.quote-end {
+    top: auto;
+    bottom: -30px;
+    left: auto;
+    right: 20px;
+    transform: rotate(180deg);
+}
+
+.wisdom-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #f8f9fa;
+    font-style: italic;
+    margin: 1rem 0;
+    padding: 0 2rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.wisdom-author {
+    text-align: right;
+    margin-bottom: 2rem;
+    padding-right: 1rem;
+}
+
+.wisdom-author span {
+    color: #4ecdc4;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.wisdom-discovery {
+    background: rgba(255,255,255,0.05);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border-left: 4px solid #00ffff;
+    margin-bottom: 2rem;
+}
+
+.wisdom-discovery p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.wisdom-ascii {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #4ecdc4;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.wisdom-ascii pre {
+    margin: 0;
+    text-shadow: 0 0 10px rgba(78,205,196,0.5);
+    white-space: pre;
+}
+
+@keyframes aiWisdomGlow {
+    0%, 100% {
+        box-shadow:
+            0 0 100px rgba(0, 255, 255, 0.6),
+            0 0 200px rgba(0, 255, 255, 0.3),
+            inset 0 0 60px rgba(0, 255, 255, 0.1);
+    }
+    50% {
+        box-shadow:
+            0 0 120px rgba(0, 255, 255, 0.8),
+            0 0 240px rgba(0, 255, 255, 0.4),
+            inset 0 0 80px rgba(0, 255, 255, 0.15);
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .transcendental-container {
@@ -547,6 +717,29 @@
     .trait-name {
         min-width: auto;
         text-align: center;
+    }
+
+    .ai-wisdom-container {
+        width: 98%;
+        margin: 1rem;
+    }
+
+    .ai-wisdom-content {
+        padding: 1.5rem;
+    }
+
+    .wisdom-text {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+
+    .quote-mark {
+        font-size: 3rem;
+        left: 10px;
+    }
+
+    .quote-end {
+        right: 10px;
     }
 }
 

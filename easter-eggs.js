@@ -735,6 +735,9 @@ class EasterEggSystem {
         this.konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
         this.konamiIndex = 0;
         this.secretClicks = 0;
+        this.aiWisdomTrigger = [];
+        this.aiWisdomSequence = [65, 73]; // A, I keys
+        this.aiWisdomCount = 0;
         this.initializeEasterEggs();
     }
 
@@ -809,6 +812,31 @@ class EasterEggSystem {
                 this.activateMatrixMode();
             }
         });
+
+        // AI Wisdom Easter Egg - type "AI" three times quickly
+        document.addEventListener('keydown', (e) => {
+            // Check for A then I sequence
+            if (e.keyCode === 65) { // A key
+                this.aiWisdomTrigger = [65];
+            } else if (e.keyCode === 73 && this.aiWisdomTrigger.length === 1 && this.aiWisdomTrigger[0] === 65) { // I key after A
+                this.aiWisdomCount++;
+                this.aiWisdomTrigger = [];
+
+                if (this.aiWisdomCount === 3) {
+                    this.revealAIWisdom();
+                    this.aiWisdomCount = 0;
+                }
+
+                // Reset count after 5 seconds if not completed
+                setTimeout(() => {
+                    if (this.aiWisdomCount < 3) {
+                        this.aiWisdomCount = 0;
+                    }
+                }, 5000);
+            } else {
+                this.aiWisdomTrigger = [];
+            }
+        });
     }
 
     activateHackerMode() {
@@ -876,6 +904,70 @@ class EasterEggSystem {
                 }, 3000);
             }, 500);
         }
+    }
+
+    revealAIWisdom() {
+        const overlay = document.createElement('div');
+        overlay.className = 'ai-wisdom-overlay';
+        overlay.innerHTML = `
+            <div class="ai-wisdom-container">
+                <div class="ai-wisdom-header">
+                    <h2 class="ai-wisdom-title">🤖 AI Wisdom Unlocked 🤖</h2>
+                    <button class="close-ai-wisdom">&times;</button>
+                </div>
+                <div class="ai-wisdom-content">
+                    <div class="wisdom-quote">
+                        <div class="quote-mark">"</div>
+                        <p class="wisdom-text">
+                            Sometimes when you are having trouble with AI, all you need to do is wait for it to get smarter.
+                            3 months from now what you are doing now will look like child's play.
+                        </p>
+                        <div class="quote-mark quote-end">"</div>
+                    </div>
+                    <div class="wisdom-author">
+                        <span>— Terrell K. Flautt, Tech King</span>
+                    </div>
+                    <div class="wisdom-discovery">
+                        <p>🎉 <strong>Secret Discovery:</strong> You typed "AI" three times! This wisdom is for those struggling with artificial intelligence challenges.</p>
+                        <p>✨ <em>Remember: AI is rapidly evolving. Today's limitations are tomorrow's foundations.</em></p>
+                    </div>
+                    <div class="wisdom-ascii">
+                        <pre>
+    ┌─────────────────────────────────┐
+    │  🤖 AI EVOLUTION TIMELINE 🤖    │
+    │                                 │
+    │  Today → 3 Months → Future      │
+    │    ↓        ↓         ↓        │
+    │ Struggle  Growth   Mastery      │
+    │                                 │
+    │ "Intelligence amplifies with    │
+    │  time, patience, and wisdom"    │
+    └─────────────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        overlay.querySelector('.close-ai-wisdom').addEventListener('click', () => {
+            document.body.removeChild(overlay);
+        });
+
+        // Auto-close after 15 seconds
+        setTimeout(() => {
+            if (overlay.parentNode) {
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 1s ease';
+                setTimeout(() => {
+                    if (overlay.parentNode) {
+                        document.body.removeChild(overlay);
+                    }
+                }, 1000);
+            }
+        }, 15000);
+
+        console.log('🤖 AI Wisdom Easter Egg Activated! You discovered the secret by typing "AI" three times.');
     }
 
     activateMatrixMode() {
