@@ -85,12 +85,30 @@ class TranscendentalExperience {
     }
 
     setupEventListeners() {
-        document.addEventListener('DOMContentLoaded', () => {
-            const trigger = document.getElementById('transcendental-trigger');
-            if (trigger) {
-                trigger.addEventListener('click', () => this.startJourney());
-            }
-        });
+        // Set up immediately since DOM is already loaded when this runs
+        const trigger = document.getElementById('transcendental-trigger');
+        if (trigger) {
+            console.log('✨ Transcendental button found and connected!');
+            trigger.addEventListener('click', () => {
+                console.log('🚀 Journey starting...');
+                this.startJourney();
+            });
+        } else {
+            console.log('⚠️ Transcendental button not found immediately, retrying...');
+            // If not found immediately, wait a bit and try again
+            setTimeout(() => {
+                const delayedTrigger = document.getElementById('transcendental-trigger');
+                if (delayedTrigger) {
+                    console.log('✨ Transcendental button found on retry!');
+                    delayedTrigger.addEventListener('click', () => {
+                        console.log('🚀 Journey starting...');
+                        this.startJourney();
+                    });
+                } else {
+                    console.error('❌ Transcendental button not found!');
+                }
+            }, 100);
+        }
     }
 
     startJourney() {
