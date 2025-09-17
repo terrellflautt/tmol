@@ -738,6 +738,8 @@ class EasterEggSystem {
         this.aiWisdomTrigger = [];
         this.aiWisdomSequence = [65, 73]; // A, I keys
         this.aiWisdomCount = 0;
+        this.aiWisdomLevel = 1; // Track which level of wisdom to show
+        this.hasSeenFirstWisdom = false;
         this.initializeEasterEggs();
     }
 
@@ -823,8 +825,17 @@ class EasterEggSystem {
                 this.aiWisdomTrigger = [];
 
                 if (this.aiWisdomCount === 3) {
-                    this.revealAIWisdom();
+                    this.revealAIWisdom(this.aiWisdomLevel);
                     this.aiWisdomCount = 0;
+
+                    // Progress to next level after first viewing
+                    if (this.aiWisdomLevel === 1) {
+                        this.hasSeenFirstWisdom = true;
+                        this.aiWisdomLevel = 2;
+                    } else {
+                        // Cycle back to level 1 after level 2
+                        this.aiWisdomLevel = this.aiWisdomLevel === 2 ? 1 : 2;
+                    }
                 }
 
                 // Reset count after 5 seconds if not completed
@@ -906,21 +917,22 @@ class EasterEggSystem {
         }
     }
 
-    revealAIWisdom() {
+    revealAIWisdom(level = 1) {
+        const wisdomData = this.getWisdomContent(level);
+
         const overlay = document.createElement('div');
         overlay.className = 'ai-wisdom-overlay';
         overlay.innerHTML = `
             <div class="ai-wisdom-container">
                 <div class="ai-wisdom-header">
-                    <h2 class="ai-wisdom-title">🤖 AI Wisdom Unlocked 🤖</h2>
+                    <h2 class="ai-wisdom-title">${wisdomData.title}</h2>
                     <button class="close-ai-wisdom">&times;</button>
                 </div>
                 <div class="ai-wisdom-content">
                     <div class="wisdom-quote">
                         <div class="quote-mark">"</div>
                         <p class="wisdom-text">
-                            Sometimes when you are having trouble with AI, all you need to do is wait for it to get smarter.
-                            3 months from now what you are doing now will look like child's play.
+                            ${wisdomData.quote}
                         </p>
                         <div class="quote-mark quote-end">"</div>
                     </div>
@@ -928,23 +940,18 @@ class EasterEggSystem {
                         <span>— Terrell K. Flautt, Tech King</span>
                     </div>
                     <div class="wisdom-discovery">
-                        <p>🎉 <strong>Secret Discovery:</strong> You typed "AI" three times! This wisdom is for those struggling with artificial intelligence challenges.</p>
-                        <p>✨ <em>Remember: AI is rapidly evolving. Today's limitations are tomorrow's foundations.</em></p>
+                        <p>🎉 <strong>Secret Discovery:</strong> ${wisdomData.discovery}</p>
+                        <p>✨ <em>${wisdomData.insight}</em></p>
+                        ${level === 2 ? '<p>🔥 <strong>Advanced Wisdom Unlocked!</strong> You\'ve progressed to the next level of AI enlightenment.</p>' : ''}
                     </div>
                     <div class="wisdom-ascii">
-                        <pre>
-    ┌─────────────────────────────────┐
-    │  🤖 AI EVOLUTION TIMELINE 🤖    │
-    │                                 │
-    │  Today → 3 Months → Future      │
-    │    ↓        ↓         ↓        │
-    │ Struggle  Growth   Mastery      │
-    │                                 │
-    │ "Intelligence amplifies with    │
-    │  time, patience, and wisdom"    │
-    └─────────────────────────────────┘
-                        </pre>
+                        <pre>${wisdomData.ascii}</pre>
                     </div>
+                    ${level === 2 && !this.hasSeenFirstWisdom ? `
+                        <div class="wisdom-hint">
+                            <p>💡 <strong>Hint:</strong> Type "AI" three times again to discover more wisdom...</p>
+                        </div>
+                    ` : ''}
                 </div>
             </div>
         `;
@@ -967,7 +974,47 @@ class EasterEggSystem {
             }
         }, 15000);
 
-        console.log('🤖 AI Wisdom Easter Egg Activated! You discovered the secret by typing "AI" three times.');
+        console.log(`🤖 AI Wisdom Level ${level} Easter Egg Activated! You discovered the secret by typing "AI" three times.`);
+    }
+
+    getWisdomContent(level) {
+        if (level === 1) {
+            return {
+                title: '🤖 AI Wisdom Unlocked 🤖',
+                quote: 'Sometimes when you are having trouble with AI, all you need to do is wait for it to get smarter. 3 months from now what you are doing now will look like child\'s play.',
+                discovery: 'You typed "AI" three times! This wisdom is for those struggling with artificial intelligence challenges.',
+                insight: 'Remember: AI is rapidly evolving. Today\'s limitations are tomorrow\'s foundations.',
+                ascii: `
+    ┌─────────────────────────────────┐
+    │  🤖 AI EVOLUTION TIMELINE 🤖    │
+    │                                 │
+    │  Today → 3 Months → Future      │
+    │    ↓        ↓         ↓        │
+    │ Struggle  Growth   Mastery      │
+    │                                 │
+    │ "Intelligence amplifies with    │
+    │  time, patience, and wisdom"    │
+    └─────────────────────────────────┘`
+            };
+        } else {
+            return {
+                title: '🧠 Advanced AI Wisdom 🧠',
+                quote: 'If what you are doing now, doesn\'t look like child\'s play 3 months from now... Do something else.',
+                discovery: 'You\'ve unlocked the advanced AI wisdom! This is for those ready to make strategic pivots.',
+                insight: 'True wisdom is knowing when to persist and when to pivot. If progress isn\'t exponential, redirect your energy.',
+                ascii: `
+    ┌─────────────────────────────────┐
+    │  🧠 THE PIVOT PRINCIPLE 🧠      │
+    │                                 │
+    │  Current → Evaluate → Pivot     │
+    │     ↓          ↓        ↓      │
+    │   Assess    Progress?  Redirect │
+    │                                 │
+    │ "Strategic pivots separate      │
+    │  the wise from the stubborn"    │
+    └─────────────────────────────────┘`
+            };
+        }
     }
 
     activateMatrixMode() {
