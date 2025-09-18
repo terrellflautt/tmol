@@ -2,6 +2,12 @@
 
 Terrell K. Flautt's peice of the interwebs built with cutting-edge web technologies and deployed on AWS CloudFront.
 
+My code is my gift to you, use it/edit how you please for your own purpose. 
+I appreciate it if you credit me and send support my way:
+http://terrellflautt.com/contribute.html
+
+
+
 ## 🎨 Features
 
 - **Interactive Particle System**: Dynamic particle animations that respond to mouse movement
