@@ -225,6 +225,11 @@ class TranscendentalExperience {
             .sort(([,a], [,b]) => b - a)
             .slice(0, 3);
 
+        // Save journey progress
+        if (window.userJourney) {
+            window.userJourney.saveTranscendentalProgress(this.answers, this.personalityProfile, dominantTrait);
+        }
+
         // Generate multi-layered experience
         const primaryExperience = this.rewardGenerators[dominantTrait] ?
             this.rewardGenerators[dominantTrait](sortedTraits) :
@@ -851,6 +856,11 @@ class EasterEggSystem {
     }
 
     activateHackerMode() {
+        // Track easter egg discovery
+        if (window.userJourney) {
+            window.userJourney.markEasterEggFound('konamiCode');
+        }
+
         const overlay = document.createElement('div');
         overlay.className = 'hacker-mode-overlay';
         overlay.innerHTML = `
@@ -880,6 +890,11 @@ class EasterEggSystem {
     }
 
     revealTechKing() {
+        // Track easter egg discovery
+        if (window.userJourney) {
+            window.userJourney.markEasterEggFound('techKingReveal');
+        }
+
         const logo = document.querySelector('.logo-text');
         if (logo) {
             logo.style.transform = 'scale(1.2)';
@@ -974,6 +989,11 @@ class EasterEggSystem {
             }
         }, 15000);
 
+        // Track easter egg discovery
+        if (window.userJourney) {
+            window.userJourney.markEasterEggFound(level === 1 ? 'aiWisdomLevel1' : 'aiWisdomLevel2');
+        }
+
         console.log(`🤖 AI Wisdom Level ${level} Easter Egg Activated! You discovered the secret by typing "AI" three times.`);
     }
 
@@ -1018,6 +1038,11 @@ class EasterEggSystem {
     }
 
     activateMatrixMode() {
+        // Track easter egg discovery
+        if (window.userJourney) {
+            window.userJourney.markEasterEggFound('matrixMode');
+        }
+
         const matrix = document.createElement('div');
         matrix.className = 'matrix-overlay';
         matrix.innerHTML = `
@@ -1044,6 +1069,12 @@ class EasterEggSystem {
         ];
 
         const reward = rewards[Math.floor(Math.random() * rewards.length)];
+
+        // Track hidden symbol discovery
+        if (window.userJourney) {
+            window.userJourney.addHiddenSymbolFound('discovery_symbol_' + Date.now());
+        }
+
         this.showNotification(reward);
     }
 
