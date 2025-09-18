@@ -557,6 +557,59 @@ class TranscendentalExperience {
         };
     }
 
+    createUniversalExperience(traits) {
+        const universalRiddles = [
+            "I am the space between what you know and what you seek. What am I?",
+            "I exist in every moment but can only be found in presence. What am I?",
+            "I am the bridge between who you are and who you're becoming. What am I?"
+        ];
+
+        const universalPoems = [
+            `The seeker finds not what they seek,
+            But something far more profound—
+            The courage to continue seeking,
+            The wisdom to remain unbound.
+
+            Your journey is uniquely yours,
+            No map can guide your way,
+            Trust the compass of your heart,
+            And let intuition say.`,
+
+            `In the space between questions,
+            Wisdom quietly grows,
+            Between the known and unknown,
+            The deepest mystery shows.
+
+            You are both the seeker
+            And the treasure being sought,
+            The answer and the question,
+            The lesson being taught.`
+        ];
+
+        return {
+            type: 'universal',
+            title: 'The Universal Seeker',
+            riddle: this.getRandomItem(universalRiddles),
+            riddle_answer: ["Mystery", "Presence", "Growth"][Math.floor(Math.random() * 3)],
+            poem: this.getRandomItem(universalPoems),
+            ascii: `
+            ┌─────────────────────────────────┐
+            │   🌟 THE UNIVERSAL SEEKER 🌟    │
+            │                                 │
+            │  Question → Seek → Discover     │
+            │     ↓        ↓       ↓         │
+            │   Wonder   Journey  Wisdom      │
+            │                                 │
+            │  "All paths lead to growth      │
+            │   when walked with intention"   │
+            └─────────────────────────────────┘
+            `,
+            personalGuidance: "Your path is unique, but you are not alone. Every seeker finds what they need when they need it most.",
+            interactiveChallenge: this.createUniversalChallenge(),
+            dailyPractice: "Each day, pause and ask: 'What is this moment trying to teach me?'"
+        };
+    }
+
     // Generate personalized guidance based on user's answers
     generateLegacyGuidance(traits) {
         const guidance = [
@@ -641,6 +694,14 @@ class TranscendentalExperience {
             title: "The Presence Practice",
             description: "Spirituality is the art of being fully alive.",
             action: "For one hour today, practice seeing the sacred in the ordinary. Report back what you discover."
+        };
+    }
+
+    createUniversalChallenge() {
+        return {
+            title: "The Seeker's Journey",
+            description: "Every path leads somewhere, but not every path leads where you want to go.",
+            action: "Take a moment to reflect: What question has been calling to you lately? Write it down and commit to exploring it this week."
         };
     }
 

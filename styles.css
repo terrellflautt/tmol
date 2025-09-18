@@ -58,6 +58,32 @@ body {
     padding: 0 2rem;
 }
 
+/* Leaderboard Link Special Styling */
+.leaderboard-link {
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.1)) !important;
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 20px;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.3s ease;
+    animation: leaderboardGlow 3s infinite ease-in-out;
+}
+
+.leaderboard-link:hover {
+    background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,215,0,0.2)) !important;
+    border-color: #FFD700;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255,215,0,0.3);
+}
+
+@keyframes leaderboardGlow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255,215,0,0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255,215,0,0.5), 0 0 30px rgba(255,215,0,0.3);
+    }
+}
+
 /* Navigation */
 .nav {
     position: fixed;
