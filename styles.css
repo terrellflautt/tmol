@@ -14,8 +14,8 @@
     --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     --shadow-primary: 0 20px 40px rgba(0, 255, 255, 0.1);
     --shadow-secondary: 0 10px 30px rgba(0, 0, 0, 0.3);
-    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: 'JetBrains Mono', Monaco, 'Cascadia Code', monospace;
+    --font-primary: system-ui, sans-serif;
+    --font-mono: ui-monospace, monospace;
 }
 
 * {
@@ -93,7 +93,6 @@ body {
     z-index: 1000;
     background: rgba(10, 10, 10, 0.95);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-color);
     transition: all 0.3s ease;
 }
 
@@ -191,6 +190,7 @@ body {
 #particles {
     width: 100%;
     height: 100%;
+    pointer-events: none;
 }
 
 .hero-content {
@@ -1056,4 +1056,1091 @@ textarea:focus,
 a:focus {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
+}
+
+/* =====================================
+   TRANSCENDENTAL EXPERIENCE STYLES
+   ===================================== */
+
+.transcendental-space {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    z-index: 10000;
+    display: none;
+    overflow: hidden;
+    font-family: var(--font-primary);
+}
+
+.transcendental-space.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: transcendentalFadeIn 2s ease-out;
+}
+
+@keyframes transcendentalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.transcendental-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.transcendental-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    color: #ffffff;
+    padding: 2rem;
+}
+
+.journey-header {
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: breatheIn 3s ease-out 0.5s forwards;
+}
+
+.journey-title {
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #4facfe, #00f2fe, #a8edea);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 6s ease-in-out infinite;
+}
+
+.journey-subtitle {
+    font-size: 1.2rem;
+    font-weight: 300;
+    opacity: 0.8;
+    letter-spacing: 1px;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes breatheIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.question-container {
+    margin: 2rem 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease-out;
+}
+
+.question-container.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.question {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    color: #e8f4fd;
+    text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+}
+
+.answers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.answer-option {
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(168, 237, 234, 0.1));
+    border: 1px solid rgba(79, 172, 254, 0.3);
+    border-radius: 15px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    text-align: left;
+}
+
+.answer-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.answer-option:hover {
+    transform: translateY(-5px);
+    border-color: rgba(79, 172, 254, 0.6);
+    box-shadow: 0 10px 30px rgba(79, 172, 254, 0.2);
+}
+
+.answer-option:hover::before {
+    left: 100%;
+}
+
+.answer-option.selected {
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.3), rgba(168, 237, 234, 0.3));
+    border-color: #4facfe;
+    transform: scale(1.02);
+    box-shadow: 0 15px 40px rgba(79, 172, 254, 0.4);
+}
+
+.answer-text {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.answer-description {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+}
+
+.progress-indicator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.progress-dot.active {
+    background: #4facfe;
+    box-shadow: 0 0 15px rgba(79, 172, 254, 0.6);
+}
+
+.progress-dot.completed {
+    background: #00f2fe;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+}
+
+.content-display {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s ease-out;
+    margin-top: 2rem;
+}
+
+.content-display.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.poem-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.poem-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    color: #4facfe;
+    text-shadow: 0 0 30px rgba(79, 172, 254, 0.5);
+    animation: titleGlow 4s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% { text-shadow: 0 0 30px rgba(79, 172, 254, 0.5); }
+    50% { text-shadow: 0 0 50px rgba(79, 172, 254, 0.8); }
+}
+
+.poem-content {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: #e8f4fd;
+    white-space: pre-line;
+    text-shadow: 0 0 20px rgba(168, 237, 234, 0.3);
+    animation: gentleBreathe 6s ease-in-out infinite;
+}
+
+@keyframes gentleBreathe {
+    0%, 100% { opacity: 0.9; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.01); }
+}
+
+.song-container {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.song-title {
+    font-size: 2.2rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+    color: #667eea;
+    text-shadow: 0 0 25px rgba(102, 126, 234, 0.5);
+}
+
+.song-artist {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
+}
+
+.lyrics-display {
+    font-size: 1.4rem;
+    line-height: 1.7;
+    color: #ffffff;
+    white-space: pre-line;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+}
+
+.current-lyric {
+    animation: lyricFadeIn 0.5s ease-out;
+}
+
+@keyframes lyricFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.audio-controls {
+    position: fixed;
+    bottom: 4rem;
+    right: 2rem;
+    z-index: 4;
+    display: flex;
+    gap: 1rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.audio-controls:hover {
+    opacity: 1;
+}
+
+.audio-control {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.3), rgba(168, 237, 234, 0.3));
+    border: 1px solid rgba(79, 172, 254, 0.5);
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.audio-control:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px rgba(79, 172, 254, 0.4);
+}
+
+.close-transcendental {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 5;
+    opacity: 0.7;
+}
+
+.close-transcendental:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    background: linear-gradient(135deg, rgba(255, 82, 82, 0.3), rgba(255, 82, 82, 0.1));
+}
+
+.wisdom-message {
+    position: fixed;
+    bottom: 8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.2), rgba(168, 237, 234, 0.2));
+    border: 1px solid rgba(79, 172, 254, 0.4);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    color: #e8f4fd;
+    font-size: 1rem;
+    line-height: 1.5;
+    backdrop-filter: blur(15px);
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+    transition: all 0.8s ease-out;
+    z-index: 3;
+}
+
+.wisdom-message.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive Design for Transcendental Experience */
+@media (max-width: 768px) {
+    .transcendental-content {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    .journey-title {
+        font-size: 2.2rem;
+    }
+
+    .question {
+        font-size: 1.3rem;
+    }
+
+    .answers-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .answer-option {
+        padding: 1.2rem;
+    }
+
+    .poem-title, .song-title {
+        font-size: 1.8rem;
+    }
+
+    .poem-content, .lyrics-display {
+        font-size: 1.1rem;
+    }
+
+    .audio-controls {
+        bottom: 2rem;
+        right: 1rem;
+    }
+
+    .close-transcendental {
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+    }
+
+    .wisdom-message {
+        bottom: 6rem;
+        max-width: 90%;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .journey-title {
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+
+    .question {
+        font-size: 1.2rem;
+    }
+
+    .answer-text {
+        font-size: 1rem;
+    }
+
+    .answer-description {
+        font-size: 0.85rem;
+    }
+
+    .poem-content, .lyrics-display {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+}
+
+/* Special effects for different emotional themes */
+.transcendental-space.healing {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a2e1a 50%, #16213e 100%);
+}
+
+.transcendental-space.hope {
+    background: linear-gradient(135deg, #0a0a0a 0%, #2e1a1a 50%, #3e1621 100%);
+}
+
+.transcendental-space.growth {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a2e2e 50%, #16213e 100%);
+}
+
+.transcendental-space.connection {
+    background: linear-gradient(135deg, #0a0a0a 0%, #2e2e1a 50%, #3e3616 100%);
+}
+
+/* =====================================
+   PHILOSOPHICAL EASTER EGG ANIMATIONS
+   ===================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
+
+.philosophical-overlay {
+    font-family: var(--font-primary);
+}
+
+.philosophical-overlay h3 {
+    text-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+.philosophical-overlay p {
+    margin-bottom: 1rem;
+}
+
+.philosophical-overlay strong {
+    color: #a8edea;
+    font-weight: 600;
+}
+
+/* =====================================
+   PROGRESSIVE HINT SYSTEM STYLES
+   ===================================== */
+
+/* Easter Egg Interactive Elements */
+.easter-word {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+    padding: 0 2px;
+}
+
+.easter-word:hover {
+    background: rgba(79, 172, 254, 0.1);
+    color: #4facfe;
+}
+
+.easter-punct {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    padding: 2px 4px;
+    margin: 0 1px;
+}
+
+.easter-punct:hover {
+    background: rgba(79, 172, 254, 0.2);
+    color: #4facfe;
+    transform: scale(1.2);
+}
+
+.easter-char {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+    padding: 1px 2px;
+    margin: 0 1px;
+}
+
+.easter-char:hover {
+    background: rgba(79, 172, 254, 0.1);
+    color: #4facfe;
+}
+
+.easter-fact {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+    padding: 1px 3px;
+}
+
+.easter-fact:hover {
+    background: rgba(79, 172, 254, 0.15);
+    color: #4facfe;
+    transform: scale(1.02);
+}
+
+/* Progressive Hint Animations */
+.easter-hint-pulse {
+    animation: easterPulse 2s ease-in-out infinite;
+}
+
+@keyframes easterPulse {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(79, 172, 254, 0.3);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(79, 172, 254, 0.6);
+        transform: scale(1.02);
+    }
+}
+
+.easter-hint-glow {
+    animation: easterGlow 3s ease-in-out infinite;
+}
+
+@keyframes easterGlow {
+    0%, 100% {
+        box-shadow: 0 0 8px rgba(79, 172, 254, 0.4);
+        filter: brightness(1);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(79, 172, 254, 0.8);
+        filter: brightness(1.1);
+    }
+}
+
+.easter-hint-word {
+    background: linear-gradient(45deg, rgba(79, 172, 254, 0.2), rgba(168, 237, 234, 0.2));
+    animation: easterWordHint 2s ease-in-out infinite;
+}
+
+@keyframes easterWordHint {
+    0%, 100% {
+        background-position: 0% 50%;
+        transform: scale(1);
+    }
+    50% {
+        background-position: 100% 50%;
+        transform: scale(1.05);
+    }
+}
+
+/* Hint Tooltips */
+.easter-hint-tooltip {
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.95), rgba(168, 237, 234, 0.95));
+    color: #ffffff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(79, 172, 254, 0.3);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    max-width: 300px;
+}
+
+.easter-hint-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.easter-hint-tooltip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Discovery Notifications */
+.easter-discovery-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.5s ease;
+    max-width: 350px;
+}
+
+.easter-discovery-notification.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.discovery-content {
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.95), rgba(168, 237, 234, 0.95));
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(79, 172, 254, 0.3);
+}
+
+.discovery-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.discovery-message {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.discovery-progress {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+}
+
+/* Level Up Notifications */
+.easter-levelup-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: all 0.6s ease;
+}
+
+.easter-levelup-notification.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.levelup-content {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+    color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.levelup-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.levelup-level {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #a8edea;
+}
+
+.levelup-message {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-style: italic;
+}
+
+/* Guidance Modals */
+.easter-guidance, .easter-gentle-guidance {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.guidance-content, .gentle-guidance-content {
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(168, 237, 234, 0.1));
+    border: 1px solid rgba(79, 172, 254, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    color: #ffffff;
+    backdrop-filter: blur(20px);
+    text-align: center;
+}
+
+.guidance-content h3, .gentle-guidance-content h3 {
+    color: #4facfe;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.guidance-content ul {
+    text-align: left;
+    margin: 20px 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.guidance-content li, .gentle-guidance-content p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.guidance-close, .gentle-guidance-close {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.guidance-close:hover, .gentle-guidance-close:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(79, 172, 254, 0.4);
+}
+
+/* Breadcrumb Hints */
+.easter-breadcrumb, .easter-patient-breadcrumb {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 9999;
+    max-width: 400px;
+}
+
+.breadcrumb-content, .patient-breadcrumb-content {
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.9), rgba(168, 237, 234, 0.9));
+    color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(79, 172, 254, 0.3);
+    position: relative;
+}
+
+.breadcrumb-hint, .patient-breadcrumb-hint {
+    display: block;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-style: italic;
+}
+
+.breadcrumb-close, .patient-breadcrumb-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.breadcrumb-close:hover, .patient-breadcrumb-close:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Design for Hint System */
+@media (max-width: 768px) {
+    .easter-discovery-notification {
+        top: 10px;
+        right: 10px;
+        max-width: 300px;
+    }
+
+    .discovery-content {
+        padding: 15px;
+    }
+
+    .levelup-content {
+        padding: 25px 30px;
+    }
+
+    .levelup-title {
+        font-size: 1.6rem;
+    }
+
+    .guidance-content, .gentle-guidance-content {
+        padding: 25px;
+        max-width: 90%;
+    }
+
+    .easter-breadcrumb, .easter-patient-breadcrumb {
+        bottom: 10px;
+        left: 10px;
+        max-width: calc(100% - 20px);
+    }
+
+    .easter-hint-tooltip {
+        max-width: 250px;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+    }
+}
+
+/* New Immediate Discovery Styles */
+.offset-punctuation {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.offset-punctuation:hover {
+    background: rgba(255, 255, 0, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+}
+
+.text-sequence {
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    color: inherit;
+}
+
+.text-sequence:hover {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(255, 107, 107, 0.2));
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+.text-sequence::after {
+    content: "✨";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 0.8em;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.text-sequence:hover::after {
+    opacity: 1;
+}
+
+/* Triple-click skill master effect */
+.skills-section.triple-clicked,
+#skills.triple-clicked {
+    animation: skillMastery 0.6s ease-out;
+}
+
+@keyframes skillMastery {
+    0% {
+        box-shadow: 0 0 0 rgba(0, 255, 255, 0.7);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+        transform: scale(1.02);
+    }
+    100% {
+        box-shadow: 0 0 0 rgba(0, 255, 255, 0.7);
+        transform: scale(1);
+    }
+}
+
+/* Keyboard sequence discovery effects */
+.typing-create,
+.typing-code {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: #00ffff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    z-index: 10000;
+    animation: typeEffect 2s ease-out;
+}
+
+@keyframes typeEffect {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    20% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    80% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+}
+
+/* Misspelling Correction System */
+.misspelled-word {
+    cursor: help;
+    border-bottom: 2px wavy #ff6b6b;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.misspelled-word:hover {
+    background: rgba(255, 107, 107, 0.1);
+    transform: scale(1.02);
+}
+
+.spelling-tooltip {
+    position: absolute;
+    background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+    color: #000000;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+    z-index: 10000;
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+}
+
+.spelling-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.spelling-tooltip::before {
+    content: "✓ ";
+    color: #000000;
+    font-weight: bold;
+}
+
+.spelling-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #00ff88 transparent transparent transparent;
+}
+
+/* Reality Creator message enhancement */
+.easter-discovery[data-discovery="reality_creator"] {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2));
+    border: 2px solid rgba(255, 215, 0, 0.5);
+}
+
+.easter-discovery[data-discovery="reality_creator"] .discovery-title {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
 }

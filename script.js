@@ -457,19 +457,8 @@ class PerformanceOptimizer {
     }
 
     preloadResources() {
-        // Preload critical fonts
-        const fontUrls = [
-            'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
-            'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap'
-        ];
-
-        fontUrls.forEach(url => {
-            const link = document.createElement('link');
-            link.rel = 'preload';
-            link.as = 'style';
-            link.href = url;
-            document.head.appendChild(link);
-        });
+        // External fonts disabled - using system fonts only
+        console.log('Font preloading disabled - using system fonts');
     }
 
     optimizeScrollEvents() {
