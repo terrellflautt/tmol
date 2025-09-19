@@ -159,7 +159,7 @@ class MagicUserSystem {
 
             if (scrollDepth > 0.7) { // Deep engagement
                 this.userInterests.programming += 0.1;
-                setTimeout(() => this.revealMagicMenu(), 500);
+                // Only reveal magic menu after user interaction, not automatically
             }
         });
 
@@ -574,7 +574,7 @@ class MagicUserSystem {
 
         if (riddleSolved && !lampGifted) {
             // User solved riddle but hasn't received lamp yet
-            setTimeout(() => this.showAzizaLampGift(), 2000);
+            // Only show lamp gift when user interacts with something, not automatically
         } else if (lampGifted) {
             // User already has lamp, add to footer
             this.addLampToFooter();
@@ -1336,7 +1336,7 @@ class MagicUserSystem {
 
             // Show reset button after first discovery
             if (isFirstDiscovery) {
-                setTimeout(() => this.onFirstDiscovery(), 1000);
+                // Show discovery elements only when user hovers or clicks, not automatically
             }
             this.shadowProgress.magicMoments.push({
                 type: 'discovery',

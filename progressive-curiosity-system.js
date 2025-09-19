@@ -425,8 +425,8 @@ class ProgressiveCuriositySystem {
         // Add game logic
         this.setupColorSequenceLogic(game);
 
-        // Show game when user reaches apprentice level
-        if (this.curiosityLevel === 'apprentice') {
+        // Show game when user reaches apprentice level or higher
+        if (this.curiosityLevel === 'apprentice' || this.curiosityLevel === 'investigator' || this.curiosityLevel === 'mystic') {
             document.body.appendChild(game);
             setTimeout(() => game.style.transform = 'translateX(0)', 1000);
         }
@@ -512,7 +512,9 @@ class ProgressiveCuriositySystem {
         }
 
         function enablePlayerInput() {
+            // First remove any existing listeners to prevent duplicates
             colorCells.forEach(cell => {
+                cell.removeEventListener('click', handlePlayerClick);
                 cell.addEventListener('click', handlePlayerClick);
             });
         }
@@ -564,6 +566,13 @@ class ProgressiveCuriositySystem {
             }
 
             isPlaying = false;
+
+            // Auto-start next level after a brief celebration pause
+            setTimeout(() => {
+                if (startBtn.textContent === 'Next Level') {
+                    startBtn.textContent = 'Start Sequence';
+                }
+            }, 2000);
         }
 
         function gameOver() {
