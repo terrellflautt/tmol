@@ -1,6 +1,12 @@
 # Terrell K. Flautt - Portfolio Website
 
-A stunning, modern portfolio website for Terrell K. Flautt, Lead DevOps Engineer, built with cutting-edge web technologies and deployed on AWS CloudFront.
+Terrell K. Flautt's peice of the interwebs built with cutting-edge web technologies and deployed on AWS CloudFront.
+
+My code is my gift to you, use it/edit how you please for your own purpose. 
+I appreciate it if you credit me and send support my way:
+http://terrellflautt.com/contribute.html
+
+
 
 ## 🎨 Features
 
@@ -204,10 +210,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact
 
 **Terrell K. Flautt**
-- Email: tkflau@protonmail.com
+- Email: tkflau@protonmail.com (encrypted)
+- terrell.flautt@gmail.com - regular daily contact
 - Phone: (737) 300-0567
 - Project Inquiries: birthmybuild@gmail.com
 
 ---
 
-*Built with ❤️ and cutting-edge web technologies*
+*Built from and with ❤️ to anyone who ever inspired or supported me*
