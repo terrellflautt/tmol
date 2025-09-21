@@ -309,24 +309,226 @@ class ContactForm {
         };
 
         if (accessKeys[email]) {
-            // Set the correct access key for routing
-            this.accessKeyField.value = accessKeys[email];
+            this.createNewContactForm(email, accessKeys[email]);
+        }
+    }
 
-            // Update form subject to indicate which email was clicked
-            const subjectField = this.form.querySelector('input[name="subject"]');
-            if (subjectField) {
-                subjectField.value = `New Contact Form Submission for ${email} from terrellflautt.com`;
+    createNewContactForm(email, accessKey) {
+        // Remove any existing overlay forms
+        const existingOverlay = document.querySelector('.contact-form-overlay');
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
+
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'contact-form-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        `;
+
+        // Create form container
+        const formContainer = document.createElement('div');
+        formContainer.className = 'floating-contact-form';
+        formContainer.style.cssText = `
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s ease;
+            position: relative;
+        `;
+
+        // Create form HTML
+        formContainer.innerHTML = `
+            <div class="form-header">
+                <h3>Message to ${email}</h3>
+                <button class="close-form" type="button">×</button>
+            </div>
+            <form class="overlay-contact-form" action="https://api.web3forms.com/submit" method="POST">
+                <input type="hidden" name="access_key" value="${accessKey}">
+                <input type="hidden" name="subject" value="New Contact Form Submission for ${email} from terrellflautt.com">
+                <input type="hidden" name="from_name" value="Terrell Flautt Contact Form">
+                <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+                <div class="form-group">
+                    <input type="text" name="name" autocomplete="name" required>
+                    <label for="name">Your Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" autocomplete="email" required>
+                    <label for="email">Your Email</label>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="phone" autocomplete="tel">
+                    <label for="phone">Phone (Optional)</label>
+                </div>
+                <div class="form-group">
+                    <textarea name="message" required rows="4"></textarea>
+                    <label for="message">Your Message</label>
+                </div>
+
+                <div class="form-status"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Send Message</span>
+                        <span class="btn-loading" style="display: none;">Sending...</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary maybe-later">Maybe Later</button>
+                </div>
+            </form>
+        `;
+
+        overlay.appendChild(formContainer);
+        document.body.appendChild(overlay);
+
+        // Animate in
+        setTimeout(() => {
+            overlay.style.opacity = '1';
+            formContainer.style.transform = 'scale(1) translateY(0)';
+        }, 10);
+
+        // Set up form handling
+        this.setupOverlayForm(overlay, formContainer);
+
+        // Focus first input
+        setTimeout(() => {
+            formContainer.querySelector('input[name="name"]').focus();
+        }, 300);
+    }
+
+    setupOverlayForm(overlay, formContainer) {
+        const form = formContainer.querySelector('.overlay-contact-form');
+        const closeBtn = formContainer.querySelector('.close-form');
+        const maybeLaterBtn = formContainer.querySelector('.maybe-later');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const statusDiv = form.querySelector('.form-status');
+
+        // Close handlers
+        closeBtn.addEventListener('click', () => this.closeOverlayForm(overlay));
+        maybeLaterBtn.addEventListener('click', () => this.closeOverlayForm(overlay));
+
+        // Click outside to close
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                this.closeOverlayForm(overlay);
+            }
+        });
+
+        // Right-click to close
+        overlay.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            this.closeOverlayForm(overlay);
+        });
+
+        // Escape key to close
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                this.closeOverlayForm(overlay);
+                document.removeEventListener('keydown', handleEscape);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!this.validateOverlayForm(form, statusDiv)) {
+                return;
             }
 
-            // Scroll to form and focus
-            this.form.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            setTimeout(() => {
-                document.getElementById('name').focus();
-            }, 500);
+            this.setOverlayLoadingState(submitBtn, true);
+            this.showOverlayMessage(statusDiv, 'Sending...', 'loading');
 
-            // Visual feedback that email was selected
-            this.showEmailSelected(email);
+            try {
+                const formData = new FormData(form);
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    this.showOverlayMessage(statusDiv, 'Message sent!', 'success');
+                    setTimeout(() => {
+                        this.closeOverlayForm(overlay);
+                    }, 2000);
+                } else {
+                    throw new Error(result.message || 'Failed to send message');
+                }
+            } catch (error) {
+                this.showOverlayMessage(statusDiv, 'Error sending message. Please try again.', 'error');
+            } finally {
+                this.setOverlayLoadingState(submitBtn, false);
+            }
+        });
+    }
+
+    validateOverlayForm(form, statusDiv) {
+        const formData = new FormData(form);
+        const name = formData.get('name').trim();
+        const email = formData.get('email').trim();
+        const message = formData.get('message').trim();
+
+        if (!name || !email || !message) {
+            this.showOverlayMessage(statusDiv, 'Please fill in all required fields.', 'error');
+            return false;
         }
+
+        if (!this.isValidEmail(email)) {
+            this.showOverlayMessage(statusDiv, 'Please enter a valid email address.', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    setOverlayLoadingState(button, loading) {
+        const textSpan = button.querySelector('.btn-text');
+        const loadingSpan = button.querySelector('.btn-loading');
+
+        if (loading) {
+            textSpan.style.display = 'none';
+            loadingSpan.style.display = 'inline';
+            button.disabled = true;
+        } else {
+            textSpan.style.display = 'inline';
+            loadingSpan.style.display = 'none';
+            button.disabled = false;
+        }
+    }
+
+    showOverlayMessage(statusDiv, message, type) {
+        statusDiv.textContent = message;
+        statusDiv.className = `form-status ${type}`;
+    }
+
+    closeOverlayForm(overlay) {
+        overlay.style.opacity = '0';
+        overlay.querySelector('.floating-contact-form').style.transform = 'scale(0.9) translateY(20px)';
+
+        setTimeout(() => {
+            overlay.remove();
+        }, 300);
     }
 
     showEmailSelected(email) {
