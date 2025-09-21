@@ -51,14 +51,15 @@ class TranscendentalAudio {
     }
 
     async playInstrumentalWithText(content, onTextUpdate, onComplete) {
-        const { poem, instrumental } = content.content || {};
+        const poem = content.content;
+        const instrumental = content.instrumental;
 
         try {
             // Start instrumental music
             await this.startInstrumental(instrumental);
 
             // Display text with gentle timing
-            await this.displayTextGently(poem.content, onTextUpdate);
+            await this.displayTextGently(poem, onTextUpdate);
 
             // Fade out music and complete
             await this.fadeOutAndStop();

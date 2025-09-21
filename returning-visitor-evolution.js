@@ -1,5 +1,4 @@
-// 🔄 Returning Visitor Evolution System
-// Creates deepening experiences that evolve with each visit
+// Returning Visitor Evolution - Subtle progression system
 
 class ReturningVisitorEvolution {
     constructor() {
@@ -319,8 +318,12 @@ class ReturningVisitorEvolution {
         const stage = this.evolutionStages[this.currentStage];
         const adaptations = this.personalizedContent.contentAdaptations[this.currentStage];
 
-        // Show personalized welcome
-        this.showStageWelcome(stage);
+        // Show personalized welcome only for returning visitors, with delay to let users explore first
+        if (this.visitHistory.length > 1) {  // Only show for returning visitors
+            setTimeout(() => {
+                this.showStageWelcome(stage);
+            }, this.getWelcomeDelay());
+        }
 
         // Adapt interface complexity
         this.adaptInterface(adaptations);
@@ -659,6 +662,22 @@ class ReturningVisitorEvolution {
     }
 
     // Helper methods
+    getWelcomeDelay() {
+        const visitCount = this.visitHistory.length;
+
+        // Progressive delays based on visit frequency and user sophistication
+        const delayConfig = {
+            newcomer: 45000,      // 45 seconds - let first-time visitors explore freely
+            explorer: 30000,      // 30 seconds - returning users can wait a bit less
+            seeker: 20000,        // 20 seconds - experienced users get quicker recognition
+            student: 15000,       // 15 seconds - students appreciate the acknowledgment
+            mystic: 10000,        // 10 seconds - mystics enjoy the subtle magic
+            master: 8000          // 8 seconds - masters expect the system to know them
+        };
+
+        return delayConfig[this.currentStage] || 30000;
+    }
+
     getStageIcon(stage) {
         const icons = {
             newcomer: '🌟',
