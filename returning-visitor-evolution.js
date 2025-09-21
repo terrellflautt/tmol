@@ -764,6 +764,57 @@ class ReturningVisitorEvolution {
         document.documentElement.style.setProperty('--transition-duration', config.transitionDuration);
         document.documentElement.style.setProperty('--effect-intensity', config.effectIntensity);
     }
+
+    activateStageFeatures(features) {
+        // Activate stage-specific features
+        if (!features || !Array.isArray(features)) return;
+
+        features.forEach(feature => {
+            switch(feature) {
+                case 'enhanced_discovery':
+                    this.enhanceDiscoverySystem();
+                    break;
+                case 'reality_shifts':
+                    this.enableRealityShifts();
+                    break;
+                case 'time_dilation':
+                    this.activateTimeDilation();
+                    break;
+                case 'consciousness_expansion':
+                    this.expandConsciousness();
+                    break;
+                default:
+                    // Unknown feature - log silently for development
+                    console.debug('Unknown stage feature:', feature);
+            }
+        });
+    }
+
+    enhanceDiscoverySystem() {
+        // Enhance discovery mechanisms for advanced users
+        if (window.easterEggs) {
+            window.easterEggs.boostDiscoveryRate = true;
+        }
+    }
+
+    enableRealityShifts() {
+        // Enable reality shifting effects
+        if (window.mindBendingReality) {
+            window.mindBendingReality.activateShifts();
+        }
+    }
+
+    activateTimeDilation() {
+        // Time perception adjustments for deep users
+        document.documentElement.style.setProperty('--time-scale', '0.8');
+    }
+
+    expandConsciousness() {
+        // Consciousness expansion features
+        if (window.subtleWonderWeaver) {
+            window.subtleWonderWeaver.expandAwareness();
+        }
+    }
 }
 
 // Initialize the returning visitor evolution system

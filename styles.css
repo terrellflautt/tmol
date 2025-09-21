@@ -475,7 +475,7 @@ body {
 
 .hero-subtitle {
     font-size: 1.25rem;
-    color: var(--text-secondary);
+    color: white;
     margin-bottom: 2rem;
     opacity: 0;
     animation: fadeInUp 1s ease-out 0.7s forwards;
