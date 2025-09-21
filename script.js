@@ -277,8 +277,10 @@ class ContactForm {
         this.form = document.getElementById('contactForm');
         this.submitBtn = document.getElementById('submitBtn');
         this.formStatus = document.getElementById('formStatus');
-        this.accessKeyField = this.form.querySelector('input[name="access_key"]');
-        this.init();
+        if (this.form) {
+            this.accessKeyField = this.form.querySelector('input[name="access_key"]');
+            this.init();
+        }
     }
 
     init() {
@@ -307,11 +309,52 @@ class ContactForm {
         };
 
         if (accessKeys[email]) {
-            // Set the correct access key
+            // Set the correct access key for routing
             this.accessKeyField.value = accessKeys[email];
-            // Focus the form
-            document.getElementById('name').focus();
+
+            // Update form subject to indicate which email was clicked
+            const subjectField = this.form.querySelector('input[name="subject"]');
+            if (subjectField) {
+                subjectField.value = `New Contact Form Submission for ${email} from terrellflautt.com`;
+            }
+
+            // Scroll to form and focus
+            this.form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => {
+                document.getElementById('name').focus();
+            }, 500);
+
+            // Visual feedback that email was selected
+            this.showEmailSelected(email);
         }
+    }
+
+    showEmailSelected(email) {
+        // Add a subtle indicator showing which email will receive the message
+        let indicator = document.querySelector('.email-indicator');
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.className = 'email-indicator';
+            indicator.style.cssText = `
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                background: rgba(102, 126, 234, 0.1);
+                border: 1px solid rgba(102, 126, 234, 0.2);
+                border-radius: 5px;
+                color: rgba(102, 126, 234, 0.9);
+                font-size: 0.9rem;
+                text-align: center;
+            `;
+            this.form.insertBefore(indicator, this.form.firstChild);
+        }
+        indicator.textContent = `Message will be sent to: ${email}`;
+
+        // Remove indicator after form submission or 10 seconds
+        setTimeout(() => {
+            if (indicator && indicator.parentNode) {
+                indicator.remove();
+            }
+        }, 10000);
     }
 
     async handleSubmit(e) {
@@ -339,9 +382,10 @@ class ContactForm {
             const result = await response.json();
 
             if (result.success) {
-                this.showMessage('Thank you for your message! I\'ll get back to you soon.', 'success');
+                this.showMessage('Message sent successfully!', 'success');
                 this.form.reset();
                 this.resetFormLabels();
+                this.clearEmailIndicator();
             } else {
                 throw new Error(result.message || 'Failed to send message');
             }
@@ -427,6 +471,13 @@ class ContactForm {
                 input.classList.remove('has-value');
             }
         });
+    }
+
+    clearEmailIndicator() {
+        const indicator = document.querySelector('.email-indicator');
+        if (indicator && indicator.parentNode) {
+            indicator.remove();
+        }
     }
 }
 
@@ -869,7 +920,6 @@ class QuietDetails {
                     <h3>🌈 Color Consciousness</h3>
                     <button class="close-game">×</button>
                 </div>
-                <p>Remember the sequence of colors that flash before you</p>
                 <div class="color-grid">
                     <div class="color-cell" data-color="red" style="background: #ff6b6b;"></div>
                     <div class="color-cell" data-color="blue" style="background: #4ecdc4;"></div>
@@ -882,7 +932,6 @@ class QuietDetails {
                     <button class="start-sequence-btn">Start Sequence</button>
                     <div class="score">Level: <span class="level">1</span></div>
                 </div>
-                <div class="game-message"></div>
             </div>
         `;
 
@@ -924,7 +973,6 @@ class QuietDetails {
         const cells = gameElement.querySelectorAll('.color-cell');
         const startBtn = gameElement.querySelector('.start-sequence-btn');
         const levelDisplay = gameElement.querySelector('.level');
-        const messageDisplay = gameElement.querySelector('.game-message');
         const closeBtn = gameElement.querySelector('.close-game');
 
         closeBtn.addEventListener('click', () => {
@@ -947,17 +995,11 @@ class QuietDetails {
                     // Check if correct
                     const currentIndex = playerSequence.length - 1;
                     if (playerSequence[currentIndex] !== sequence[currentIndex]) {
-                        // Wrong!
-                        messageDisplay.textContent = 'Wrong sequence! Try again.';
-                        messageDisplay.style.color = '#ff6b6b';
                         resetGame();
                     } else if (playerSequence.length === sequence.length) {
-                        // Completed level!
                         level++;
                         levelDisplay.textContent = level;
-                        messageDisplay.textContent = 'Great! Next level...';
-                        messageDisplay.style.color = '#4ecdc4';
-                        setTimeout(startNewLevel, 1500);
+                        setTimeout(startNewLevel, 800);
                     }
                 }
             });
@@ -967,8 +1009,6 @@ class QuietDetails {
             isPlaying = true;
             isPlayerTurn = false;
             playerSequence = [];
-            messageDisplay.textContent = 'Watch the sequence...';
-            messageDisplay.style.color = 'white';
             startBtn.disabled = true;
 
             // Generate new sequence
@@ -995,7 +1035,6 @@ class QuietDetails {
                     // Player's turn
                     setTimeout(() => {
                         isPlayerTurn = true;
-                        messageDisplay.textContent = 'Your turn! Click the sequence.';
                         startBtn.disabled = false;
                     }, 800);
                 }
@@ -1018,9 +1057,6 @@ class QuietDetails {
             level = 1;
             levelDisplay.textContent = level;
             startBtn.disabled = false;
-            setTimeout(() => {
-                messageDisplay.textContent = '';
-            }, 2000);
         }
 
         // Initialize cell styles
