@@ -82,7 +82,6 @@ class DynamicWordEvolution {
         this.implementLetterMixing();
         this.saveEvolutionState();
 
-        console.log(`🌊 Dynamic Words: Day ${this.consecutiveDays} - Visit ${this.visitCount} - Stage: ${this.journeyStage} - Changes today: ${this.getTodaysChanges()}/2`);
     }
 
     checkDailyReturn() {
@@ -197,21 +196,6 @@ class DynamicWordEvolution {
     }
 
     showDailyReturnReward() {
-        const rewards = {
-            2: "🌅 Welcome back! The realm remembers you...",
-            3: "🔮 Three days of devotion - magic intensifies around you",
-            7: "👑 A week of dedication - you become legend in this digital realm",
-            14: "✨ Fortnight faithful - reality bends to honor your commitment",
-            30: "🌟 Monthly master - you have transcended ordinary existence",
-            100: "💫 Centennial sage - your spirit is woven into the fabric of this world"
-        };
-
-        const reward = rewards[this.consecutiveDays];
-        if (reward) {
-            this.showMessage(reward, 'daily-reward');
-        } else if (this.consecutiveDays > 1) {
-            this.showMessage(`🔥 ${this.consecutiveDays} days strong - your journey deepens...`, 'streak');
-        }
 
         // Grant special abilities for consecutive visits
         this.grantConsecutiveDayBonuses();
@@ -723,4 +707,3 @@ if (window.evolvingSession) {
 // Set journey stage on body for CSS targeting
 document.body.setAttribute('data-journey-stage', window.dynamicWordEvolution.journeyStage);
 
-console.log('🌊 Dynamic Word Evolution System activated - Text that grows with your journey');
