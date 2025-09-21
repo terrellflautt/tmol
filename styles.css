@@ -469,9 +469,7 @@ body {
 
 .title-line {
     display: block;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 50%, var(--secondary-color) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: white;
     background-clip: text;
 }
 

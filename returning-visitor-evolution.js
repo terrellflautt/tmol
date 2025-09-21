@@ -736,6 +736,34 @@ class ReturningVisitorEvolution {
             });
         });
     }
+
+    adjustComplexity(level) {
+        // Adjust system complexity based on user experience
+        const complexityLevels = {
+            'low': {
+                animationSpeed: 0.5,
+                transitionDuration: '0.2s',
+                effectIntensity: 0.3
+            },
+            'medium': {
+                animationSpeed: 1,
+                transitionDuration: '0.5s',
+                effectIntensity: 0.6
+            },
+            'high': {
+                animationSpeed: 1.5,
+                transitionDuration: '0.8s',
+                effectIntensity: 1.0
+            }
+        };
+
+        const config = complexityLevels[level] || complexityLevels['medium'];
+
+        // Apply complexity settings to document
+        document.documentElement.style.setProperty('--animation-speed', config.animationSpeed);
+        document.documentElement.style.setProperty('--transition-duration', config.transitionDuration);
+        document.documentElement.style.setProperty('--effect-intensity', config.effectIntensity);
+    }
 }
 
 // Initialize the returning visitor evolution system
