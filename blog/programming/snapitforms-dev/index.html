@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapIT Forms | Dev Blog</title>
+    <link rel="stylesheet" href="../../../styles.css">
+    <link rel="stylesheet" href="../../../easter-eggs.css">
+    <style>
+        .blog-container {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .blog-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .blog-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .article-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .article-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        .article-meta {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .article-excerpt {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .read-more {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .read-more:hover {
+            color: #764ba2;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #764ba2;
+        }
+        .live-status {
+            color: #4ade80;
+            font-weight: 500;
+        }
+        .tech-stack {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-container">
+        <a href="../index.html" class="back-link">← Back to Code</a>
+
+        <div class="blog-header">
+            <h1 class="blog-title">SnapIT Forms</h1>
+            <p class="live-status">● Live Production System</p>
+        </div>
+
+        <div class="tech-stack">
+            AWS Lambda + DynamoDB + S3 + CloudFront + Stripe + SES
+        </div>
+
+        <article class="article-card">
+            <h2 class="article-title">Architecture</h2>
+            <div class="article-meta">Core System</div>
+            <div class="article-excerpt">
+                Serverless form handling. No backend required. Production ready.
+            </div>
+            <a href="https://snapitforms.com" class="read-more" target="_blank">Live Site →</a>
+        </article>
+
+        <article class="article-card">
+            <h2 class="article-title">Deployment</h2>
+            <div class="article-meta">DevOps</div>
+            <div class="article-excerpt">
+                Infrastructure as code. Automated deployments. Blue-green strategy.
+            </div>
+            <a href="#" class="read-more">Coming Soon →</a>
+        </article>
+
+        <article class="article-card">
+            <h2 class="article-title">Payment Integration</h2>
+            <div class="article-meta">Stripe</div>
+            <div class="article-excerpt">
+                Subscription management. Webhook handling. 8 pricing tiers.
+            </div>
+            <a href="#" class="read-more">Coming Soon →</a>
+        </article>
+
+        <article class="article-card">
+            <h2 class="article-title">Email System</h2>
+            <div class="article-meta">AWS SES</div>
+            <div class="article-excerpt">
+                Form notifications. Template system. Delivery optimization.
+            </div>
+            <a href="#" class="read-more">Coming Soon →</a>
+        </article>
+    </div>
+
+    <script src="../../../easter-eggs.js"></script>
+    <script src="../../../script.js"></script>
+</body>
+</html>
