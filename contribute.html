@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribute | Terrell K. Flautt</title>
+    <meta name="description" content="Support our open-source projects and innovation through contributions, donations, and collaboration.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="contribute.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // Set Stripe publishable key for production
+        window.STRIPE_PUBLISHABLE_KEY = 'pk_test_51S8n1pREyNSlEStYr0yyocwI3FR63XtsYMhQImI8cAhLmvQtpN1lh9zpPIXsgaYBuOSEpRsqRhLlJ1lHtaA4eAzE00hQvmUmDt';
+    </script>
+</head>
+<body>
+    <div class="cursor-follower"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-text">T.K.</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#projects" class="nav-link">Projects</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+                <a href="contribute.html" class="nav-link active">Contribute</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="contribute-hero">
+        <canvas class="particle-canvas" id="particleCanvas"></canvas>
+        <div class="floating-shapes" id="floatingShapes"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="title-line">Support Innovation</span>
+                    <span class="title-line gradient-text">Shape the Future</span>
+                </h1>
+                <p class="hero-description">
+                    Join us in building cutting-edge solutions that make a difference.
+                    Your contribution fuels open-source innovation and helps create tools that benefit everyone.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">2</span>
+                        <span class="stat-label">Active Projects</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Open Source</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Possibilities</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contribution Options -->
+    <section class="contribution-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How You Can Contribute</h2>
+                <p class="section-subtitle">Multiple ways to support our mission</p>
+            </div>
+
+            <div class="contribution-grid">
+                <!-- Code Contributions -->
+                <div class="contribution-card code-card">
+                    <div class="card-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16,18 22,12 16,6"></polyline>
+                            <polyline points="8,6 2,12 8,18"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Code Contributions</h3>
+                    <p class="card-description">
+                        Contribute code, report bugs, suggest features, or improve documentation.
+                        Every pull request makes our projects better.
+                    </p>
+                    <div class="github-repos">
+                        <h4>Our Repositories</h4>
+                        <div class="repo-links">
+                            <a href="https://github.com/terrellflautt/tmol" target="_blank" class="repo-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                                <span>TMOL Project</span>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                            <a href="https://github.com/terrellflautt/nickelpie" target="_blank" class="repo-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                                <span>Nickelpie</span>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                            <a href="https://github.com/terrellflautt/snapitforms" target="_blank" class="repo-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                                <span>SnapIT Forms</span>
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M1 11L11 1M11 1H1M11 1V11" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Support -->
+                <div class="contribution-card donation-card">
+                    <div class="card-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Financial Support</h3>
+                    <p class="card-description">
+                        Help us dedicate more time to development, infrastructure costs,
+                        and creating tools that benefit the entire community.
+                    </p>
+
+                    <!-- Donation Section -->
+                    <div class="donation-options">
+                        <h4>Choose Your Support</h4>
+
+                        <div class="donation-type-toggle">
+                            <label class="toggle-option">
+                                <input type="radio" name="donationType" value="monthly" checked>
+                                <span>Monthly</span>
+                            </label>
+                            <label class="toggle-option">
+                                <input type="radio" name="donationType" value="onetime">
+                                <span>One-time</span>
+                            </label>
+                        </div>
+
+                        <div class="amount-buttons">
+                            <button class="amount-btn" data-amount="1">$1</button>
+                            <button class="amount-btn" data-amount="3">$3</button>
+                            <button class="amount-btn" data-amount="5">$5</button>
+                            <button class="amount-btn" data-amount="30">$30</button>
+                            <button class="amount-btn" data-amount="100">$100</button>
+                        </div>
+
+                        <div class="custom-amount">
+                            <input type="number" id="customAmount" placeholder="Enter any amount" min="1" max="10000">
+                            <span class="currency" id="currencyLabel">$/month</span>
+                        </div>
+
+                        <!-- Inline Payment Form -->
+                        <div class="payment-section" id="paymentSection" style="display: none;">
+                            <div class="payment-summary">
+                                <div class="selected-amount">
+                                    You're contributing <strong id="selectedAmountDisplay">$0</strong>
+                                    <span id="frequencyDisplay">monthly</span>
+                                </div>
+                            </div>
+
+                            <div class="payment-form-container">
+                                <div id="payment-element">
+                                    <!-- Stripe Elements will create form here -->
+                                </div>
+
+                                <button id="submitPayment" class="submit-payment-btn">
+                                    <span id="submitText">Complete Donation</span>
+                                </button>
+                            </div>
+
+                            <div class="payment-message" id="paymentMessage"></div>
+                        </div>
+
+                        <button id="continueBtn" class="donate-btn" style="display: block;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                            <span>Continue</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Alternative Payment Methods -->
+                <div class="contribution-card payment-card">
+                    <div class="card-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="7" y1="8" x2="17" y2="8"></line>
+                            <line x1="7" y1="12" x2="17" y2="12"></line>
+                            <line x1="7" y1="16" x2="10" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Quick Donations</h3>
+                    <p class="card-description">
+                        Prefer alternative payment methods? Scan the QR code below to donate
+                        via PayPal, Venmo, Cash App, or Solana.
+                    </p>
+
+                    <div class="qr-section">
+                        <div class="qr-code">
+                            <svg width="160" height="160" viewBox="0 0 160 160" id="qrcode">
+                                <!-- QR Code will be generated here -->
+                            </svg>
+                        </div>
+                        <div class="payment-methods">
+                            <span class="payment-badge">PayPal</span>
+                            <span class="payment-badge">Venmo</span>
+                            <span class="payment-badge">Cash App</span>
+                            <span class="payment-badge">Solana</span>
+                        </div>
+                        <p class="qr-instructions">
+                            Scan with your phone camera or payment app
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Your Impact</h2>
+                <p class="section-subtitle">How your contribution makes a difference</p>
+            </div>
+
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <div class="impact-icon">🚀</div>
+                    <h3>Accelerate Development</h3>
+                    <p>Your support allows us to focus more time on building innovative features and improving existing tools.</p>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-icon">🌍</div>
+                    <h3>Global Accessibility</h3>
+                    <p>Help us maintain servers, improve performance, and make our tools accessible to users worldwide.</p>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-icon">🔧</div>
+                    <h3>Better Tools</h3>
+                    <p>Fund the development of new features, security improvements, and cutting-edge integrations.</p>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-icon">📚</div>
+                    <h3>Knowledge Sharing</h3>
+                    <p>Support the creation of documentation, tutorials, and educational content for the community.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Thank You</h3>
+                    <p>Every contribution, no matter the size, helps us build a better future through technology.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Questions about contributing? <a href="mailto:contact@terrellflautt.com">Get in touch</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Transparency</h3>
+                    <p>All contributions go directly to project development and infrastructure costs.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Terrell K. Flautt. Built with ❤️ for the community.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Accessibility Menu -->
+    <button class="accessibility-trigger" id="accessibilityTrigger" aria-label="Open accessibility options">
+        ♿
+    </button>
+
+    <div class="accessibility-menu" id="accessibilityMenu">
+        <h3>🔧 Accessibility Options</h3>
+        <div class="accessibility-options">
+            <div class="option-group">
+                <h4>Color Vision</h4>
+                <div class="color-theme-buttons">
+                    <button class="theme-btn active" data-theme="default">Default</button>
+                    <button class="theme-btn" data-theme="deuteranopia">Deuteranopia</button>
+                    <button class="theme-btn" data-theme="protanopia">Protanopia</button>
+                    <button class="theme-btn" data-theme="tritanopia">Tritanopia</button>
+                    <button class="theme-btn" data-theme="high-contrast">High Contrast</button>
+                </div>
+            </div>
+            <div class="option-group">
+                <h4>Motion & Effects</h4>
+                <div class="toggle-option-accessibility">
+                    <span>Reduce Motion</span>
+                    <div class="toggle-switch" id="motionToggle"></div>
+                </div>
+                <div class="toggle-option-accessibility">
+                    <span>Reduce Animations</span>
+                    <div class="toggle-switch" id="animationToggle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Menu -->
+    <button class="language-trigger" id="languageTrigger" aria-label="Choose language">
+        🌍
+    </button>
+
+    <div class="language-menu" id="languageMenu">
+        <h3>🌍 Choose Language</h3>
+        <div class="language-grid">
+            <a href="contribute.html" class="language-btn" data-lang="en">
+                <span class="language-flag">🇺🇸</span>
+                <span>English</span>
+            </a>
+            <a href="es/contribute.html" class="language-btn" data-lang="es">
+                <span class="language-flag">🇪🇸</span>
+                <span>Español</span>
+            </a>
+            <a href="zh/contribute.html" class="language-btn" data-lang="zh">
+                <span class="language-flag">🇨🇳</span>
+                <span>中文</span>
+            </a>
+            <a href="fr/contribute.html" class="language-btn" data-lang="fr">
+                <span class="language-flag">🇫🇷</span>
+                <span>Français</span>
+            </a>
+            <a href="de/contribute.html" class="language-btn" data-lang="de">
+                <span class="language-flag">🇩🇪</span>
+                <span>Deutsch</span>
+            </a>
+            <a href="ja/contribute.html" class="language-btn" data-lang="ja">
+                <span class="language-flag">🇯🇵</span>
+                <span>日本語</span>
+            </a>
+            <a href="ko/contribute.html" class="language-btn" data-lang="ko">
+                <span class="language-flag">🇰🇷</span>
+                <span>한국어</span>
+            </a>
+            <a href="pt/contribute.html" class="language-btn" data-lang="pt">
+                <span class="language-flag">🇧🇷</span>
+                <span>Português</span>
+            </a>
+            <a href="ru/contribute.html" class="language-btn" data-lang="ru">
+                <span class="language-flag">🇷🇺</span>
+                <span>Русский</span>
+            </a>
+            <a href="ar/contribute.html" class="language-btn" data-lang="ar">
+                <span class="language-flag">🇸🇦</span>
+                <span>العربية</span>
+            </a>
+            <a href="hi/contribute.html" class="language-btn" data-lang="hi">
+                <span class="language-flag">🇮🇳</span>
+                <span>हिन्दी</span>
+            </a>
+            <a href="it/contribute.html" class="language-btn" data-lang="it">
+                <span class="language-flag">🇮🇹</span>
+                <span>Italiano</span>
+            </a>
+        </div>
+        <div class="auto-translate-note">
+            <strong>Note:</strong> All versions are professionally translated and culturally adapted for the best possible experience in your language.
+        </div>
+    </div>
+
+    <script src="stripe-config.js"></script>
+    <script src="script.js"></script>
+    <script src="contribute.js"></script>
+    <script src="contribute-animations.js"></script>
+    <script>
+        // Language priority based on global internet usage and developer community
+        const LANGUAGE_PRIORITY = {
+            'en': { priority: 1, users: '1.5B', dev: 'Primary' },
+            'zh': { priority: 2, users: '850M', dev: 'High' },
+            'es': { priority: 3, users: '470M', dev: 'High' },
+            'hi': { priority: 4, users: '600M', dev: 'Medium' },
+            'ar': { priority: 5, users: '420M', dev: 'Medium' },
+            'pt': { priority: 6, users: '280M', dev: 'High' },
+            'ru': { priority: 7, users: '260M', dev: 'High' },
+            'ja': { priority: 8, users: '120M', dev: 'Very High' },
+            'fr': { priority: 9, users: '280M', dev: 'High' },
+            'de': { priority: 10, users: '100M', dev: 'High' },
+            'ko': { priority: 11, users: '82M', dev: 'Very High' },
+            'it': { priority: 12, users: '65M', dev: 'Medium' }
+        };
+
+        // Accessibility Menu
+        class AccessibilityManager {
+            constructor() {
+                this.init();
+                this.detectUserRegion();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadSavedPreferences();
+                this.updateLanguageAvailability();
+            }
+
+            async detectUserRegion() {
+                try {
+                    // Use browser's navigator.language and timezone
+                    const userLang = navigator.language.substring(0, 2);
+                    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                    // Regional language mapping
+                    const regionLanguageMap = {
+                        'en': ['US', 'GB', 'AU', 'CA', 'IE', 'NZ', 'ZA'],
+                        'zh': ['CN', 'TW', 'HK', 'SG'],
+                        'es': ['ES', 'MX', 'AR', 'CO', 'PE', 'VE', 'CL', 'EC', 'UY', 'PY', 'BO'],
+                        'hi': ['IN'],
+                        'ar': ['SA', 'AE', 'EG', 'MA', 'DZ', 'IQ', 'SY', 'JO', 'LB', 'KW', 'QA', 'BH', 'OM', 'YE'],
+                        'pt': ['BR', 'PT', 'AO', 'MZ'],
+                        'ru': ['RU', 'BY', 'KZ', 'KG', 'UZ', 'TJ', 'AM', 'AZ', 'GE', 'MD'],
+                        'ja': ['JP'],
+                        'fr': ['FR', 'CA', 'BE', 'CH', 'SN', 'CI', 'CM', 'BF', 'NE', 'ML', 'MG', 'BJ', 'TG', 'GN', 'CF', 'TD', 'CG', 'GA'],
+                        'de': ['DE', 'AT', 'CH', 'LI'],
+                        'ko': ['KR'],
+                        'it': ['IT', 'SM', 'VA']
+                    };
+
+                    // Suggest language based on detected region
+                    this.suggestLanguage(userLang, timezone);
+
+                } catch (error) {
+                    console.log('Region detection not available, using browser language');
+                    this.suggestLanguage(navigator.language.substring(0, 2));
+                }
+            }
+
+            suggestLanguage(detectedLang, timezone = '') {
+                // Only suggest if we have that language and it's not English (default)
+                if (LANGUAGE_PRIORITY[detectedLang] && detectedLang !== 'en') {
+                    const priority = LANGUAGE_PRIORITY[detectedLang].priority;
+
+                    // Show language suggestion for high-priority languages
+                    if (priority <= 6) {
+                        this.showLanguageSuggestion(detectedLang);
+                    }
+                }
+            }
+
+            showLanguageSuggestion(langCode) {
+                const langNames = {
+                    'zh': '中文',
+                    'es': 'Español',
+                    'hi': 'हिन्दी',
+                    'ar': 'العربية',
+                    'pt': 'Português',
+                    'ru': 'Русский',
+                    'ja': '日本語',
+                    'fr': 'Français',
+                    'de': 'Deutsch',
+                    'ko': '한국어',
+                    'it': 'Italiano'
+                };
+
+                const flags = {
+                    'zh': '🇨🇳', 'es': '🇪🇸', 'hi': '🇮🇳', 'ar': '🇸🇦',
+                    'pt': '🇧🇷', 'ru': '🇷🇺', 'ja': '🇯🇵', 'fr': '🇫🇷',
+                    'de': '🇩🇪', 'ko': '🇰🇷', 'it': '🇮🇹'
+                };
+
+                // Create subtle language suggestion
+                const suggestion = document.createElement('div');
+                suggestion.className = 'language-suggestion';
+                suggestion.innerHTML = `
+                    <div class="suggestion-content">
+                        <span class="suggestion-flag">${flags[langCode]}</span>
+                        <span class="suggestion-text">View in ${langNames[langCode]}?</span>
+                        <div class="suggestion-actions">
+                            <button class="suggestion-btn accept" onclick="window.location.href='${langCode}/contribute.html'">
+                                Yes
+                            </button>
+                            <button class="suggestion-btn decline" onclick="this.closest('.language-suggestion').remove()">
+                                Stay in English
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(suggestion);
+
+                // Auto-remove after 10 seconds
+                setTimeout(() => {
+                    if (suggestion.parentNode) {
+                        suggestion.remove();
+                    }
+                }, 10000);
+            }
+
+            updateLanguageAvailability() {
+                // Mark which languages are actually available vs planned
+                const availableLanguages = ['en']; // Start with English
+                const plannedLanguages = ['zh', 'es', 'hi', 'ar', 'pt', 'ru']; // High priority
+
+                document.querySelectorAll('.language-btn').forEach(btn => {
+                    const lang = btn.dataset.lang;
+                    if (!availableLanguages.includes(lang)) {
+                        if (plannedLanguages.includes(lang)) {
+                            btn.classList.add('coming-soon');
+                            btn.innerHTML += '<span class="coming-soon-badge">Soon</span>';
+                        } else {
+                            btn.classList.add('planned');
+                            btn.innerHTML += '<span class="planned-badge">Planned</span>';
+                        }
+                        btn.onclick = (e) => {
+                            e.preventDefault();
+                            this.showComingSoonMessage(lang);
+                        };
+                    }
+                });
+            }
+
+            showComingSoonMessage(langCode) {
+                const langNames = {
+                    'zh': 'Chinese', 'es': 'Spanish', 'hi': 'Hindi', 'ar': 'Arabic',
+                    'pt': 'Portuguese', 'ru': 'Russian', 'ja': 'Japanese', 'fr': 'French',
+                    'de': 'German', 'ko': 'Korean', 'it': 'Italian'
+                };
+
+                const priority = LANGUAGE_PRIORITY[langCode]?.priority || 99;
+                const message = priority <= 6 ?
+                    `${langNames[langCode]} version is coming soon! We're building languages based on global usage.` :
+                    `${langNames[langCode]} version is planned for future release.`;
+
+                // Show toast notification
+                const toast = document.createElement('div');
+                toast.className = 'language-toast';
+                toast.innerHTML = `
+                    <div class="toast-content">
+                        <span class="toast-icon">🌍</span>
+                        <span class="toast-message">${message}</span>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+
+                setTimeout(() => toast.classList.add('show'), 100);
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 4000);
+            }
+
+            setupEventListeners() {
+                // Accessibility trigger
+                document.getElementById('accessibilityTrigger').addEventListener('click', () => {
+                    this.toggleAccessibilityMenu();
+                });
+
+                // Language trigger
+                document.getElementById('languageTrigger').addEventListener('click', () => {
+                    this.toggleLanguageMenu();
+                });
+
+                // Theme buttons
+                document.querySelectorAll('.theme-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.setTheme(e.target.dataset.theme);
+                    });
+                });
+
+                // Motion toggles
+                document.getElementById('motionToggle').addEventListener('click', () => {
+                    this.toggleMotion();
+                });
+
+                document.getElementById('animationToggle').addEventListener('click', () => {
+                    this.toggleAnimations();
+                });
+
+                // Close menus when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.accessibility-menu') && !e.target.closest('.accessibility-trigger')) {
+                        document.getElementById('accessibilityMenu').classList.remove('show');
+                    }
+                    if (!e.target.closest('.language-menu') && !e.target.closest('.language-trigger')) {
+                        document.getElementById('languageMenu').classList.remove('show');
+                    }
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    // Alt + A for accessibility
+                    if (e.altKey && e.key === 'a') {
+                        e.preventDefault();
+                        this.toggleAccessibilityMenu();
+                    }
+                    // Alt + L for language
+                    if (e.altKey && e.key === 'l') {
+                        e.preventDefault();
+                        this.toggleLanguageMenu();
+                    }
+                });
+            }
+
+            toggleAccessibilityMenu() {
+                const menu = document.getElementById('accessibilityMenu');
+                const langMenu = document.getElementById('languageMenu');
+                langMenu.classList.remove('show');
+                menu.classList.toggle('show');
+            }
+
+            toggleLanguageMenu() {
+                const menu = document.getElementById('languageMenu');
+                const accMenu = document.getElementById('accessibilityMenu');
+                accMenu.classList.remove('show');
+                menu.classList.toggle('show');
+            }
+
+            setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('terrellflautt_theme', theme);
+
+                // Update active button
+                document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+            }
+
+            toggleMotion() {
+                const toggle = document.getElementById('motionToggle');
+                const isActive = toggle.classList.toggle('active');
+                document.documentElement.setAttribute('data-motion', isActive ? 'reduced' : 'normal');
+                localStorage.setItem('terrellflautt_motion', isActive ? 'reduced' : 'normal');
+            }
+
+            toggleAnimations() {
+                const toggle = document.getElementById('animationToggle');
+                const isActive = toggle.classList.toggle('active');
+                document.documentElement.setAttribute('data-animations', isActive ? 'reduced' : 'normal');
+                localStorage.setItem('terrellflautt_animations', isActive ? 'reduced' : 'normal');
+            }
+
+            loadSavedPreferences() {
+                // Load theme
+                const savedTheme = localStorage.getItem('terrellflautt_theme') || 'default';
+                this.setTheme(savedTheme);
+
+                // Load motion preference
+                const savedMotion = localStorage.getItem('terrellflautt_motion');
+                if (savedMotion === 'reduced') {
+                    document.getElementById('motionToggle').classList.add('active');
+                    document.documentElement.setAttribute('data-motion', 'reduced');
+                }
+
+                // Load animation preference
+                const savedAnimations = localStorage.getItem('terrellflautt_animations');
+                if (savedAnimations === 'reduced') {
+                    document.getElementById('animationToggle').classList.add('active');
+                    document.documentElement.setAttribute('data-animations', 'reduced');
+                }
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new AccessibilityManager();
+        });
+    </script>
+</body>
+</html>
