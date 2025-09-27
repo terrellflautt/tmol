@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribuir | Terrell K. Flautt</title>
+    <meta name="description" content="Apoya nuestros proyectos de código abierto e innovación a través de contribuciones, donaciones y colaboración.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="contribute.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // Set Stripe publishable key for production
+        window.STRIPE_PUBLISHABLE_KEY = 'pk_live_51S8n1HIKz9wDf9qXch8jutJX0nSd3j9T2mRC2d9n6ajRspl3cnoRbtEBhgwilHDg5VRE20ehcLOjyOk64GKuSX1P00wwq4KpOQ';
+    </script>
+</head>
+<body>
+    <div class="cursor-follower"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-text">T.K.</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index.html#about" class="nav-link">Acerca de</a>
+                <a href="index.html#projects" class="nav-link">Proyectos</a>
+                <a href="index.html#contact" class="nav-link">Contacto</a>
+                <a href="contribuir.html" class="nav-link active">Contribuir</a>
+                <a href="contribute.html" class="nav-link lang-toggle" title="English">🇺🇸 EN</a>
+            </div>
+
+            <!-- Accessibility Menu Button -->
+            <button class="accessibility-btn" aria-label="Menú de Accesibilidad" title="Presiona Alt+A">♿</button>
+
+            <!-- Language Menu Button -->
+            <button class="language-btn" aria-label="Cambiar Idioma" title="Presiona Alt+L">🌍</button>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="nav-toggle" aria-label="Alternar menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Accessibility Menu -->
+    <div class="accessibility-menu" id="accessibility-menu">
+        <div class="accessibility-content">
+            <h3>🎨 Opciones de Accesibilidad</h3>
+            <div class="accessibility-options">
+                <button class="accessibility-option" data-theme="deuteranopia">
+                    <span class="option-icon">🟢</span>
+                    <span class="option-text">Deuteranomaía</span>
+                </button>
+                <button class="accessibility-option" data-theme="protanopia">
+                    <span class="option-icon">🔴</span>
+                    <span class="option-text">Protanomaía</span>
+                </button>
+                <button class="accessibility-option" data-theme="tritanopia">
+                    <span class="option-icon">🔵</span>
+                    <span class="option-text">Tritanomaía</span>
+                </button>
+                <button class="accessibility-option" data-theme="high-contrast">
+                    <span class="option-icon">⚫</span>
+                    <span class="option-text">Alto Contraste</span>
+                </button>
+                <button class="accessibility-option" data-motion="reduced">
+                    <span class="option-icon">⏸️</span>
+                    <span class="option-text">Reducir Movimiento</span>
+                </button>
+                <button class="accessibility-option" data-theme="default">
+                    <span class="option-icon">🎨</span>
+                    <span class="option-text">Tema Predeterminado</span>
+                </button>
+            </div>
+            <button class="accessibility-close">✕</button>
+        </div>
+    </div>
+
+    <!-- Language Menu -->
+    <div class="language-menu" id="language-menu">
+        <div class="language-content">
+            <h3>🌍 Seleccionar Idioma</h3>
+            <div class="language-options">
+                <a href="contribute.html" class="language-option">
+                    <span class="flag">🇺🇸</span>
+                    <span class="language-name">English</span>
+                    <span class="language-native">English</span>
+                </a>
+                <a href="contribuir.html" class="language-option active">
+                    <span class="flag">🇪🇸</span>
+                    <span class="language-name">Español</span>
+                    <span class="language-native">Español</span>
+                </a>
+                <!-- Future language options -->
+                <div class="language-option disabled">
+                    <span class="flag">🇨🇳</span>
+                    <span class="language-name">中文 (简体)</span>
+                    <span class="language-native">Próximamente</span>
+                </div>
+                <div class="language-option disabled">
+                    <span class="flag">🇮🇳</span>
+                    <span class="language-name">हिंदी</span>
+                    <span class="language-native">Próximamente</span>
+                </div>
+            </div>
+            <button class="language-close">✕</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="contribute-hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="title-line">Apoya la</span>
+                    <span class="title-line gradient-text">Innovación</span>
+                </h1>
+                <p class="hero-description">
+                    Únete a nosotros en el desarrollo de proyectos revolucionarios de código abierto que transforman el panorama tecnológico.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Proyectos Activos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Código Abierto</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Impacto Potencial</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Repositories Section -->
+    <section class="repositories-section">
+        <div class="container">
+            <h2 class="section-title">🚀 Nuestros Proyectos</h2>
+            <div class="repo-links">
+                <a href="https://github.com/terrellflautt/tmol" target="_blank" rel="noopener" class="repo-link">
+                    <div class="repo-icon">📚</div>
+                    <div class="repo-info">
+                        <h3 class="repo-name">TMOL - El Significado de la Vida</h3>
+                        <p class="repo-description">
+                            Un proyecto filosófico-tecnológico que explora las preguntas fundamentales de la existencia a través de código e interacción.
+                        </p>
+                        <div class="repo-tech">
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">Filosofía</span>
+                            <span class="tech-tag">IA</span>
+                        </div>
+                    </div>
+                    <span class="repo-arrow">→</span>
+                </a>
+
+                <a href="https://github.com/terrellflautt/nickelpie" target="_blank" rel="noopener" class="repo-link">
+                    <div class="repo-icon">🥧</div>
+                    <div class="repo-info">
+                        <h3 class="repo-name">NickelPie</h3>
+                        <p class="repo-description">
+                            Plataforma innovadora para la gestión y visualización de datos con un enfoque en la experiencia del usuario y la simplicidad.
+                        </p>
+                        <div class="repo-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">AWS</span>
+                        </div>
+                    </div>
+                    <span class="repo-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contribution Cards Section -->
+    <section class="contribution-section">
+        <div class="container">
+            <h2 class="section-title">💝 Formas de Contribuir</h2>
+            <div class="contribution-grid">
+
+                <!-- Financial Support Card -->
+                <div class="contribution-card" id="donation-card">
+                    <div class="card-header">
+                        <div class="card-icon">💰</div>
+                        <h3 class="card-title">Apoyo Financiero</h3>
+                        <p class="card-description">Ayuda a impulsar el desarrollo con una contribución monetaria.</p>
+                    </div>
+
+                    <div class="card-content">
+                        <!-- Donation Type Toggle -->
+                        <div class="donation-type-toggle">
+                            <button class="toggle-btn active" data-type="one-time">
+                                <span class="toggle-icon">⚡</span>
+                                <span class="toggle-text">Una Vez</span>
+                            </button>
+                            <button class="toggle-btn" data-type="monthly">
+                                <span class="toggle-icon">🔄</span>
+                                <span class="toggle-text">Mensual</span>
+                            </button>
+                        </div>
+
+                        <!-- Amount Selection -->
+                        <div class="amount-selection">
+                            <h4>Elige tu aporte:</h4>
+                            <div class="amount-buttons">
+                                <button class="amount-btn" data-amount="100">$1</button>
+                                <button class="amount-btn" data-amount="300">$3</button>
+                                <button class="amount-btn popular" data-amount="500">$5</button>
+                                <button class="amount-btn" data-amount="3000">$30</button>
+                                <button class="amount-btn premium" data-amount="10000">$100</button>
+                                <button class="amount-btn custom" data-amount="custom">Personalizado</button>
+                            </div>
+                            <input type="number" class="custom-amount" placeholder="Ingresa cantidad personalizada" min="1" max="10000" style="display: none;">
+                        </div>
+
+                        <!-- Payment Form Container -->
+                        <div class="payment-container" style="display: none;">
+                            <div class="payment-form">
+                                <div class="form-group">
+                                    <label for="card-element">Información de Tarjeta</label>
+                                    <div id="card-element" class="stripe-element">
+                                        <!-- Stripe Elements will mount here -->
+                                    </div>
+                                    <div id="card-errors" role="alert" class="error-message"></div>
+                                </div>
+
+                                <button type="submit" id="submit-payment" class="payment-btn">
+                                    <span class="btn-text">Procesar Donación</span>
+                                    <span class="btn-loader" style="display: none;">⏳</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Success Message -->
+                        <div class="success-message" style="display: none;">
+                            <div class="success-content">
+                                <div class="success-icon">✨</div>
+                                <h3>¡Gracias por tu generosidad!</h3>
+                                <p>Tu contribución impulsa la innovación y el desarrollo de código abierto.</p>
+
+                                <!-- Optional Order Registration -->
+                                <div class="order-invitation">
+                                    <h4>🎭 Únete a La Orden</h4>
+                                    <p>Los contribuyentes pueden unirse a nuestra comunidad mística de innovadores.</p>
+                                    <div class="order-form">
+                                        <input type="email" class="order-email" placeholder="tu@email.com (opcional)">
+                                        <button class="order-join-btn">Unirse a La Orden</button>
+                                        <button class="order-skip-btn">Continuar sin unirse</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tier Benefits -->
+                    <div class="tier-benefits">
+                        <h4>Beneficios por Nivel:</h4>
+                        <div class="benefit-tier bronze">
+                            <span class="tier-badge">🥉 Bronce</span>
+                            <span class="tier-range">$1-4</span>
+                            <span class="tier-perk">Reconocimiento en el Salón de la Fama</span>
+                        </div>
+                        <div class="benefit-tier silver">
+                            <span class="tier-badge">🥈 Plata</span>
+                            <span class="tier-range">$5-29</span>
+                            <span class="tier-perk">Badge especial + acceso prioritario</span>
+                        </div>
+                        <div class="benefit-tier gold">
+                            <span class="tier-badge">🥇 Oro</span>
+                            <span class="tier-range">$30-99</span>
+                            <span class="tier-perk">Experiencias exclusivas</span>
+                        </div>
+                        <div class="benefit-tier platinum">
+                            <span class="tier-badge">💎 Platino</span>
+                            <span class="tier-range">$100+</span>
+                            <span class="tier-perk">Acceso completo a La Orden</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alternative Methods Card -->
+                <div class="contribution-card">
+                    <div class="card-header">
+                        <div class="card-icon">📱</div>
+                        <h3 class="card-title">Métodos Alternativos</h3>
+                        <p class="card-description">Otras formas de apoyar nuestros proyectos.</p>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="alt-methods">
+                            <h4>Códigos QR de Pago:</h4>
+                            <div class="qr-grid">
+                                <div class="qr-item">
+                                    <div class="qr-placeholder">📱</div>
+                                    <span class="qr-label">PayPal</span>
+                                </div>
+                                <div class="qr-item">
+                                    <div class="qr-placeholder">💸</div>
+                                    <span class="qr-label">Venmo</span>
+                                </div>
+                                <div class="qr-item">
+                                    <div class="qr-placeholder">💵</div>
+                                    <span class="qr-label">Cash App</span>
+                                </div>
+                                <div class="qr-item">
+                                    <div class="qr-placeholder">🪙</div>
+                                    <span class="qr-label">Solana</span>
+                                </div>
+                            </div>
+                            <p class="qr-note">*Códigos QR reales próximamente</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Non-Financial Card -->
+                <div class="contribution-card">
+                    <div class="card-header">
+                        <div class="card-icon">🤝</div>
+                        <h3 class="card-title">Contribuciones No Monetarias</h3>
+                        <p class="card-description">Contribuye con tu tiempo y habilidades.</p>
+                    </div>
+
+                    <div class="card-content">
+                        <div class="contribution-types">
+                            <div class="contrib-type">
+                                <span class="contrib-icon">💻</span>
+                                <div class="contrib-info">
+                                    <h5>Desarrollo de Código</h5>
+                                    <p>Contribuye con PRs, reporta bugs, sugiere mejoras</p>
+                                </div>
+                            </div>
+                            <div class="contrib-type">
+                                <span class="contrib-icon">📝</span>
+                                <div class="contrib-info">
+                                    <h5>Documentación</h5>
+                                    <p>Ayuda a mejorar docs, guías y tutoriales</p>
+                                </div>
+                            </div>
+                            <div class="contrib-type">
+                                <span class="contrib-icon">🎨</span>
+                                <div class="contrib-info">
+                                    <h5>Diseño</h5>
+                                    <p>UX/UI, gráficos, branding y assets visuales</p>
+                                </div>
+                            </div>
+                            <div class="contrib-type">
+                                <span class="contrib-icon">🧪</span>
+                                <div class="contrib-info">
+                                    <h5>Testing</h5>
+                                    <p>Pruebas de calidad, testing de rendimiento</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact-section">
+        <div class="container">
+            <h2 class="section-title">🌟 Tu Impacto</h2>
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <div class="impact-icon">🔬</div>
+                    <h3>Investigación & Desarrollo</h3>
+                    <p>Impulsa la innovación en tecnologías emergentes y soluciones revolucionarias.</p>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-icon">🌍</div>
+                    <h3>Código Abierto Global</h3>
+                    <p>Contribuye a proyectos que benefician a desarrolladores de todo el mundo.</p>
+                </div>
+                <div class="impact-item">
+                    <div class="impact-icon">🚀</div>
+                    <h3>Futuro Tecnológico</h3>
+                    <p>Ayuda a construir las herramientas y plataformas del mañana.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Terrell K. Flautt</h3>
+                    <p>Ingeniero DevOps Principal</p>
+                    <p>Construcción de mundos usando diseño mágico.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <a href="index.html#about">Acerca de</a>
+                    <a href="index.html#projects">Proyectos</a>
+                    <a href="index.html#contact">Contacto</a>
+                    <a href="contribuir.html">Contribuir</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Proyectos</h4>
+                    <a href="https://github.com/terrellflautt/tmol" target="_blank">TMOL</a>
+                    <a href="https://github.com/terrellflautt/nickelpie" target="_blank">NickelPie</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Conectar</h4>
+                    <a href="https://github.com/terrellflautt" target="_blank">GitHub</a>
+                    <a href="https://linkedin.com/in/terrellflautt" target="_blank">LinkedIn</a>
+                    <a href="mailto:terrell@terrellflautt.com">Email</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Terrell K. Flautt. Todos los derechos reservados.</p>
+                <div class="footer-links">
+                    <a href="#privacy">Privacidad</a>
+                    <a href="#terms">Términos</a>
+                    <a href="contribute.html">🇺🇸 English</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="contribute.js"></script>
+    <script src="magic-user-system.js"></script>
+    <script>
+        // Set Spanish language for the contribution system
+        window.SITE_LANGUAGE = 'es';
+
+        // Initialize Spanish-specific features
+        document.addEventListener('DOMContentLoaded', () => {
+            // Update Stripe error messages for Spanish
+            if (window.contributeSystem) {
+                window.contributeSystem.setLanguage('es');
+            }
+        });
+    </script>
+</body>
+</html>
