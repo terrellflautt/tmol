@@ -30,9 +30,25 @@ class LogoEvolution {
     init() {
         this.logoElement = document.querySelector('.logo-text');
         if (this.logoElement) {
+            this.checkForPendingRevert();
             this.setupLogoClicks();
             this.startSessionTracking();
             this.checkForSessionEvolution();
+        }
+    }
+
+    checkForPendingRevert() {
+        // Check if logo should revert from previous session
+        const shouldRevert = localStorage.getItem('terrellflautt_logo_should_revert');
+        if (shouldRevert === 'true') {
+            // Ensure logo is original text and clear the flag
+            this.logoElement.textContent = this.originalText;
+            localStorage.removeItem('terrellflautt_logo_should_revert');
+
+            // Subtle hint that something changed
+            setTimeout(() => {
+                this.showEvolutionMessage('Something feels different...');
+            }, 3000);
         }
     }
 
@@ -305,6 +321,9 @@ class LogoEvolution {
 
             // Subtle notification
             this.showEvolutionMessage('Welcome back, friend.');
+
+            // ALWAYS revert back after this session
+            this.scheduleSessionRevert();
         }, 1500);
     }
 
@@ -322,7 +341,52 @@ class LogoEvolution {
 
             // Personal welcome
             this.showEvolutionMessage(`Welcome back, ${this.userProfile.username}.`);
+
+            // ALWAYS revert back after this session
+            this.scheduleSessionRevert();
         }, 1500);
+    }
+
+    scheduleSessionRevert() {
+        // Set flag to revert logo on next visit
+        localStorage.setItem('terrellflautt_logo_should_revert', 'true');
+
+        // Also revert if they stay on page too long (10+ minutes)
+        setTimeout(() => {
+            this.revertToOriginal('Extended session - logo refreshed');
+        }, 600000); // 10 minutes
+
+        // Revert on page visibility change (user switches tabs/windows)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                setTimeout(() => {
+                    if (!document.hidden && this.isEvolved && this.sessionEvolutionApplied) {
+                        this.revertToOriginal('Welcome back!');
+                    }
+                }, 2000); // 2 seconds after they return
+            }
+        });
+    }
+
+    revertToOriginal(message) {
+        if (!this.isEvolved || !this.sessionEvolutionApplied) return;
+
+        this.logoElement.style.transition = 'opacity 2s ease';
+        this.logoElement.style.opacity = '0.3';
+
+        setTimeout(() => {
+            this.logoElement.textContent = this.originalText;
+            this.logoElement.style.opacity = '1';
+            this.isEvolved = false;
+            this.sessionEvolutionApplied = false;
+
+            if (message) {
+                this.showEvolutionMessage(message);
+            }
+
+            // Clear the revert flag
+            localStorage.removeItem('terrellflautt_logo_should_revert');
+        }, 1000);
     }
 
     showEvolutionMessage(message) {
