@@ -1,6 +1,6 @@
 # Terrell K. Flautt - Portfolio Website
 
-Terrell K. Flautt's peice of the interwebs built with cutting-edge web technologies and deployed on AWS CloudFront.
+A modern, interactive portfolio website showcasing cloud architecture and DevOps expertise, built with cutting-edge web technologies and deployed on AWS CloudFront.
 
 My code is my gift to you, use it/edit how you please for your own purpose. 
 I appreciate it if you credit me and send support my way:
