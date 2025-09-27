@@ -287,6 +287,7 @@ class ContactForm {
         if (this.form) {
             this.form.addEventListener('submit', (e) => this.handleSubmit(e));
             this.setupEmailLinks();
+            this.checkForSuccessMessage();
         }
     }
 
@@ -575,11 +576,24 @@ class ContactForm {
             // Create FormData from form
             const formData = new FormData(this.form);
 
-            // Submit to Web3Forms
+            // Add required fields for Web3Forms
+            formData.append('access_key', '0da4e560-820a-4b81-8b85-91a90e019e01');
+            formData.append('subject', 'New Contact Form Submission from terrellflautt.com');
+            formData.append('from_name', 'Terrell Flautt Contact Form');
+
+            // Submit to Web3Forms with proper headers and no-cors mode
             const response = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                },
                 body: formData
             });
+
+            // Check if response is ok
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
             const result = await response.json();
 
@@ -594,9 +608,59 @@ class ContactForm {
 
         } catch (error) {
             console.error('Form submission error:', error);
-            this.showMessage('Sorry, there was an error sending your message. Please try again or contact me directly.', 'error');
+
+            // Fallback: Try standard form submission if fetch fails
+            try {
+                this.showMessage('Trying alternative submission method...', 'loading');
+
+                // Create a temporary form for standard submission
+                const tempForm = document.createElement('form');
+                tempForm.action = 'https://api.web3forms.com/submit';
+                tempForm.method = 'POST';
+                tempForm.style.display = 'none';
+
+                // Copy form data
+                const formData = new FormData(this.form);
+                for (let [key, value] of formData.entries()) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    tempForm.appendChild(input);
+                }
+
+                // Add success redirect
+                const redirectInput = document.createElement('input');
+                redirectInput.type = 'hidden';
+                redirectInput.name = 'redirect';
+                redirectInput.value = `${window.location.origin}${window.location.pathname}#contact-success`;
+                tempForm.appendChild(redirectInput);
+
+                document.body.appendChild(tempForm);
+                tempForm.submit();
+
+                // Show success message
+                this.showMessage('Message sent! Redirecting...', 'success');
+                this.form.reset();
+                this.resetFormLabels();
+                this.clearEmailIndicator();
+
+            } catch (fallbackError) {
+                console.error('Fallback submission error:', fallbackError);
+                this.showMessage('Sorry, there was an error sending your message. Please contact me directly at terrell@terrellflautt.com', 'error');
+            }
         } finally {
             this.setLoadingState(false);
+        }
+    }
+
+    checkForSuccessMessage() {
+        if (window.location.hash === '#contact-success') {
+            setTimeout(() => {
+                this.showMessage('Message sent successfully! Thank you for contacting me.', 'success');
+                // Clear the hash after showing message
+                history.replaceState(null, null, window.location.pathname);
+            }, 1000);
         }
     }
 

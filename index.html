@@ -524,12 +524,15 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                    <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
                         <!-- Web3Forms Access Key -->
                         <input type="hidden" name="access_key" value="0da4e560-820a-4b81-8b85-91a90e019e01">
 
+                        <!-- Email destination -->
+                        <input type="hidden" name="email" value="birthmybuild@gmail.com">
+
                         <!-- Optional: Redirect after successful submission -->
-                        <input type="hidden" name="redirect" value="https://terrellflautt.com#contact">
+                        <input type="hidden" name="redirect" value="https://terrellflautt.com#contact-success">
 
                         <!-- Optional: Custom subject line -->
                         <input type="hidden" name="subject" value="New Contact Form Submission from terrellflautt.com">
