@@ -765,6 +765,17 @@ class ReturningVisitorEvolution {
         document.documentElement.style.setProperty('--effect-intensity', config.effectIntensity);
     }
 
+    displayStageGoals(goals) {
+        // Display stage-specific goals to the user
+        if (!goals || !Array.isArray(goals)) return;
+
+        // Store goals for later reference
+        this.currentStageGoals = goals;
+
+        // Optionally display goals in UI (can be expanded later)
+        console.debug('Stage goals:', goals);
+    }
+
     activateStageFeatures(features) {
         // Activate stage-specific features
         if (!features || !Array.isArray(features)) return;

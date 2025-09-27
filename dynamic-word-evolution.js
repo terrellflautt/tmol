@@ -595,6 +595,50 @@ class DynamicWordEvolution {
             currentWords: this.currentWords
         };
     }
+
+    enableAdvancedEvolution() {
+        // Enable advanced word evolution features for experienced users
+        this.advancedEvolutionEnabled = true;
+        this.maxChangesPerDay = 5; // Increase daily changes
+
+        // Add more aggressive evolution patterns
+        this.beginContinuousEvolution();
+
+        console.debug('Advanced word evolution enabled');
+    }
+
+    beginContinuousEvolution() {
+        // Start continuous evolution of text elements
+        if (this.evolutionInterval) {
+            clearInterval(this.evolutionInterval);
+        }
+
+        this.evolutionInterval = setInterval(() => {
+            this.evolveRandomElement();
+        }, 30000); // Evolve every 30 seconds
+    }
+
+    evolveRandomElement() {
+        const textElements = document.querySelectorAll('p, h1, h2, h3, h4, span, a');
+        if (textElements.length === 0) return;
+
+        const randomElement = textElements[Math.floor(Math.random() * textElements.length)];
+        const currentText = randomElement.textContent.trim();
+
+        if (currentText.length > 3 && !randomElement.classList.contains('evolved-word')) {
+            this.temporaryWordShift(randomElement);
+        }
+    }
+
+    temporaryWordShift(element) {
+        const originalText = element.textContent;
+        element.classList.add('evolving');
+
+        // Brief transformation effect
+        setTimeout(() => {
+            element.classList.remove('evolving');
+        }, 2000);
+    }
 }
 
 // CSS for word evolution effects
