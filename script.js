@@ -802,8 +802,69 @@ class PerformanceOptimizer {
     }
 
     preloadResources() {
-        // External fonts disabled - using system fonts only
-        console.log('Font preloading disabled - using system fonts');
+        // Optimized font loading strategy - prefer system fonts for performance
+        this.optimizeFontLoading();
+        console.log('Font loading optimized - using system fonts for performance');
+    }
+
+    optimizeFontLoading() {
+        // Use modern font-display: swap for any web fonts that might load
+        const style = document.createElement('style');
+        style.textContent = `
+            @font-face {
+                font-family: 'System UI';
+                src: local('system-ui'), local('-apple-system'), local('BlinkMacSystemFont'),
+                     local('Segoe UI'), local('Roboto'), local('Oxygen'), local('Ubuntu'),
+                     local('Cantarell'), local('sans-serif');
+                font-display: swap;
+            }
+
+            /* Optimize font loading performance */
+            * {
+                font-family: 'System UI', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                            Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            }
+
+            /* Prevent layout shift during font loading */
+            body {
+                font-feature-settings: "kern" 1;
+                text-rendering: optimizeSpeed;
+            }
+
+            /* Optimize heading fonts */
+            h1, h2, h3, h4, h5, h6 {
+                font-family: 'System UI', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                            Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                font-weight: 600;
+            }
+        `;
+
+        // Add to head if not already present
+        if (!document.querySelector('style[data-font-optimization]')) {
+            style.setAttribute('data-font-optimization', 'true');
+            document.head.appendChild(style);
+        }
+
+        // Preconnect to potential font sources for future enhancement
+        this.addFontPreconnects();
+    }
+
+    addFontPreconnects() {
+        // Preconnect to Google Fonts for potential future use
+        const preconnectLinks = [
+            'https://fonts.googleapis.com',
+            'https://fonts.gstatic.com'
+        ];
+
+        preconnectLinks.forEach(href => {
+            if (!document.querySelector(`link[href="${href}"]`)) {
+                const link = document.createElement('link');
+                link.rel = 'preconnect';
+                link.href = href;
+                link.crossOrigin = 'anonymous';
+                document.head.appendChild(link);
+            }
+        });
     }
 
     optimizeScrollEvents() {

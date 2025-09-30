@@ -299,6 +299,107 @@ class ReturningVisitorEvolution {
         console.log(`🔄 Returning Visitor Evolution: Stage ${this.currentStage} (Visit ${this.visitHistory.length})`);
     }
 
+    activatePersonalizations() {
+        // Activate personalized features based on user stage and history
+        const stage = this.evolutionStages[this.currentStage];
+
+        // Apply subtle personalizations
+        if (this.visitHistory.length > 1) {
+            this.personalizeInterface();
+        }
+
+        // Activate stage-specific personalizations
+        this.applyStagePersonalizations(stage);
+    }
+
+    personalizeInterface() {
+        // Subtle personalization for returning visitors
+        const preferences = JSON.parse(localStorage.getItem('user_preferences') || '{}');
+
+        // Apply saved preferences subtly
+        if (preferences.preferredColorScheme) {
+            this.applyColorScheme(preferences.preferredColorScheme);
+        }
+
+        if (preferences.discoveryStyle) {
+            this.adjustDiscoveryStyle(preferences.discoveryStyle);
+        }
+    }
+
+    applyStagePersonalizations(stage) {
+        // Stage-specific personalizations
+        switch(this.currentStage) {
+            case 'newcomer':
+                this.activateNewcomerFeatures();
+                break;
+            case 'explorer':
+                this.activateExplorerFeatures();
+                break;
+            case 'seeker':
+                this.activateSeekerFeatures();
+                break;
+            case 'student':
+                this.activateStudentFeatures();
+                break;
+            case 'mystic':
+                this.activateMysticFeatures();
+                break;
+            case 'master':
+                this.activateMasterFeatures();
+                break;
+        }
+    }
+
+    activateNewcomerFeatures() {
+        // Gentle guidance for newcomers
+        setTimeout(() => {
+            this.showSubtleHint('Welcome! Try clicking on the logo...');
+        }, 10000);
+    }
+
+    activateExplorerFeatures() {
+        // More discovery opportunities for explorers
+        this.enhanceInteractionFeedback();
+    }
+
+    activateSeekerFeatures() {
+        // Deeper mysteries for seekers
+        this.enableMysteryMode();
+    }
+
+    activateStudentFeatures() {
+        // Learning tools for students
+        this.enableLearningEnhancements();
+    }
+
+    activateMysticFeatures() {
+        // Advanced features for mystics
+        this.unlockMysticAbilities();
+    }
+
+    activateMasterFeatures() {
+        // Full access for masters
+        this.grantMasterAccess();
+    }
+
+    setupEvolutionTracking() {
+        // Set up tracking for evolution progression
+        this.trackEvolutionProgress();
+    }
+
+    trackEvolutionProgress() {
+        // Track user progression through stages
+        const progressData = {
+            currentStage: this.currentStage,
+            visitCount: this.visitHistory.length,
+            totalTimeSpent: this.getTotalTimeSpent(),
+            discoveryCount: this.getTotalDiscoveries(),
+            lastUpdate: Date.now()
+        };
+
+        localStorage.setItem('evolution_progress', JSON.stringify(progressData));
+    }
+
     recordCurrentVisit() {
         const currentVisit = this.visitHistory[this.visitHistory.length - 1];
         currentVisit.stage = this.currentStage;
@@ -825,6 +926,109 @@ class ReturningVisitorEvolution {
         if (window.subtleWonderWeaver) {
             window.subtleWonderWeaver.expandAwareness();
         }
+    }
+
+    // Helper methods for personalization features
+    showSubtleHint(message) {
+        const hint = document.createElement('div');
+        hint.style.cssText = `
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 2s ease;
+            pointer-events: none;
+        `;
+        hint.textContent = message;
+        document.body.appendChild(hint);
+
+        setTimeout(() => hint.style.opacity = '1', 100);
+        setTimeout(() => {
+            hint.style.opacity = '0';
+            setTimeout(() => hint.remove(), 2000);
+        }, 5000);
+    }
+
+    enhanceInteractionFeedback() {
+        // Subtle feedback enhancements for explorers
+        document.addEventListener('click', (e) => {
+            this.createInteractionRipple(e.clientX, e.clientY);
+        });
+    }
+
+    createInteractionRipple(x, y) {
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.3);
+            transform: translate(-50%, -50%);
+            animation: rippleEffect 1s ease-out;
+            pointer-events: none;
+            z-index: 1000;
+        `;
+
+        if (!document.querySelector('style[data-ripple-styles]')) {
+            const styles = document.createElement('style');
+            styles.setAttribute('data-ripple-styles', 'true');
+            styles.textContent = `
+                @keyframes rippleEffect {
+                    from {
+                        transform: translate(-50%, -50%) scale(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translate(-50%, -50%) scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(styles);
+        }
+
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 1000);
+    }
+
+    enableMysteryMode() {
+        // Enable mystery mode for seekers
+        document.body.classList.add('mystery-mode');
+    }
+
+    enableLearningEnhancements() {
+        // Learning enhancements for students
+        document.body.classList.add('learning-enhanced');
+    }
+
+    unlockMysticAbilities() {
+        // Unlock mystic abilities
+        document.body.classList.add('mystic-abilities');
+    }
+
+    grantMasterAccess() {
+        // Grant master access
+        document.body.classList.add('master-access');
+    }
+
+    applyColorScheme(scheme) {
+        // Apply color scheme based on preferences
+        document.documentElement.setAttribute('data-color-scheme', scheme);
+    }
+
+    adjustDiscoveryStyle(style) {
+        // Adjust discovery style based on preferences
+        document.documentElement.setAttribute('data-discovery-style', style);
     }
 }
 

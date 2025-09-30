@@ -61,10 +61,74 @@ class LogoEvolution {
         // Add subtle cursor hint
         this.logoElement.style.cursor = 'pointer';
         this.logoElement.style.transition = 'all 0.5s ease';
+
+        // Add subtle hover effects to hint at interactivity
+        this.logoElement.addEventListener('mouseenter', () => {
+            this.logoElement.style.transform = 'scale(1.02)';
+            this.logoElement.style.textShadow = '0 0 10px rgba(102, 126, 234, 0.2)';
+        });
+
+        this.logoElement.addEventListener('mouseleave', () => {
+            this.logoElement.style.transform = 'scale(1)';
+            this.logoElement.style.textShadow = '';
+        });
+
+        // Subtle first-time visitor hint
+        const visitCount = parseInt(localStorage.getItem('terrellflautt_visit_count') || '0');
+        if (visitCount <= 2) {
+            setTimeout(() => {
+                this.showFirstTimeHint();
+            }, 12000); // After 12 seconds, give a gentle hint
+        }
+    }
+
+    showFirstTimeHint() {
+        // Check if user has already discovered clicking
+        const hasClickedLogo = localStorage.getItem('terrellflautt_logo_discovery');
+        if (hasClickedLogo) return;
+
+        const hint = document.createElement('div');
+        hint.style.cssText = `
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 2s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        `;
+        hint.textContent = 'psst... try clicking';
+
+        this.logoElement.style.position = 'relative';
+        this.logoElement.appendChild(hint);
+
+        setTimeout(() => {
+            hint.style.opacity = '1';
+        }, 100);
+
+        setTimeout(() => {
+            hint.style.opacity = '0';
+            setTimeout(() => {
+                if (hint.parentNode) hint.remove();
+            }, 2000);
+        }, 4000);
     }
 
     handleLogoClick() {
         this.clickCount++;
+
+        // Track discovery on first click
+        if (this.clickCount === 1) {
+            localStorage.setItem('terrellflautt_logo_discovery', 'true');
+            this.showDiscoveryEncouragement();
+        }
 
         // Clear any existing reset timeout
         if (this.resetTimeout) {
@@ -74,6 +138,8 @@ class LogoEvolution {
         // Evolve logo based on click count
         if (this.clickCount >= 3) {
             this.evolveLogo();
+        } else if (this.clickCount === 2) {
+            this.showProgressHint();
         }
 
         // Subtle feedback for each click
@@ -86,6 +152,68 @@ class LogoEvolution {
         this.resetTimeout = setTimeout(() => {
             this.resetLogo();
         }, 10000);
+    }
+
+    showDiscoveryEncouragement() {
+        const message = document.createElement('div');
+        message.style.cssText = `
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: rgba(102, 126, 234, 0.9);
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 2s ease;
+            pointer-events: none;
+        `;
+        message.textContent = 'Nice discovery! Keep clicking...';
+
+        document.body.appendChild(message);
+
+        setTimeout(() => {
+            message.style.opacity = '1';
+        }, 100);
+
+        setTimeout(() => {
+            message.style.opacity = '0';
+            setTimeout(() => message.remove(), 2000);
+        }, 3000);
+    }
+
+    showProgressHint() {
+        const hint = document.createElement('div');
+        hint.style.cssText = `
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 2s ease;
+            pointer-events: none;
+        `;
+        hint.textContent = 'Something is stirring... continue...';
+
+        document.body.appendChild(hint);
+
+        setTimeout(() => {
+            hint.style.opacity = '1';
+        }, 100);
+
+        setTimeout(() => {
+            hint.style.opacity = '0';
+            setTimeout(() => hint.remove(), 2000);
+        }, 2500);
     }
 
     evolveLogo() {
@@ -205,35 +333,89 @@ class LogoEvolution {
     }
 
     showLogoMakerHint() {
-        const hint = document.createElement('div');
-        hint.style.cssText = `
+        // Show achievement notification first
+        this.showAchievementNotification();
+
+        // Then show the portal hint
+        setTimeout(() => {
+            const hint = document.createElement('div');
+            hint.style.cssText = `
+                position: fixed;
+                bottom: 70px;
+                right: 20px;
+                background: rgba(0, 0, 0, 0.95);
+                color: #ffd700;
+                padding: 12px 16px;
+                border-radius: 8px;
+                font-size: 0.8rem;
+                z-index: 1001;
+                opacity: 0;
+                transition: opacity 2s ease;
+                pointer-events: none;
+                max-width: 200px;
+                text-align: center;
+                border: 1px solid rgba(255, 215, 0, 0.3);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            `;
+            hint.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 4px;">🎨 Logo Maker Unlocked!</div>
+                <div style="font-size: 0.7rem; opacity: 0.8;">Click the golden portal to create</div>
+            `;
+
+            document.body.appendChild(hint);
+
+            setTimeout(() => {
+                hint.style.opacity = '1';
+            }, 100);
+
+            setTimeout(() => {
+                hint.style.opacity = '0';
+                setTimeout(() => hint.remove(), 2000);
+            }, 7000);
+        }, 1500);
+    }
+
+    showAchievementNotification() {
+        const achievement = document.createElement('div');
+        achievement.style.cssText = `
             position: fixed;
-            bottom: 70px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            color: #ffd700;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            z-index: 1001;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(255, 107, 107, 0.95));
+            color: white;
+            padding: 25px 35px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            z-index: 1002;
             opacity: 0;
-            transition: opacity 2s ease;
-            pointer-events: none;
-            max-width: 150px;
+            transition: all 1s ease;
             text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
         `;
-        hint.textContent = 'Logo Maker Unlocked! Click the golden orb.';
+        achievement.innerHTML = `
+            <div style="font-size: 2em; margin-bottom: 10px;">🏆</div>
+            <div style="font-weight: bold; margin-bottom: 8px;">MASTER ACHIEVEMENT</div>
+            <div style="font-size: 0.9rem; opacity: 0.9;">Logo Maker Portal Activated</div>
+        `;
 
-        document.body.appendChild(hint);
+        document.body.appendChild(achievement);
 
         setTimeout(() => {
-            hint.style.opacity = '1';
-        }, 1000);
+            achievement.style.opacity = '1';
+            achievement.style.transform = 'translate(-50%, -50%) scale(1.05)';
+        }, 100);
 
         setTimeout(() => {
-            hint.style.opacity = '0';
-            setTimeout(() => hint.remove(), 2000);
-        }, 5000);
+            achievement.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 200);
+
+        setTimeout(() => {
+            achievement.style.opacity = '0';
+            achievement.style.transform = 'translate(-50%, -50%) scale(0.95)';
+            setTimeout(() => achievement.remove(), 1000);
+        }, 3000);
     }
 
     openLogoMaker() {

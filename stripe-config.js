@@ -12,7 +12,7 @@ const StripeConfig = {
 
     // Production Environment
     production: {
-        publishableKey: 'pk_live_51S8n1HIKz9wDf9qXch8jutJX0nSd3j9T2mRC2d9n6ajRspl3cnoRbtEBhgwilHDg5VRE20ehcLOjyOk64GKuSX1P00wwq4KpOQ',
+        publishableKey: window.STRIPE_LIVE_PUBLISHABLE_KEY || 'pk_live_51S8n1HIKz9wDf9qXch8jutJX0nSd3j9T2mRC2d9n6ajRspl3cnoRbtEBhgwilHDg5VRE20ehcLOjyOk64GKuSX1P00wwq4KpOQ',
         // SECRET KEY (sk_live_...) should NEVER be in frontend code
         // Store it securely on your server as an environment variable
     },
