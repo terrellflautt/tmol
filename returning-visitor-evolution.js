@@ -17,7 +17,7 @@ class ReturningVisitorEvolution {
 
     init() {
         this.trackCurrentSession();
-        this.applyPersonalizations();
+        this.activatePersonalizations();
         this.enableGradualFeatures();
 
         // Track session time
@@ -56,7 +56,7 @@ class ReturningVisitorEvolution {
         localStorage.setItem('terrellflautt_total_time', this.totalTimeSpent.toString());
     }
 
-    applyPersonalizations() {
+    activatePersonalizations() {
         // Apply saved preferences very subtly
         if (this.preferences.preferredSection) {
             setTimeout(() => {
@@ -71,6 +71,11 @@ class ReturningVisitorEvolution {
         if (this.visitCount > 5) {
             this.enableAdvancedFeatures();
         }
+    }
+
+    // Backward compatibility alias
+    applyPersonalizations() {
+        return this.activatePersonalizations();
     }
 
     highlightPreferredSection(sectionId) {
@@ -187,9 +192,9 @@ class ReturningVisitorEvolution {
     }
 }
 
-// Initialize for returning visitors
-if (typeof window !== 'undefined') {
-    window.returningVisitorEvolution = new ReturningVisitorEvolution();
+// Initialize for returning visitors - only if not already initialized
+if (typeof window !== 'undefined' && !window.returningVisitorEvolution) {
+    window.returningVisitorEvolutionSimple = new ReturningVisitorEvolution();
 }
 
 // Export for modules
