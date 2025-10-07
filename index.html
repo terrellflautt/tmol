@@ -6,10 +6,14 @@
     <title>Terrell K. Flautt | Lead DevOps</title>
     <meta name="description" content="Terrell K. Flautt - Lead DevOps specializing in cloud infrastructure, serverless architecture, and innovative web solutions.">
     <meta name="keywords" content="DevOps, Cloud Infrastructure, AWS, Automation, Web Development">
+
+    <!-- Preload critical game assets -->
+    <link rel="preload" href="images/game/aziza-portrait.webp" as="image">
+    <link rel="preload" href="js/core/quest-engine.js" as="script">
+
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="css/rpg-dialogue.css">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <!-- EMERGENCY FIX: Must load FIRST to remove yellow overlay -->
 </head>
 <body>
     <div class="cursor-follower"></div>
@@ -25,8 +29,8 @@
                 <a href="#about" class="nav-link">About</a>
                 <a href="#projects" class="nav-link">Projects</a>
                 <a href="#contact" class="nav-link">Contact</a>
-                <a href="#skills" class="nav-link quest-unlocked" id="nav-skills" style="display: none;">Skills</a>
-                <a href="#hall-of-fame" class="nav-link quest-unlocked" id="nav-hall-of-fame" style="display: none;">Hall of Fame</a>
+                <a href="character.html" class="nav-link quest-unlocked" id="nav-skills" style="display: none;">Skills</a>
+                <a href="hall-of-fame.html" class="nav-link quest-unlocked" id="nav-hall-of-fame" style="display: none;">Hall of Fame</a>
             </div>
             <div class="nav-toggle">
                 <span></span>
@@ -839,14 +843,36 @@
 
     <!-- Core Systems -->
     <!-- Hidden Discovery System (loads first) -->
-    <script src="js/features/hidden-discoveries.js?v=1"></script>
+    <script src="js/features/hidden-discoveries.js?v=2"></script>
+
+    <!-- Adaptive RPG Core Systems -->
+    <script src="js/core/adaptive-rpg-system.js?v=1"></script>
+    <script src="js/core/skill-system.js?v=1"></script>
+    <script src="js/core/puzzle-system.js?v=1"></script>
+    <script src="js/core/content-scheduler.js?v=1"></script>
 
     <!-- Quest for Glory Game Engine -->
-    <script src="js/core/quest-engine.js?v=1"></script>
+    <script src="js/core/quest-engine.js?v=2"></script>
     <script src="js/core/door-riddle.js?v=1"></script>
     <script src="js/features/elemental-battles.js?v=1"></script>
 
     <!-- Core Portfolio Scripts -->
     <script src="script.js?v=5"></script>
+
+    <!-- Voting System -->
+    <script src="voting-system.js?v=1"></script>
+
+    <!-- Production Error Handler -->
+    <script>
+        window.addEventListener('error', function(e) {
+            console.error('Production error:', e.error);
+            // Silently log errors in production, don't break UX
+        });
+
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+            // Silently log promise rejections
+        });
+    </script>
 </body>
 </html>
