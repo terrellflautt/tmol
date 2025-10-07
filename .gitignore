@@ -52,6 +52,7 @@ DEVELOPMENT-PROGRESS.md
 test-results.json
 *test-results.json
 button-fix-results.json
+test-*.html
 
 # MCP Servers (local only)
 mcp-servers/
