@@ -622,28 +622,32 @@ class QuestEngine {
     }
 
     async checkRiddleAnswer(answer, attempts, hintsUsed) {
-        const normalized = answer.toLowerCase().trim();
+        // Normalize: lowercase, trim, remove all punctuation
+        const normalized = answer.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
 
-        // Multiple valid answers: AZIZA or TERRELL (TKF = Terrell K. Flautt)
+        // Multiple valid answers: AZIZA, TERRELL, or ENCHANTRESS
+        // Very lenient - accepts any variation or close match
         const correctAnswers = [
             'aziza',
             'terrell',
-            'terrell k',
-            'terrell k.',
-            'terrell flautt',
+            'terrellk',
+            'terrellflautt',
             'tk',
-            't.k.',
-            't.k',
             'tkf',
             't',
             'tf',
-            'the sphinx'
+            'sphinx',
+            'the sphinx',
+            'enchantress',
+            'the enchantress'
         ];
 
+        // Accept if normalized answer matches or contains key terms
         const isCorrect = correctAnswers.some(correct =>
             normalized === correct ||
             normalized.includes('aziza') ||
-            normalized.includes('terrell')
+            normalized.includes('terrell') ||
+            normalized.includes('enchantress')
         );
 
         const resultArea = document.querySelector('#result-area');
