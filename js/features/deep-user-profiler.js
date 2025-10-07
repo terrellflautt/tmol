@@ -223,19 +223,14 @@ class DeepUserProfiler {
             source: null
         };
 
-        // Try HTML5 Geolocation first (most accurate but requires permission)
-        if (navigator.geolocation) {
-            try {
-                const position = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(resolve, reject, {
-                        timeout: 5000,
-                        maximumAge: 300000
-                    });
-                });
-
+        // Use IP-based geolocation only (no intrusive permission requests)
+        // Removed HTML5 Geolocation to avoid browser popups
+        try {
+            // Skip geolocation entirely or use passive IP lookup
+            if (false) { // Disabled geolocation
                 location.coordinates = {
-                    lat: position.coords.latitude,
-                    lon: position.coords.longitude
+                    lat: 0,
+                    lon: 0
                 };
                 location.accuracy = position.coords.accuracy;
                 location.source = 'geolocation';

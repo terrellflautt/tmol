@@ -1044,16 +1044,229 @@ class QuestEngine {
     }
 
     showContinuePrompt() {
-        // Show option to continue from last save
+        // Auto-continue where user left off with brief notification
         setTimeout(() => {
-            if (confirm('Continue your quest from where you left off?')) {
+            // Show brief Aziza notification
+            this.showAzizaNotification(
+                'Welcome back, traveler... Resuming your journey.',
+                [],
+                3000
+            );
+
+            // Auto-resume after a moment
+            setTimeout(() => {
                 if (this.gameState.act === 1) {
                     this.showAzizaIntroduction();
                 } else if (this.gameState.act === 2) {
                     this.showElementalQuestHub();
                 }
+            }, 3500);
+        }, 1000);
+    }
+
+    showAzizaNotification(message, actions = [], duration = 3000) {
+        // Create Aziza-themed notification overlay
+        const notification = document.createElement('div');
+        notification.className = 'aziza-notification';
+        notification.innerHTML = `
+            <div class="aziza-notification-content">
+                <button class="aziza-notification-close" aria-label="Close">✕</button>
+                <div class="aziza-notification-portrait">
+                    <img src="images/game/aziza-portrait.webp" alt="Aziza">
+                </div>
+                <div class="aziza-notification-body">
+                    <div class="aziza-notification-name">Aziza</div>
+                    <div class="aziza-notification-message">${message}</div>
+                    ${actions.length > 0 ? `
+                        <div class="aziza-notification-actions">
+                            ${actions.map((action, i) => `
+                                <button class="aziza-notification-btn" data-action="${i}">
+                                    ${action.text}
+                                </button>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Add styles if not already present
+        if (!document.getElementById('aziza-notification-styles')) {
+            const styles = document.createElement('style');
+            styles.id = 'aziza-notification-styles';
+            styles.textContent = `
+                .aziza-notification {
+                    position: fixed;
+                    bottom: 30px;
+                    right: 30px;
+                    z-index: 9999;
+                    animation: azizaSlideIn 0.5s ease-out;
+                }
+
+                @keyframes azizaSlideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(50px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                @keyframes azizaSlideOut {
+                    from {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                    to {
+                        opacity: 0;
+                        transform: translateY(50px);
+                    }
+                }
+
+                .aziza-notification-content {
+                    background: linear-gradient(135deg, rgba(26, 26, 46, 0.98) 0%, rgba(16, 16, 36, 0.98) 100%);
+                    border: 2px solid #ffd700;
+                    border-radius: 15px;
+                    padding: 20px;
+                    display: flex;
+                    gap: 15px;
+                    max-width: 400px;
+                    box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+                    position: relative;
+                }
+
+                .aziza-notification-close {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background: none;
+                    border: none;
+                    color: #ffd700;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    opacity: 0.6;
+                    transition: opacity 0.3s;
+                    padding: 5px;
+                    line-height: 1;
+                }
+
+                .aziza-notification-close:hover {
+                    opacity: 1;
+                }
+
+                .aziza-notification-portrait {
+                    flex-shrink: 0;
+                }
+
+                .aziza-notification-portrait img {
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 50%;
+                    border: 2px solid #ffd700;
+                    object-fit: cover;
+                }
+
+                .aziza-notification-body {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                .aziza-notification-name {
+                    color: #ffd700;
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                    font-family: 'Georgia', serif;
+                }
+
+                .aziza-notification-message {
+                    color: #e8e8ff;
+                    font-size: 0.95rem;
+                    line-height: 1.5;
+                    font-family: 'Georgia', serif;
+                    font-style: italic;
+                }
+
+                .aziza-notification-actions {
+                    display: flex;
+                    gap: 10px;
+                    margin-top: 5px;
+                }
+
+                .aziza-notification-btn {
+                    padding: 8px 16px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                    transition: all 0.3s;
+                    font-family: 'Georgia', serif;
+                }
+
+                .aziza-notification-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+                }
+
+                @media (max-width: 768px) {
+                    .aziza-notification {
+                        bottom: 20px;
+                        right: 20px;
+                        left: 20px;
+                    }
+
+                    .aziza-notification-content {
+                        max-width: none;
+                    }
+
+                    .aziza-notification-portrait img {
+                        width: 60px;
+                        height: 60px;
+                    }
+                }
+            `;
+            document.head.appendChild(styles);
+        }
+
+        // Close handlers
+        const closeNotification = () => {
+            notification.style.animation = 'azizaSlideOut 0.3s ease-in';
+            setTimeout(() => notification.remove(), 300);
+        };
+
+        // X button click
+        notification.querySelector('.aziza-notification-close').addEventListener('click', closeNotification);
+
+        // Right-click anywhere on notification
+        notification.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            closeNotification();
+        });
+
+        // Action button clicks
+        actions.forEach((action, i) => {
+            const btn = notification.querySelector(`[data-action="${i}"]`);
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    action.action();
+                    closeNotification();
+                });
             }
-        }, 2000);
+        });
+
+        // Auto-dismiss after duration
+        if (duration > 0) {
+            setTimeout(closeNotification, duration);
+        }
+
+        return notification;
     }
 
     updateAlignment(changes) {
