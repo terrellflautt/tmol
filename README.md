@@ -18,8 +18,11 @@ http://terrellflautt.com/contribute.html
 - **Contact Form**: Functional contact form with validation
 - **Performance Optimized**: Lazy loading, efficient animations, and optimized assets
 - **PWA Ready**: Service worker support for offline functionality
-- **🎮 Hidden Easter Eggs**: Quest for Glory inspired NPCs and secrets ([See Guide](EASTER-EGGS-GUIDE.md))
+- **🎮 Quest for Glory RPG System**: Complete character progression with 17 skills, turn-based PvP combat, and Hall of Fame leaderboards
+- **Hidden Easter Eggs**: Mysterious door discovery, cryptic riddles, and secret pathways ([See Guide](EASTER-EGGS-GUIDE.md))
 - **AI NPCs**: Chat with Aziza (the Sphinx), Dr. Cranium, Time Keeper, and more
+- **Character Progression**: 17 skills (0-100), dynamic level calculation, class system (Fighter, Wizard, Thief, Paladin, Hero)
+- **PvP Dueling**: Turn-based combat using actual player stats with AI opponents
 - **Privacy Education**: Transparent tracking that teaches you about data collection
 
 ## 🚀 Technologies Used
@@ -36,15 +39,31 @@ http://terrellflautt.com/contribute.html
 ```
 terrellflautt/
 ├── index.html               # Main HTML file
+├── character.html           # Character sheet page
+├── hall-of-fame.html        # Leaderboards page
 ├── styles.css               # CSS styles and animations
 ├── script.js                # JavaScript functionality
+├── css/
+│   └── character-sheet.css  # QFG-style character UI
 ├── js/
-│   └── core/
-│       ├── quest-engine.js  # Easter egg game engine
-│       └── tracking.js      # Privacy-aware analytics
+│   ├── core/
+│   │   ├── quest-engine.js          # Main game engine
+│   │   ├── adaptive-rpg-system.js   # 300+ hours content scheduler
+│   │   ├── skill-system.js          # 17-skill progression
+│   │   ├── puzzle-system.js         # 50+ adaptive puzzles
+│   │   ├── consequence-system.js    # Permanent outcomes
+│   │   ├── main-story-arc.js        # Cryptic narrative
+│   │   ├── hidden-world-system.js   # Secret discovery
+│   │   └── tracking.js              # Privacy-aware analytics
+│   └── features/
+│       ├── character-sheet.js       # Stat visualization
+│       ├── pvp-system.js            # Turn-based combat
+│       ├── hall-of-fame.js          # Leaderboards
+│       └── rpg-dialogue.js          # NPC conversations
 ├── voting-api/              # Serverless voting backend
 │   ├── vote.js              # Vote handler (Lambda)
 │   ├── tracking.js          # User tracking API
+│   ├── game-tracking.js     # RPG progress tracking
 │   ├── npc-ai.js           # AI NPC chat system
 │   ├── consciousness.js     # User profile aggregation
 │   ├── serverless.yml       # Infrastructure as code
@@ -203,23 +222,42 @@ CloudFront uses dynamic IP addresses. You have two options:
 - **Largest Contentful Paint**: < 2.5s
 - **Time to Interactive**: < 3.0s
 
-## 🎮 Easter Eggs & Hidden Features
+## 🎮 Quest for Glory RPG System
 
-This site includes a **Quest for Glory inspired** interactive experience with:
+This site includes a **complete Quest for Glory inspired RPG** with 300+ hours of content:
 
-- **AI NPCs**: Chat with characters like Aziza the Sphinx
-- **Hidden Secrets**: Find easter eggs throughout the site
-- **Progress Tracking**: Your journey is saved in localStorage
-- **Privacy Education**: Learn about tracking while being tracked
+### Character Progression
+- **17 Skills**: Strength, Intelligence, Agility, Vitality, Luck, Wisdom, Curiosity, Attention, Patience, Speed, Precision, Creativity, Code Reading, Problem Solving, Pattern Recognition
+- **Dynamic Leveling**: Level = Total Skill Points / 50
+- **5 Classes**: Fighter, Wizard, Thief, Paladin, Hero (based on highest stats)
+- **Character Sheet**: View your stats at character.html after solving the door riddle
+
+### PvP Combat System
+- **Turn-Based Dueling**: Fight AI opponents using your actual stats
+- **3 Actions**: Attack (strength-based), Defend (vitality healing), Special (intelligence + luck crits)
+- **Battle History**: Track wins/losses to Hall of Fame
+
+### Hall of Fame Leaderboards
+- **6 Categories**: Overall Score, Highest Level, Puzzles Solved, Secrets Discovered, PvP Wins, Time Spent
+- **Real Rankings**: Top players shown with gold/silver/bronze badges
+- **View Rankings**: hall-of-fame.html
+
+### Discovery Methods
+1. **Click the logo 7 times** - The door appears
+2. **Type "aziza"** - Summons the guardian
+3. **Breathing logo** - Watch for subtle animation
+4. **Solve the riddle** - "My first is the first..." (Answer: Aziza/Terrell/TK/Sphinx/Enchantress)
 
 **👉 [Full Easter Eggs Guide](EASTER-EGGS-GUIDE.md)**
 
-### Quick Start
-
-1. Visit https://terrellflautt.com
-2. Look for clickable elements (hint: check punctuation)
-3. Open browser console to see your tracking data
-4. Meet NPCs and discover secrets!
+### Quest Flow
+1. Discover door → "Try the door?"
+2. Aziza's riddle → "My first is the first..."
+3. Door opens → "You may enter"
+4. Name greeting → Enter your name
+5. Conversation → "What calls you here?" (4 choices)
+6. Elemental prophecy → Personalized with your city
+7. Character progression → Skills/Hall of Fame unlocked
 
 ## 🔌 Backend API
 
@@ -227,23 +265,34 @@ The site is powered by a **serverless API** built with AWS Lambda:
 
 - **Voting System**: Upvote/downvote projects
 - **User Tracking**: Privacy-aware analytics
+- **RPG Progress Tracking**: Save character stats, discoveries, achievements
 - **AI Chat**: Powered by OpenAI GPT-4
 - **Real-time Sync**: DynamoDB with PITR backups
 - **X-Ray Tracing**: Distributed request tracing
+
+**API Endpoint:** `api.terrellflautt.com`
 
 **API Documentation:** See [voting-api/README.md](voting-api/README.md)
 
 **Key Endpoints:**
 - `POST /vote` - Vote on projects
+- `GET /vote/{projectId}` - Get project votes
+- `POST /journey` - Track RPG journey
+- `GET /journey/{userId}` - Get user journey data
+- `POST /user-profile` - Save character stats
+- `GET /user-profile/{userId}` - Get character profile
 - `POST /npc/chat` - Chat with AI NPCs
 - `POST /consciousness/sync` - Sync user profile
 - `POST /tracking` - Track user events
+- `POST /forum/messages` - Post forum messages
+- `GET /forum/messages` - Get forum messages
 
 **Infrastructure:**
-- 66 CloudWatch alarms for monitoring
-- 25 DynamoDB tables with automated backups
-- X-Ray distributed tracing
-- CORS configured for security
+- **14 Lambda Functions**: vote, feedback, analytics, userJourney, tracking, userProfile, genie, contributions, forum, consciousness, npcAI, createCheckoutSession, stripeWebhook, contributionsWebhook
+- **CloudFront CDN**: Custom domain with api.terrellflautt.com
+- **DynamoDB Tables**: votes, feedback, user-journeys, tracking, tracking-events, hall-of-fame, donations, forum-messages, rate-limits
+- **X-Ray Tracing**: Distributed request tracing enabled
+- **CORS Configured**: Secure cross-origin requests
 
 ## 📱 Browser Support
 
