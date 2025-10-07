@@ -18,6 +18,9 @@ http://terrellflautt.com/contribute.html
 - **Contact Form**: Functional contact form with validation
 - **Performance Optimized**: Lazy loading, efficient animations, and optimized assets
 - **PWA Ready**: Service worker support for offline functionality
+- **🎮 Hidden Easter Eggs**: Quest for Glory inspired NPCs and secrets ([See Guide](EASTER-EGGS-GUIDE.md))
+- **AI NPCs**: Chat with Aziza (the Sphinx), Dr. Cranium, Time Keeper, and more
+- **Privacy Education**: Transparent tracking that teaches you about data collection
 
 ## 🚀 Technologies Used
 
@@ -32,13 +35,25 @@ http://terrellflautt.com/contribute.html
 
 ```
 terrellflautt/
-├── index.html          # Main HTML file
-├── styles.css          # CSS styles and animations
-├── script.js           # JavaScript functionality
-├── favicon.svg         # Website favicon
-├── deploy.sh           # AWS deployment script
-├── package.json        # Project configuration
-└── README.md           # Project documentation
+├── index.html               # Main HTML file
+├── styles.css               # CSS styles and animations
+├── script.js                # JavaScript functionality
+├── js/
+│   └── core/
+│       ├── quest-engine.js  # Easter egg game engine
+│       └── tracking.js      # Privacy-aware analytics
+├── voting-api/              # Serverless voting backend
+│   ├── vote.js              # Vote handler (Lambda)
+│   ├── tracking.js          # User tracking API
+│   ├── npc-ai.js           # AI NPC chat system
+│   ├── consciousness.js     # User profile aggregation
+│   ├── serverless.yml       # Infrastructure as code
+│   └── README.md            # API documentation
+├── favicon.svg              # Website favicon
+├── deploy.sh                # AWS deployment script
+├── package.json             # Project configuration
+├── README.md                # Project documentation
+└── EASTER-EGGS-GUIDE.md     # Hidden features guide
 ```
 
 ## 🛠️ Local Development
@@ -187,6 +202,48 @@ CloudFront uses dynamic IP addresses. You have two options:
 - **First Contentful Paint**: < 1.5s
 - **Largest Contentful Paint**: < 2.5s
 - **Time to Interactive**: < 3.0s
+
+## 🎮 Easter Eggs & Hidden Features
+
+This site includes a **Quest for Glory inspired** interactive experience with:
+
+- **AI NPCs**: Chat with characters like Aziza the Sphinx
+- **Hidden Secrets**: Find easter eggs throughout the site
+- **Progress Tracking**: Your journey is saved in localStorage
+- **Privacy Education**: Learn about tracking while being tracked
+
+**👉 [Full Easter Eggs Guide](EASTER-EGGS-GUIDE.md)**
+
+### Quick Start
+
+1. Visit https://terrellflautt.com
+2. Look for clickable elements (hint: check punctuation)
+3. Open browser console to see your tracking data
+4. Meet NPCs and discover secrets!
+
+## 🔌 Backend API
+
+The site is powered by a **serverless API** built with AWS Lambda:
+
+- **Voting System**: Upvote/downvote projects
+- **User Tracking**: Privacy-aware analytics
+- **AI Chat**: Powered by OpenAI GPT-4
+- **Real-time Sync**: DynamoDB with PITR backups
+- **X-Ray Tracing**: Distributed request tracing
+
+**API Documentation:** See [voting-api/README.md](voting-api/README.md)
+
+**Key Endpoints:**
+- `POST /vote` - Vote on projects
+- `POST /npc/chat` - Chat with AI NPCs
+- `POST /consciousness/sync` - Sync user profile
+- `POST /tracking` - Track user events
+
+**Infrastructure:**
+- 66 CloudWatch alarms for monitoring
+- 25 DynamoDB tables with automated backups
+- X-Ray distributed tracing
+- CORS configured for security
 
 ## 📱 Browser Support
 
