@@ -7,6 +7,9 @@ provider:
   stage: prod
   memorySize: 256
   timeout: 30
+  tracing:
+    lambda: true
+    apiGateway: true
   environment:
     VOTES_TABLE: ${self:service}-${self:provider.stage}-votes
     FEEDBACK_TABLE: ${self:service}-${self:provider.stage}-feedback
@@ -46,6 +49,11 @@ provider:
         - s3:PutObjectAcl
       Resource:
         - "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: "*"
 
 plugins:
   - serverless-domain-manager
@@ -67,14 +75,28 @@ functions:
       - http:
           path: vote
           method: post
-          cors: true
+          cors:
+            origin: 'https://terrellflautt.com'
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Requested-With
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+            allowCredentials: true
           throttle:
             rate: 10
             burst: 20
       - http:
           path: vote/{projectId}
           method: get
-          cors: true
+          cors:
+            origin: 'https://terrellflautt.com'
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: true
           throttle:
             rate: 50
             burst: 100

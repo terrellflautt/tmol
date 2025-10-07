@@ -5,9 +5,10 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const VOTES_TABLE = process.env.VOTES_TABLE;
 
 const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Origin': 'https://terrellflautt.com',
+  'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Requested-With',
+  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+  'Access-Control-Allow-Credentials': 'true'
 };
 
 exports.handler = async (event) => {
