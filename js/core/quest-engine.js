@@ -484,14 +484,13 @@ class QuestEngine {
 
                         <div style="background: rgba(255, 215, 0, 0.12); padding: 30px;
                              border-radius: 12px; margin-bottom: 35px; border-left: 4px solid #ffd700;">
-                            <p style="font-size: 1.25rem; line-height: 2; font-style: italic; color: #ffd700;">
-                                "Elementals are very powerful and destructive.<br>
-                                They can be weakened by the contrary Element,<br>
-                                but they cannot be destroyed."
-                            </p>
-                            <p style="font-size: 1.3rem; line-height: 2; font-weight: bold;
-                                 color: #fff; margin-top: 25px; text-align: center;">
-                                "What force can weaken that which cannot be destroyed?"
+                            <p style="font-size: 1.3rem; line-height: 2; font-style: italic; color: #ffd700; text-align: center;">
+                                "My first is the first.<br>
+                                My second is the last.<br>
+                                Next comes myself.<br>
+                                Then back to the end,<br>
+                                and to the beginning again.<br><br>
+                                <span style="color: #fff; font-weight: bold; font-size: 1.4rem;">Who am I?</span>"
                             </p>
                         </div>
 
@@ -612,33 +611,39 @@ class QuestEngine {
         const hintText = document.querySelector('#hint-text');
 
         const hints = [
-            "The riddle speaks its own answer. Read carefully what Aziza has already told you...",
-            "Look at the exact words: 'They can be weakened by the _____ Element'",
-            "The answer is a single word describing an Element that opposes another. It's right there in the riddle."
+            "The riddle describes letters in a name. Think about the alphabet...",
+            "First letter of the alphabet is A. Last letter is Z. What letter represents 'myself'?",
+            "A (first), Z (last), I (myself), Z (end), A (beginning). Put them together..."
         ];
 
         hintArea.style.display = 'block';
         hintArea.style.animation = 'fadeIn 0.4s';
-        hintText.textContent = hints[hintLevel] || "No more hints! The answer relates to opposites...";
+        hintText.textContent = hints[hintLevel] || "No more hints! It spells a name you should know...";
     }
 
     async checkRiddleAnswer(answer, attempts, hintsUsed) {
         const normalized = answer.toLowerCase().trim();
 
-        // Multiple acceptable answers
+        // Multiple valid answers: AZIZA or TERRELL (TKF = Terrell K. Flautt)
         const correctAnswers = [
-            'contrary',
-            'opposite',
-            'opposing',
-            'contrary element',
-            'opposite element',
-            'opposing element',
-            'the contrary element',
-            'the opposite element'
+            'aziza',
+            'terrell',
+            'terrell k',
+            'terrell k.',
+            'terrell flautt',
+            'tk',
+            't.k.',
+            't.k',
+            'tkf',
+            't',
+            'tf',
+            'the sphinx'
         ];
 
         const isCorrect = correctAnswers.some(correct =>
-            normalized === correct || normalized.includes(correct.split(' ')[0])
+            normalized === correct ||
+            normalized.includes('aziza') ||
+            normalized.includes('terrell')
         );
 
         const resultArea = document.querySelector('#result-area');
@@ -682,10 +687,10 @@ class QuestEngine {
                         ✓ CORRECT!
                     </p>
                     <p style="color: #fff; font-size: 1.1rem; line-height: 1.7;">
-                        "The contrary element... Yes. You understand."
+                        "Yes... You have spoken my name. You understand."
                     </p>
                     <p style="color: #ffd700; font-size: 1rem; margin-top: 15px; font-style: italic;">
-                        Aziza nods slowly. "The lamp is yours, seeker..."
+                        The sphinx smiles knowingly. "The lamp is yours, seeker..."
                     </p>
                 </div>
             `;
