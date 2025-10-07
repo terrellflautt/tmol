@@ -395,22 +395,30 @@ class QuestEngine {
             alignmentChanges: alignment
         });
 
+        // Get user's location for personalized vision
+        const location = await this.getUserLocation();
+        const locationText = location.city ? `in ${location.city}` : location.region ? `in ${location.region}` : 'in your realm';
+
         // Aziza's response based on choice
         const responses = {
             wisdom: {
                 text: '"Wisdom... The path reveals itself to those who listen. You have chosen well, seeker."',
-                next: '"I shall grant you a test. Answer my riddle, and the Ancient Lamp is yours..."'
+                vision: `"I have seen visions... troubling visions. Four elementals rise ${locationText}. Fire, Water, Air, and Earth... they threaten to consume all in chaos."`,
+                next: '"But there is hope. You may be the one to stop them. First, prove your worth. Answer my riddle, and the Ancient Lamp is yours..."'
             },
             power: {
                 text: '"Power... Interesting. The void calls to you, does it not? Some paths lead to power. Some to madness. Often... both."',
-                next: '"But first, prove your cunning. Solve my riddle, and power shall be within reach..."'
+                vision: `"Know this: Four elementals gather strength ${locationText}. Fire burns. Water drowns. Air suffocates. Earth crushes. Such power... unchecked."`,
+                next: '"You seek control? Then prove your cunning. Solve my riddle, and power shall be within reach..."'
             },
             curiosity: {
                 text: '"Curiosity without agenda... Rare. Most seek with purpose. You seek with wonder. Aziza... approves."',
-                next: '"Let us see how deep your curiosity runs. Answer my riddle..."'
+                vision: `"Perhaps curiosity will serve you well. I have glimpsed strange forces awakening ${locationText}... four ancient beings of Fire, Water, Air, and Earth."`,
+                next: '"Whether you can stop them... that remains to be seen. Let us see how deep your curiosity runs. Answer my riddle..."'
             },
             truth: {
                 text: '"Truth beyond illusion... You see that reality itself is layered. Like this place. Portfolio... and more."',
+                vision: `"Then know the truth: Four elementals manifest ${locationText}. They are not metaphor. They are real. Fire. Water. Air. Earth. All converging."`,
                 next: '"The truth you seek lies beyond my riddle. Shall we begin?"'
             }
         };
@@ -424,6 +432,8 @@ class QuestEngine {
         dialogueText.innerHTML = `
             <p style="margin-bottom: 20px; color: #ffd700;">${response.text}</p>
             <p style="margin-bottom: 20px; color: #a0a0ff;"><em>Aziza's eyes gleam with ancient knowledge...</em></p>
+            <p style="margin-bottom: 20px; color: #ff6b6b;">${response.vision}</p>
+            <p style="margin-bottom: 20px; color: #a0a0ff;"><em>The sphinx's gaze pierces through time and space...</em></p>
             <p style="margin-bottom: 20px;">${response.next}</p>
         `;
 
@@ -1328,6 +1338,37 @@ class QuestEngine {
             screen: `${screen.width}x${screen.height}`,
             language: navigator.language
         };
+    }
+
+    async getUserLocation() {
+        // Check if we already have cached location
+        if (this.gameState.userLocation) {
+            return this.gameState.userLocation;
+        }
+
+        try {
+            // Use free IP geolocation service (no API key required)
+            const response = await fetch('https://ipapi.co/json/');
+            const data = await response.json();
+
+            const location = {
+                city: data.city || null,
+                region: data.region || null,
+                country: data.country_name || null,
+                timezone: data.timezone || null,
+                ip: data.ip || null
+            };
+
+            // Cache location in game state
+            this.gameState.userLocation = location;
+            this.saveGameState();
+
+            return location;
+        } catch (error) {
+            console.warn('Could not fetch user location:', error);
+            // Return default if API fails
+            return { city: null, region: null, country: null, timezone: null, ip: null };
+        }
     }
 
     loadGameState() {
