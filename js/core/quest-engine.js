@@ -157,13 +157,13 @@ class QuestEngine {
                 animation: fadeIn 1.5s;
             ">
                 <h1 style="font-size: 3rem; margin-bottom: 20px; color: #ffd700; text-shadow: 0 0 20px #ffd700;">
-                    ✨ A Hidden Door Appears ✨
+                    You discover a door.
                 </h1>
                 <p style="font-size: 1.3rem; margin-bottom: 10px; max-width: 600px; line-height: 1.6;">
-                    You have discovered what others miss.
+                    You have found what others miss.
                 </p>
                 <p style="font-size: 1.1rem; margin-bottom: 30px; opacity: 0.8; font-style: italic;">
-                    "This portfolio... it's not just a portfolio..."
+                    "Hm, this website isn't what it seems."
                 </p>
                 <button class="enter-door-btn" style="
                     padding: 15px 50px;
@@ -176,7 +176,7 @@ class QuestEngine {
                     box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
                     transition: all 0.3s;
                 ">
-                    🚪 Enter the Quest
+                    Try the door?
                 </button>
             </div>
 
@@ -218,8 +218,8 @@ class QuestEngine {
             referrer: document.referrer
         });
 
-        // Show the door riddle first
-        this.showDoorRiddle();
+        // Show Aziza's name greeting at the door
+        this.showAzizaNameGreeting();
     }
 
     /**
@@ -437,17 +437,16 @@ class QuestEngine {
 
                         <div id="dialogue-text" style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 30px;">
                             <p style="margin-bottom: 20px;">
-                                "You have arrived, ${this.gameState.playerName || 'seeker'}... This surprises Aziza. But does not displease her."
+                                "So. ${this.gameState.playerName}..."
                             </p>
                             <p style="margin-bottom: 20px; color: #a0a0ff;">
-                                <em>The sphinx studies you with ancient eyes...</em>
+                                <em>Ancient eyes study you, measuring something unseen...</em>
                             </p>
                             <p style="margin-bottom: 20px;">
-                                "Most who visit this place see only... code. Projects. A resume.
-                                But YOU... you saw the door. You spoke a name. You understand the hidden path."
+                                "You found the door where others see only walls. You spoke when silence would have been... safer."
                             </p>
                             <p style="margin-bottom: 20px; color: #ffd700;">
-                                "Tell me, ${this.gameState.playerName || 'seeker'}... what do you seek?"
+                                "Tell me, seeker... what calls you here?"
                             </p>
                         </div>
 
@@ -464,7 +463,7 @@ class QuestEngine {
                                 transition: all 0.3s;
                                 font-family: 'Georgia', serif;
                             ">
-                                🧠 "I seek knowledge. Wisdom. Understanding of the hidden patterns."
+                                "Understanding. The truth beneath the surface."
                             </button>
 
                             <button class="choice-btn" data-choice="power" style="
@@ -479,7 +478,7 @@ class QuestEngine {
                                 transition: all 0.3s;
                                 font-family: 'Georgia', serif;
                             ">
-                                ⚡ "I seek power. The secrets that give control."
+                                "Power. The ability to shape reality itself."
                             </button>
 
                             <button class="choice-btn" data-choice="curiosity" style="
@@ -494,7 +493,7 @@ class QuestEngine {
                                 transition: all 0.3s;
                                 font-family: 'Georgia', serif;
                             ">
-                                🔍 "I seek... whatever is here to be found. I'm just curious."
+                                "I don't know yet. Something drew me here."
                             </button>
 
                             <button class="choice-btn" data-choice="truth" style="
@@ -509,7 +508,7 @@ class QuestEngine {
                                 transition: all 0.3s;
                                 font-family: 'Georgia', serif;
                             ">
-                                👁️ "I seek truth. What is real beyond the illusions?"
+                                "What lies beyond what I can see."
                             </button>
                         </div>
                     </div>
@@ -573,24 +572,24 @@ class QuestEngine {
         // Aziza's response based on choice
         const responses = {
             wisdom: {
-                text: '"Wisdom... The path reveals itself to those who listen. You have chosen well, seeker."',
-                vision: `"I have seen visions... troubling visions. Four elementals rise ${locationText}. Fire, Water, Air, and Earth... they threaten to consume all in chaos."`,
-                next: '"But there is hope. You may be the one to stop them. First, prove your worth. Answer my riddle, and the Ancient Lamp is yours..."'
+                text: '"Understanding..." <em>She pauses, watching you.</em> "Yes. Those who see beneath... they alone find what matters."',
+                vision: `"Four ancient powers stir. Elementals of old. They gather strength ${locationText}, drawn by... something." <em>Her eyes darken.</em> "And beneath them all... something older. Something that should not wake."`,
+                next: '"You will need more than wisdom to face what comes. But first... prove you can see what others miss."'
             },
             power: {
-                text: '"Power... Interesting. The void calls to you, does it not? Some paths lead to power. Some to madness. Often... both."',
-                vision: `"Know this: Four elementals gather strength ${locationText}. Fire burns. Water drowns. Air suffocates. Earth crushes. Such power... unchecked."`,
-                next: '"You seek control? Then prove your cunning. Solve my riddle, and power shall be within reach..."'
+                text: '"Power..." <em>A knowing smile crosses her features.</em> "The void whispers to you, yes? Careful, seeker. That which grants power... often demands payment."',
+                vision: `"Four forces converge ${locationText}. Fire. Water. Air. Earth. Unchecked. Untamed. Such power could reshape everything... or destroy it utterly."`,
+                next: '"You wish to command such forces? Then show me your will. Solve what I set before you."'
             },
             curiosity: {
-                text: '"Curiosity without agenda... Rare. Most seek with purpose. You seek with wonder. Aziza... approves."',
-                vision: `"Perhaps curiosity will serve you well. I have glimpsed strange forces awakening ${locationText}... four ancient beings of Fire, Water, Air, and Earth."`,
-                next: '"Whether you can stop them... that remains to be seen. Let us see how deep your curiosity runs. Answer my riddle..."'
+                text: '"You seek without knowing what you seek..." <em>She tilts her head, intrigued.</em> "Interesting. Most mortals fear the unknown. You... embrace it."',
+                vision: `"Something stirs ${locationText}. Four elementals, awakening from slumber. Why now? Why there? Perhaps your curiosity will uncover what even Aziza cannot see."`,
+                next: '"Let us discover together what you are capable of. Answer what I ask..."'
             },
             truth: {
-                text: '"Truth beyond illusion... You see that reality itself is layered. Like this place. Portfolio... and more."',
-                vision: `"Then know the truth: Four elementals manifest ${locationText}. They are not metaphor. They are real. Fire. Water. Air. Earth. All converging."`,
-                next: '"The truth you seek lies beyond my riddle. Shall we begin?"'
+                text: '"Ah. You sense the layers..." <em>The air shimmers around her.</em> "This place is more than it appears. So too are you, perhaps."',
+                vision: `"The truth: Four elementals manifest ${locationText}. Not symbols. Not dreams. Real as the door you found. Fire. Water. Air. Earth. All drawn to a focal point."`,
+                next: '"If you would know the full truth... you must prove yourself worthy of it."'
             }
         };
 
