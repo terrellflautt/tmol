@@ -266,17 +266,17 @@ class QuestEngine {
 
                         <div id="dialogue-text" style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 30px;">
                             <p style="margin-bottom: 20px;">
-                                "You have arrived... This surprises Aziza. But does not displease her."
+                                "You have arrived, ${this.gameState.playerName || 'seeker'}... This surprises Aziza. But does not displease her."
                             </p>
                             <p style="margin-bottom: 20px; color: #a0a0ff;">
                                 <em>The sphinx studies you with ancient eyes...</em>
                             </p>
                             <p style="margin-bottom: 20px;">
                                 "Most who visit this place see only... code. Projects. A resume.
-                                But YOU... you saw the door. The hidden path."
+                                But YOU... you saw the door. You spoke a name. You understand the hidden path."
                             </p>
                             <p style="margin-bottom: 20px; color: #ffd700;">
-                                "Tell me, seeker... what do you seek?"
+                                "Tell me, ${this.gameState.playerName || 'seeker'}... what do you seek?"
                             </p>
                         </div>
 
@@ -662,10 +662,11 @@ class QuestEngine {
         });
 
         if (isCorrect) {
-            // Success!
+            // Success! Save the user's chosen name from their answer
             this.gameState.riddleSolved = true;
             this.gameState.riddleAttempts = attempts;
             this.gameState.riddleHintsUsed = hintsUsed;
+            this.gameState.playerName = answer.trim(); // Save their exact answer as their name
             this.saveGameState();
 
             // Award wisdom based on performance
