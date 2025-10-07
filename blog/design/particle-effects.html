@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Particle Systems: Performance-Optimized Visual Effects</title>
+    <meta name="description" content="60fps particle bursts for web interfaces. Canvas optimization, memory management, GPU acceleration. Visual magic without performance cost.">
+    <meta name="keywords" content="canvas particles, web animation, performance optimization, GPU acceleration, visual effects, 60fps animation">
+    <meta name="author" content="Terrell K. Flautt">
+    <meta property="og:title" content="Canvas Particle Effects: Performance-First Animation">
+    <meta property="og:description" content="Building smooth particle systems that enhance interfaces without sacrificing performance.">
+    <meta property="og:type" content="article">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Canvas Particle Systems: Performance-Optimized Visual Effects",
+        "author": {"@type": "Person", "name": "Terrell K. Flautt"},
+        "datePublished": "2024-09-18"
+    }
+    </script>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        .article-container {
+            max-width: 700px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .article-header {
+            margin-bottom: 30px;
+        }
+        .article-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #f093fb;
+        }
+        .article-meta {
+            color: #888;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            color: #f093fb;
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        .article-content {
+            line-height: 1.6;
+        }
+        .article-content p {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <a href="index.html" class="back-link">← Back to Design</a>
+
+        <div class="article-header">
+            <h1 class="article-title">Particle Effects</h1>
+            <div class="article-meta">Sept 29, 2025</div>
+        </div>
+
+        <div class="article-content">
+            <h2>Performance-First Particles</h2>
+            <p>Visual effects that enhance without degrading. 60fps target. Memory efficient. GPU accelerated when possible.</p>
+
+            <div class="code-block">
+// Core particle system
+class ParticleSystem {
+    constructor() {
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.animationId = null;
+
+        this.setupCanvas();
+    }
+
+    setupCanvas() {
+        this.canvas.style.cssText = `
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        `;
+
+        this.resizeCanvas();
+        window.addEventListener('resize', () => this.resizeCanvas());
+    }
+
+    resizeCanvas() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+}
+            </div>
+
+            <h3>Burst Generation</h3>
+            <p>Radial particle distribution. Velocity randomization. Color variety. Size variation.</p>
+
+            <div class="code-block">
+createBurst(x, y, options = {}) {
+    const defaults = {
+        count: 30,
+        colors: ['#667eea', '#764ba2'],
+        speed: 5,
+        life: 2000
+    };
+
+    const config = { ...defaults, ...options };
+
+    for (let i = 0; i < config.count; i++) {
+        const angle = (Math.PI * 2 * i) / config.count + Math.random() * 0.3;
+        const speed = config.speed * (0.5 + Math.random() * 0.5);
+
+        this.particles.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            color: config.colors[Math.floor(Math.random() * config.colors.length)],
+            size: 2 + Math.random() * 4,
+            life: config.life,
+            maxLife: config.life,
+            decay: 0.98
+        });
+    }
+
+    if (!this.animationId) this.startAnimation();
+}
+            </div>
+
+            <h3>Animation Loop</h3>
+            <p>RequestAnimationFrame based. Particle lifecycle management. Automatic cleanup.</p>
+
+            <div class="code-block">
+startAnimation() {
+    if (!document.body.contains(this.canvas)) {
+        document.body.appendChild(this.canvas);
+    }
+
+    const animate = () => {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.particles = this.particles.filter(particle => {
+            // Update physics
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            particle.vx *= particle.decay;
+            particle.vy *= particle.decay;
+            particle.life -= 16; // ~60fps assumption
+
+            // Render
+            const alpha = particle.life / particle.maxLife;
+            this.ctx.save();
+            this.ctx.globalAlpha = alpha;
+            this.ctx.fillStyle = particle.color;
+            this.ctx.beginPath();
+            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.restore();
+
+            return particle.life > 0;
+        });
+
+        if (this.particles.length > 0) {
+            this.animationId = requestAnimationFrame(animate);
+        } else {
+            this.stopAnimation();
+        }
+    };
+
+    this.animationId = requestAnimationFrame(animate);
+}
+
+stopAnimation() {
+    if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+        this.animationId = null;
+    }
+
+    if (this.canvas.parentNode) {
+        this.canvas.parentNode.removeChild(this.canvas);
+    }
+}
+            </div>
+
+            <h3>Memory Management</h3>
+            <p>Particle pool reuse. Canvas cleanup. Event listener removal. Garbage collection friendly.</p>
+
+            <div class="code-block">
+// Efficient particle management
+class OptimizedParticleSystem extends ParticleSystem {
+    constructor() {
+        super();
+        this.particlePool = [];
+        this.maxParticles = 500; // Performance limit
+    }
+
+    getParticle() {
+        return this.particlePool.pop() || {};
+    }
+
+    recycleParticle(particle) {
+        // Reset properties
+        Object.keys(particle).forEach(key => delete particle[key]);
+        this.particlePool.push(particle);
+    }
+
+    createBurst(x, y, options = {}) {
+        // Respect performance limits
+        if (this.particles.length > this.maxParticles) return;
+
+        const config = { ...this.defaults, ...options };
+
+        for (let i = 0; i < Math.min(config.count, this.maxParticles - this.particles.length); i++) {
+            const particle = this.getParticle();
+
+            // Initialize reused particle
+            const angle = (Math.PI * 2 * i) / config.count;
+            const speed = config.speed * (0.5 + Math.random() * 0.5);
+
+            Object.assign(particle, {
+                x, y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                color: config.colors[Math.floor(Math.random() * config.colors.length)],
+                size: 2 + Math.random() * 4,
+                life: config.life,
+                maxLife: config.life,
+                decay: 0.98
+            });
+
+            this.particles.push(particle);
+        }
+    }
+}
+            </div>
+
+            <h3>Integration Points</h3>
+            <p>Logo clicks trigger bursts. Menu reveals get sparkles. Discovery celebrations get explosions.</p>
+
+            <div class="code-block">
+// Portfolio integration examples
+const particles = new OptimizedParticleSystem();
+
+// Logo evolution celebration
+function celebrateLogoEvolution(logoElement) {
+    const rect = logoElement.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    particles.createBurst(x, y, {
+        count: 20,
+        colors: ['#667eea', '#764ba2'],
+        speed: 3,
+        life: 1500
+    });
+}
+
+// Menu link appearance
+function enhanceMenuReveal(linkElement) {
+    const rect = linkElement.getBoundingClientRect();
+
+    particles.createBurst(rect.right - 10, rect.top + rect.height / 2, {
+        count: 8,
+        colors: ['rgba(255,255,255,0.8)'],
+        speed: 2,
+        life: 1000
+    });
+}
+
+// Easter egg discovery
+function explodeDiscovery(element) {
+    const rect = element.getBoundingClientRect();
+
+    particles.createBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, {
+        count: 50,
+        colors: ['#ffd700', '#ff6b6b', '#4ecdc4'],
+        speed: 6,
+        life: 3000
+    });
+}
+            </div>
+
+            <h3>Performance Monitoring</h3>
+            <p>Frame rate tracking. Particle count limits. Automatic quality adjustment.</p>
+
+            <div class="code-block">
+// Performance-aware system
+class SmartParticleSystem extends OptimizedParticleSystem {
+    constructor() {
+        super();
+        this.frameCount = 0;
+        this.lastFpsCheck = Date.now();
+        this.currentFps = 60;
+        this.qualityLevel = 1; // 0.5 = half particles, 2 = double
+    }
+
+    checkPerformance() {
+        this.frameCount++;
+        const now = Date.now();
+
+        if (now - this.lastFpsCheck > 1000) {
+            this.currentFps = this.frameCount;
+            this.frameCount = 0;
+            this.lastFpsCheck = now;
+
+            // Adjust quality based on performance
+            if (this.currentFps < 45) {
+                this.qualityLevel = Math.max(0.5, this.qualityLevel * 0.8);
+            } else if (this.currentFps > 55) {
+                this.qualityLevel = Math.min(2, this.qualityLevel * 1.1);
+            }
+        }
+    }
+
+    createBurst(x, y, options = {}) {
+        options.count = Math.floor((options.count || 30) * this.qualityLevel);
+        super.createBurst(x, y, options);
+    }
+}
+            </div>
+
+            <p>Built for my portfolio's magic moments. Celebrates discoveries without overwhelming slower devices. Quality scales automatically.</p>
+        </div>
+    </div>
+
+    <script src="../../magic-user-system.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "spanish": {
+    "title": "Contribuir | Terrell K. Flautt",
+    "language": "es",
+    "hasStripe": true,
+    "donationButtonsText": [
+      "$1",
+      "$3",
+      "$5",
+      "$30",
+      "$100",
+      "Personalizado"
+    ],
+    "navigationText": [
+      "Acerca de",
+      "Proyectos",
+      "Contacto",
+      "Contribuir",
+      "🇺🇸 EN"
+    ]
+  },
+  "english": {
+    "title": "Contribute | Terrell K. Flautt",
+    "hasStripe": true,
+    "donationButtonsText": [
+      "$1",
+      "$3",
+      "$5",
+      "$30",
+      "$100"
+    ],
+    "navigationText": [
+      "About",
+      "Projects",
+      "Contact",
+      "Contribute"
+    ]
+  },
+  "differences": [
+    "Title difference: \"Contribuir | Terrell K. Flautt\" vs \"Contribute | Terrell K. Flautt\"",
+    "Language setting: \"es\" vs \"undefined\""
+  ]
+}

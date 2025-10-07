@@ -1,0 +1,99 @@
+service: terrellflautt-logo-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: ${opt:stage, 'prod'}
+  environment:
+    STAGE: ${self:provider.stage}
+    S3_BUCKET: terrellflautt-logos
+    OPENAI_API_KEY: ${ssm:/terrellflautt/openai-api-key}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+        - s3:DeleteObject
+      Resource: "arn:aws:s3:::terrellflautt-logos/*"
+
+functions:
+  # Enhanced AI logo generation (optional upgrade from client-side)
+  generateAdvanced:
+    handler: handler.generateAdvanced
+    timeout: 30
+    events:
+      - http:
+          path: /generate/advanced
+          method: post
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+
+  # Logo optimization and variants
+  optimize:
+    handler: handler.optimize
+    events:
+      - http:
+          path: /optimize
+          method: post
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+
+  # Save logo to cloud storage
+  save:
+    handler: handler.save
+    events:
+      - http:
+          path: /save
+          method: post
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+
+  # Get premium templates
+  templates:
+    handler: handler.getTemplates
+    events:
+      - http:
+          path: /templates
+          method: get
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+
+resources:
+  Resources:
+    LogoDomainName:
+      Type: AWS::ApiGatewayV2::DomainName
+      Properties:
+        DomainName: logo.terrellflautt.com
+        DomainNameConfigurations:
+          - CertificateArn: ${ssm:/terrellflautt/ssl-certificate-arn}
+            EndpointType: REGIONAL
+
+    LogoMapping:
+      Type: AWS::ApiGatewayV2::ApiMapping
+      Properties:
+        DomainName: !Ref LogoDomainName
+        ApiId: !Ref HttpApi
+        Stage: ${self:provider.stage}
+
+    LogoS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: terrellflautt-logos
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
+
+plugins:
+  - serverless-offline

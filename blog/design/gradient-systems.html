@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Gradient Animation: CSS Custom Properties + JS Control</title>
+    <meta name="description" content="Logo color evolution through CSS custom properties. JavaScript-controlled gradient transitions. Performance-optimized animation systems.">
+    <meta name="keywords" content="css custom properties, gradient animation, logo evolution, css variables, dynamic styling, performance optimization">
+    <meta name="author" content="Terrell K. Flautt">
+    <meta property="og:title" content="Dynamic Gradient Systems for Interactive Design">
+    <meta property="og:description" content="Building smooth color transitions that respond to user interaction through CSS custom properties.">
+    <meta property="og:type" content="article">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Dynamic Gradient Animation: CSS Custom Properties + JS Control",
+        "author": {"@type": "Person", "name": "Terrell K. Flautt"},
+        "datePublished": "2024-09-18"
+    }
+    </script>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        .article-container {
+            max-width: 700px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .article-header {
+            margin-bottom: 30px;
+        }
+        .article-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #f093fb;
+        }
+        .article-meta {
+            color: #888;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            color: #f093fb;
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        .article-content {
+            line-height: 1.6;
+        }
+        .article-content p {
+            margin-bottom: 15px;
+        }
+        .demo-gradient {
+            background: linear-gradient(45deg, var(--color-1, #667eea), var(--color-2, #764ba2));
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <a href="index.html" class="back-link">← Back to Design</a>
+
+        <div class="article-header">
+            <h1 class="article-title">Gradient Systems</h1>
+            <div class="article-meta">Sept 28, 2025</div>
+        </div>
+
+        <div class="article-content">
+            <h2>Variable-Driven Color</h2>
+            <p>CSS custom properties enable runtime gradient control. JavaScript updates variables. Transitions happen automatically.</p>
+
+            <div class="code-block">
+// Logo evolution through color
+:root {
+    --logo-color-1: #667eea;
+    --logo-color-2: #764ba2;
+    --evolution-stage: 1;
+}
+
+.logo-text {
+    background: linear-gradient(45deg,
+        var(--logo-color-1),
+        var(--logo-color-2)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+            </div>
+
+            <div class="demo-gradient">
+                <p>This gradient responds to CSS variables</p>
+            </div>
+
+            <h3>JavaScript Color Control</h3>
+            <p>Stage-based palettes. Smooth transitions. No flicker.</p>
+
+            <div class="code-block">
+// Evolution color mapping
+const stageColors = {
+    1: ['#667eea', '#764ba2'],  // Initial blue-purple
+    2: ['#f093fb', '#f5576c'],  // Pink evolution
+    3: ['#4facfe', '#00f2fe'],  // Blue transformation
+    4: ['#43e97b', '#38f9d7'],  // Green emergence
+    5: ['#ffecd2', '#fcb69f']   // Golden completion
+};
+
+function evolveGradient(stage) {
+    const [color1, color2] = stageColors[stage];
+
+    document.documentElement.style.setProperty('--logo-color-1', color1);
+    document.documentElement.style.setProperty('--logo-color-2', color2);
+    document.documentElement.style.setProperty('--evolution-stage', stage);
+}
+            </div>
+
+            <h3>Performance Considerations</h3>
+            <p>GPU acceleration through transforms. Avoid layout thrashing. Batch property updates.</p>
+
+            <div class="code-block">
+// Optimized transitions
+.logo-text {
+    transform: translateZ(0); // Force hardware acceleration
+    will-change: background; // Hint browser optimization
+    backface-visibility: hidden; // Prevent flicker
+}
+
+// Batch updates
+function updateLogoAppearance(stage, scale, opacity) {
+    const root = document.documentElement;
+
+    requestAnimationFrame(() => {
+        root.style.setProperty('--logo-stage', stage);
+        root.style.setProperty('--logo-scale', scale);
+        root.style.setProperty('--logo-opacity', opacity);
+    });
+}
+            </div>
+
+            <h3>Interactive Responsiveness</h3>
+            <p>Hover states enhance evolution. Active states provide feedback. Focus states maintain accessibility.</p>
+
+            <div class="code-block">
+.logo-text:hover {
+    --logo-intensity: 1.2;
+    transform: scale(calc(1 + var(--evolution-stage) * 0.02));
+}
+
+.logo-text:active {
+    --logo-intensity: 0.8;
+    transform: scale(0.98);
+}
+
+// Dynamic intensity control
+:root {
+    --logo-intensity: 1;
+}
+
+.logo-text {
+    filter: brightness(var(--logo-intensity));
+}
+            </div>
+
+            <h3>Mobile Adaptations</h3>
+            <p>Reduced motion support. Touch-friendly interactions. Battery-conscious animations.</p>
+
+            <div class="code-block">
+@media (prefers-reduced-motion: reduce) {
+    .logo-text {
+        transition: none;
+    }
+}
+
+@media (hover: none) {
+    .logo-text:hover {
+        transform: none; // Disable hover on touch devices
+    }
+}
+            </div>
+
+            <p>Built for my portfolio's logo evolution. Demonstrates smooth state transitions without JavaScript animation libraries.</p>
+        </div>
+    </div>
+
+    <script src="../../magic-user-system.js"></script>
+</body>
+</html>

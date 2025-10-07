@@ -1,0 +1,457 @@
+/* Micro-Interaction Rewards CSS - Visual effects for instant gratification */
+
+/* Base reward styling */
+.micro-reward {
+    position: fixed;
+    pointer-events: none;
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 10000;
+    transform-origin: center;
+    will-change: transform, opacity;
+}
+
+/* Sparkle reward animation */
+@keyframes sparkle-reward {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(180deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.8) rotate(360deg) translateY(-30px);
+    }
+}
+
+.micro-reward-sparkle {
+    animation: sparkle-reward 0.8s ease-out forwards;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+/* Glow reward animation */
+@keyframes glow-reward {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+        filter: brightness(0.5);
+    }
+    30% {
+        opacity: 1;
+        transform: scale(1.3);
+        filter: brightness(1.5);
+    }
+    70% {
+        opacity: 0.8;
+        transform: scale(1.1);
+        filter: brightness(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.9) translateY(-40px);
+        filter: brightness(0.8);
+    }
+}
+
+.micro-reward-glow {
+    animation: glow-reward 1.2s ease-out forwards;
+    text-shadow: 0 0 20px rgba(255, 255, 0, 0.9);
+}
+
+/* Pulse reward animation */
+@keyframes pulse-reward {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    25% {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+    75% {
+        opacity: 0.6;
+        transform: scale(1.3);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1) translateY(-35px);
+    }
+}
+
+.micro-reward-pulse {
+    animation: pulse-reward 1s ease-out forwards;
+    text-shadow: 0 0 15px rgba(255, 182, 193, 0.8);
+}
+
+/* Shimmer reward animation */
+@keyframes shimmer-reward {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(0deg);
+        filter: hue-rotate(0deg);
+    }
+    33% {
+        opacity: 1;
+        transform: scale(1.5) rotate(120deg);
+        filter: hue-rotate(120deg);
+    }
+    66% {
+        opacity: 0.9;
+        transform: scale(1.2) rotate(240deg);
+        filter: hue-rotate(240deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.8) rotate(360deg) translateY(-50px);
+        filter: hue-rotate(360deg);
+    }
+}
+
+.micro-reward-shimmer {
+    animation: shimmer-reward 1.5s ease-out forwards;
+    text-shadow: 0 0 25px rgba(255, 215, 0, 1);
+}
+
+/* Burst reward animation */
+@keyframes burst-reward {
+    0% {
+        opacity: 0;
+        transform: scale(0.2);
+    }
+    20% {
+        opacity: 1;
+        transform: scale(2);
+    }
+    40% {
+        opacity: 0.9;
+        transform: scale(1.5);
+    }
+    70% {
+        opacity: 0.7;
+        transform: scale(1.8);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.2) translateY(-60px);
+    }
+}
+
+.micro-reward-burst {
+    animation: burst-reward 2s ease-out forwards;
+    text-shadow: 0 0 30px rgba(255, 69, 0, 1);
+    font-size: 32px;
+}
+
+/* Burst particles */
+.burst-particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, #ff4500, #ff6347);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: 0 0 6px rgba(255, 69, 0, 0.8);
+}
+
+@keyframes burst-particle {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3) translateX(var(--dx, 0)) translateY(var(--dy, 0));
+    }
+}
+
+/* Jackpot reward animation */
+@keyframes jackpot-reward {
+    0% {
+        opacity: 0;
+        transform: scale(0.1) rotate(0deg);
+    }
+    25% {
+        opacity: 1;
+        transform: scale(2.5) rotate(90deg);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(2) rotate(180deg);
+    }
+    75% {
+        opacity: 0.8;
+        transform: scale(2.2) rotate(270deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.5) rotate(360deg) translateY(-80px);
+    }
+}
+
+.micro-reward-jackpot {
+    animation: jackpot-reward 3s ease-out forwards;
+    text-shadow: 0 0 40px rgba(255, 215, 0, 1);
+    font-size: 40px;
+}
+
+/* Jackpot confetti */
+.jackpot-confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    z-index: 9998;
+    border-radius: 2px;
+}
+
+@keyframes jackpot-confetti {
+    0% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(200px) rotate(720deg);
+    }
+}
+
+/* Celebration message */
+.celebration-message {
+    position: fixed;
+    pointer-events: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    z-index: 10001;
+    white-space: nowrap;
+}
+
+@keyframes celebration-message {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2) translateY(-20px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1) translateY(-40px);
+    }
+}
+
+/* Micro feedback for non-rewarded interactions */
+.micro-feedback {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    filter: brightness(1.05) contrast(1.02);
+    outline: 1px solid rgba(255, 215, 0, 0.2);
+    outline-offset: 2px;
+}
+
+/* Anticipation zones */
+.anticipation-zone {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    z-index: 1000;
+}
+
+@keyframes anticipation-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.7;
+    }
+}
+
+.anticipation-building {
+    animation: anticipation-pulse 2s ease-in-out infinite;
+}
+
+/* Hover surprise effects */
+.hover-surprise {
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.hover-surprise::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: linear-gradient(45deg,
+        transparent,
+        rgba(255, 215, 0, 0.1),
+        transparent
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.hover-surprise:hover::before {
+    opacity: 1;
+}
+
+/* Interactive elements that can receive rewards */
+.interactive,
+.curiosity-trigger,
+.mystery-element,
+.easter-egg,
+.hover-reveal,
+.clickable {
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.interactive:hover,
+.curiosity-trigger:hover,
+.mystery-element:hover,
+.easter-egg:hover,
+.hover-reveal:hover,
+.clickable:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+}
+
+.interactive:active,
+.curiosity-trigger:active,
+.mystery-element:active,
+.easter-egg:active,
+.hover-reveal:active,
+.clickable:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Streak indicators */
+.streak-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #ffd700;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.streak-indicator.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.streak-indicator.high-streak {
+    background: linear-gradient(45deg, rgba(255, 215, 0, 0.2), rgba(255, 69, 0, 0.2));
+    border-color: rgba(255, 215, 0, 0.5);
+    animation: streak-glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes streak-glow {
+    0% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    }
+}
+
+/* Reward history visualization */
+.reward-trail {
+    position: fixed;
+    pointer-events: none;
+    width: 2px;
+    height: 2px;
+    background: rgba(255, 215, 0, 0.6);
+    border-radius: 50%;
+    z-index: 9999;
+    animation: reward-trail-fade 1s ease-out forwards;
+}
+
+@keyframes reward-trail-fade {
+    0% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .micro-reward {
+        font-size: 20px;
+    }
+
+    .micro-reward-burst {
+        font-size: 28px;
+    }
+
+    .micro-reward-jackpot {
+        font-size: 32px;
+    }
+
+    .celebration-message {
+        font-size: 16px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .micro-reward,
+    .burst-particle,
+    .jackpot-confetti,
+    .celebration-message,
+    .anticipation-zone {
+        animation: none !important;
+    }
+
+    .micro-reward {
+        opacity: 1;
+        transform: none;
+    }
+
+    .celebration-message {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .micro-reward {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+        filter: contrast(1.5);
+    }
+
+    .micro-feedback {
+        outline-color: rgba(255, 255, 0, 0.8);
+        filter: brightness(1.2) contrast(1.3);
+    }
+}

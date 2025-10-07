@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI | Terrell K. Flautt</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../easter-eggs.css">
+    <style>
+        .blog-container {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .blog-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .blog-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #a8edea, #fed6e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .article-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .article-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #a8edea;
+        }
+        .article-meta {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .article-excerpt {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .read-more {
+            color: #a8edea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .read-more:hover {
+            color: #fed6e3;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #a8edea;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #fed6e3;
+        }
+        .daily-update {
+            background: rgba(168, 237, 234, 0.1);
+            border-left: 4px solid #a8edea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .daily-update h3 {
+            color: #a8edea;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-container">
+        <a href="../../index.html" class="back-link">← Back</a>
+
+        <div class="blog-header">
+            <h1 class="blog-title">AI Lab</h1>
+        </div>
+
+        <div class="daily-update">
+            <h3>Sept 18</h3>
+            <p>Building genie chat system. Multiple API fallbacks. Context awareness for hints.</p>
+        </div>
+
+        <article class="article-card">
+            <h2 class="article-title">Multi-API Fallback System</h2>
+            <div class="article-meta">Working</div>
+            <div class="article-excerpt">
+                Hugging Face → Ollama → Local AI. Zero downtime chat responses. Error handling built-in.
+            </div>
+            <a href="#" class="read-more">Code →</a>
+        </article>
+
+        <article class="article-card">
+            <h2 class="article-title">Context-Aware Hints</h2>
+            <div class="article-meta">Next</div>
+            <div class="article-excerpt">
+                AI genie tracks user progress. Provides relevant hints only when stuck. No intrusion.
+            </div>
+            <a href="#" class="read-more">View →</a>
+        </article>
+
+        <article class="article-card">
+            <h2 class="article-title">React.js Portfolio</h2>
+            <div class="article-meta">Portfolio</div>
+            <div class="article-excerpt">
+                Component architecture. State management. Responsive design with Tailwind CSS.
+            </div>
+            <a href="react-portfolio.html" class="read-more">View →</a>
+        </article>
+
+        <article class="article-card">
+            <h2 class="article-title">AWS Lambda API</h2>
+            <div class="article-meta">Production</div>
+            <div class="article-excerpt">
+                Serverless functions. API Gateway routing. DynamoDB integration. Auto-scaling.
+            </div>
+            <a href="aws-lambda-api.html" class="read-more">Code →</a>
+        </article>
+    </div>
+
+    <script src="../../magic-user-system.js"></script>
+</body>
+</html>

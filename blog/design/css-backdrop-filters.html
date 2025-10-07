@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Backdrop Filters | Design</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        .article-container {
+            max-width: 700px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .article-header {
+            margin-bottom: 30px;
+        }
+        .article-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #f093fb;
+        }
+        .article-meta {
+            color: #888;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            color: #f093fb;
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        .article-content {
+            line-height: 1.6;
+        }
+        .article-content p {
+            margin-bottom: 15px;
+        }
+        .demo-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <a href="index.html" class="back-link">← Back to Design</a>
+
+        <div class="article-header">
+            <h1 class="article-title">CSS Backdrop Filters</h1>
+            <div class="article-meta">Sept 27, 2025</div>
+        </div>
+
+        <div class="article-content">
+            <p>I use backdrop-filter for frosted glass effects across this site. No images needed.</p>
+
+            <div class="code-block">
+.blog-container {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+}
+            </div>
+
+            <p>This creates depth without performance hits. The blur applies to content behind the element.</p>
+
+            <div class="demo-box">
+                <p>This box uses backdrop-filter: blur(10px)</p>
+                <p>See how it blurs the background content?</p>
+            </div>
+
+            <p>Browser support is excellent. Safari had it first. Chrome and Firefox followed.</p>
+
+            <div class="code-block">
+/* Fallback for older browsers */
+.glass-effect {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+
+    /* Fallback */
+    background: rgba(0, 0, 0, 0.3);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+    .glass-effect {
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+            </div>
+
+            <p>I combine it with subtle borders for definition:</p>
+
+            <div class="code-block">
+border: 1px solid rgba(255, 255, 255, 0.1);
+            </div>
+
+            <p>The magic happens when elements overlap. Each layer adds its own blur.</p>
+
+            <p>My genie cave interface uses this heavily. Multiple depth layers create atmosphere without images.</p>
+
+            <p>Performance tip: Use transform3d(0,0,0) to force hardware acceleration on complex scenes.</p>
+
+            <div class="code-block">
+.genie-cave {
+    backdrop-filter: blur(15px);
+    transform: translate3d(0, 0, 0);
+    will-change: backdrop-filter;
+}
+            </div>
+
+            <p>Less than 50 lines of CSS. Maximum visual impact.</p>
+        </div>
+    </div>
+
+    <script src="../../magic-user-system.js"></script>
+</body>
+</html>

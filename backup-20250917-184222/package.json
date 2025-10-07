@@ -1,0 +1,36 @@
+{
+  "name": "terrellflautt-website",
+  "version": "1.0.0",
+  "description": "Terrell K. Flautt - Lead DevOps Engineer Portfolio Website",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3001",
+    "dev": "python -m http.server 3001",
+    "serve": "python -m http.server 3001",
+    "test": "python -m http.server 3001",
+    "build": "echo 'Building static site...' && npm run optimize",
+    "optimize": "echo 'Optimizing assets...'",
+    "deploy": "chmod +x deploy.sh && ./deploy.sh",
+    "deploy:ssl": "chmod +x deploy-ssl.sh && ./deploy-ssl.sh",
+    "deploy:s3": "aws s3 sync . s3://terrellflautt-com --exclude '*.sh' --exclude '*.json' --exclude '*.md' --exclude '.git/*' --delete",
+    "invalidate": "aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths '/*'",
+    "status": "aws cloudfront get-distribution --id ${CLOUDFRONT_DISTRIBUTION_ID} --query 'Distribution.Status' --output text"
+  },
+  "keywords": [
+    "portfolio",
+    "devops",
+    "aws",
+    "cloudfront",
+    "static-site"
+  ],
+  "author": "Terrell K. Flautt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/terrellflautt/terrellflautt.com.git"
+  },
+  "bugs": {
+    "url": "https://github.com/terrellflautt/terrellflautt.com/issues"
+  },
+  "homepage": "https://terrellflautt.com"
+}

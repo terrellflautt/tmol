@@ -1,0 +1,117 @@
+{
+  "testSuite": "Fast Mobile Contribution Page Testing",
+  "timestamp": "2025-09-18T20:58:42.722Z",
+  "summary": {
+    "devicesTestedCount": 3,
+    "totalIssues": 9,
+    "totalWorking": 21
+  },
+  "detailedResults": [
+    {
+      "device": "iPhone SE",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2,
+        "isMobile": true,
+        "hasTouch": true
+      },
+      "issues": [
+        "header not visible",
+        "hero section not visible",
+        "donation form not visible"
+      ],
+      "working": [
+        "No horizontal scrolling",
+        "navigation visible",
+        "Found 5 donation buttons",
+        "Donation buttons have adequate touch targets",
+        "Heading text readable (32px)",
+        "Body text readable (19.2px)",
+        "Found 14 interactive buttons"
+      ]
+    },
+    {
+      "device": "iPhone 12",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 3,
+        "isMobile": true,
+        "hasTouch": true
+      },
+      "issues": [
+        "header not visible",
+        "hero section not visible",
+        "donation form not visible"
+      ],
+      "working": [
+        "No horizontal scrolling",
+        "navigation visible",
+        "Found 5 donation buttons",
+        "Donation buttons have adequate touch targets",
+        "Heading text readable (32px)",
+        "Body text readable (19.2px)",
+        "Found 14 interactive buttons"
+      ]
+    },
+    {
+      "device": "iPad Mini",
+      "viewport": {
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 2,
+        "isMobile": true,
+        "hasTouch": true
+      },
+      "issues": [
+        "header not visible",
+        "hero section not visible",
+        "donation form not visible"
+      ],
+      "working": [
+        "No horizontal scrolling",
+        "navigation visible",
+        "Found 5 donation buttons",
+        "Donation buttons have adequate touch targets",
+        "Heading text readable (40px)",
+        "Body text readable (19.2px)",
+        "Found 14 interactive buttons"
+      ]
+    }
+  ],
+  "allIssues": [
+    "iPhone SE: header not visible",
+    "iPhone SE: hero section not visible",
+    "iPhone SE: donation form not visible",
+    "iPhone 12: header not visible",
+    "iPhone 12: hero section not visible",
+    "iPhone 12: donation form not visible",
+    "iPad Mini: header not visible",
+    "iPad Mini: hero section not visible",
+    "iPad Mini: donation form not visible"
+  ],
+  "allWorking": [
+    "iPhone SE: No horizontal scrolling",
+    "iPhone SE: navigation visible",
+    "iPhone SE: Found 5 donation buttons",
+    "iPhone SE: Donation buttons have adequate touch targets",
+    "iPhone SE: Heading text readable (32px)",
+    "iPhone SE: Body text readable (19.2px)",
+    "iPhone SE: Found 14 interactive buttons",
+    "iPhone 12: No horizontal scrolling",
+    "iPhone 12: navigation visible",
+    "iPhone 12: Found 5 donation buttons",
+    "iPhone 12: Donation buttons have adequate touch targets",
+    "iPhone 12: Heading text readable (32px)",
+    "iPhone 12: Body text readable (19.2px)",
+    "iPhone 12: Found 14 interactive buttons",
+    "iPad Mini: No horizontal scrolling",
+    "iPad Mini: navigation visible",
+    "iPad Mini: Found 5 donation buttons",
+    "iPad Mini: Donation buttons have adequate touch targets",
+    "iPad Mini: Heading text readable (40px)",
+    "iPad Mini: Body text readable (19.2px)",
+    "iPad Mini: Found 14 interactive buttons"
+  ]
+}

@@ -1,0 +1,244 @@
+{
+  "testSuite": "Comprehensive Mobile Contribution Page Testing",
+  "timestamp": "2025-09-18T21:00:18.635Z",
+  "summary": {
+    "devicesTestedCount": 3,
+    "totalIssues": 9,
+    "totalWorking": 55,
+    "overallStatus": "NEEDS_IMPROVEMENT"
+  },
+  "detailedResults": [
+    {
+      "device": "iPhone SE",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2,
+        "isMobile": true,
+        "hasTouch": true
+      },
+      "layout": {},
+      "navigation": {
+        "linkCount": 4
+      },
+      "donationForm": {
+        "contributionCards": 3,
+        "repoLinks": 2
+      },
+      "readability": {},
+      "interactive": {
+        "buttonCount": 14
+      },
+      "performance": {
+        "domContentLoaded": 445,
+        "loadComplete": 446,
+        "resourceCount": 8
+      },
+      "issues": [
+        "donation section not visible or not found",
+        "Navigation links too small for touch (height: 35px, need 44px+)",
+        "No donation form or section found"
+      ],
+      "working": [
+        "No horizontal scrolling",
+        "navigation visible and accessible",
+        "navigation positioned within viewport",
+        "hero section visible and accessible",
+        "hero section positioned within viewport",
+        "contribution section visible and accessible",
+        "Found 4 navigation links",
+        "Found 3 contribution option cards",
+        "Found 2 GitHub repository links",
+        "Repository links have adequate touch targets",
+        "Hero title readable (32px)",
+        "Body text readable (19.2px)",
+        "Found 14 interactive buttons/links",
+        "Buttons have adequate touch targets",
+        "Found 3 elements with accessibility attributes",
+        "Good page load performance (445ms)",
+        "Proper viewport meta tag configured",
+        "Zoom is allowed for accessibility"
+      ]
+    },
+    {
+      "device": "iPhone 12",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 3,
+        "isMobile": true,
+        "hasTouch": true
+      },
+      "layout": {},
+      "navigation": {
+        "linkCount": 4
+      },
+      "donationForm": {
+        "contributionCards": 3,
+        "repoLinks": 2
+      },
+      "readability": {},
+      "interactive": {
+        "buttonCount": 14
+      },
+      "performance": {
+        "domContentLoaded": 429,
+        "loadComplete": 430,
+        "resourceCount": 8
+      },
+      "issues": [
+        "donation section not visible or not found",
+        "Navigation links too small for touch (height: 35px, need 44px+)",
+        "No donation form or section found"
+      ],
+      "working": [
+        "No horizontal scrolling",
+        "navigation visible and accessible",
+        "navigation positioned within viewport",
+        "hero section visible and accessible",
+        "hero section positioned within viewport",
+        "contribution section visible and accessible",
+        "Found 4 navigation links",
+        "Found 3 contribution option cards",
+        "Found 2 GitHub repository links",
+        "Repository links have adequate touch targets",
+        "Hero title readable (32px)",
+        "Body text readable (19.2px)",
+        "Found 14 interactive buttons/links",
+        "Buttons have adequate touch targets",
+        "Found 3 elements with accessibility attributes",
+        "Good page load performance (429ms)",
+        "Proper viewport meta tag configured",
+        "Zoom is allowed for accessibility"
+      ]
+    },
+    {
+      "device": "iPad Mini",
+      "viewport": {
+        "width": 768,
+        "height": 1024,
+        "deviceScaleFactor": 2,
+        "isMobile": true,
+        "hasTouch": true
+      },
+      "layout": {},
+      "navigation": {
+        "linkCount": 4
+      },
+      "donationForm": {
+        "contributionCards": 3,
+        "repoLinks": 2
+      },
+      "readability": {},
+      "interactive": {
+        "buttonCount": 14
+      },
+      "performance": {
+        "domContentLoaded": 284,
+        "loadComplete": 285,
+        "resourceCount": 8
+      },
+      "issues": [
+        "donation section not visible or not found",
+        "Navigation links too small for touch (height: 35px, need 44px+)",
+        "No donation form or section found"
+      ],
+      "working": [
+        "No horizontal scrolling",
+        "navigation visible and accessible",
+        "navigation positioned within viewport",
+        "hero section visible and accessible",
+        "hero section positioned within viewport",
+        "contribution section visible and accessible",
+        "contribution section positioned within viewport",
+        "Found 4 navigation links",
+        "Found 3 contribution option cards",
+        "Found 2 GitHub repository links",
+        "Repository links have adequate touch targets",
+        "Hero title readable (40px)",
+        "Body text readable (19.2px)",
+        "Found 14 interactive buttons/links",
+        "Buttons have adequate touch targets",
+        "Found 3 elements with accessibility attributes",
+        "Good page load performance (284ms)",
+        "Proper viewport meta tag configured",
+        "Zoom is allowed for accessibility"
+      ]
+    }
+  ],
+  "allIssues": [
+    "iPhone SE: donation section not visible or not found",
+    "iPhone SE: Navigation links too small for touch (height: 35px, need 44px+)",
+    "iPhone SE: No donation form or section found",
+    "iPhone 12: donation section not visible or not found",
+    "iPhone 12: Navigation links too small for touch (height: 35px, need 44px+)",
+    "iPhone 12: No donation form or section found",
+    "iPad Mini: donation section not visible or not found",
+    "iPad Mini: Navigation links too small for touch (height: 35px, need 44px+)",
+    "iPad Mini: No donation form or section found"
+  ],
+  "allWorking": [
+    "iPhone SE: No horizontal scrolling",
+    "iPhone SE: navigation visible and accessible",
+    "iPhone SE: navigation positioned within viewport",
+    "iPhone SE: hero section visible and accessible",
+    "iPhone SE: hero section positioned within viewport",
+    "iPhone SE: contribution section visible and accessible",
+    "iPhone SE: Found 4 navigation links",
+    "iPhone SE: Found 3 contribution option cards",
+    "iPhone SE: Found 2 GitHub repository links",
+    "iPhone SE: Repository links have adequate touch targets",
+    "iPhone SE: Hero title readable (32px)",
+    "iPhone SE: Body text readable (19.2px)",
+    "iPhone SE: Found 14 interactive buttons/links",
+    "iPhone SE: Buttons have adequate touch targets",
+    "iPhone SE: Found 3 elements with accessibility attributes",
+    "iPhone SE: Good page load performance (445ms)",
+    "iPhone SE: Proper viewport meta tag configured",
+    "iPhone SE: Zoom is allowed for accessibility",
+    "iPhone 12: No horizontal scrolling",
+    "iPhone 12: navigation visible and accessible",
+    "iPhone 12: navigation positioned within viewport",
+    "iPhone 12: hero section visible and accessible",
+    "iPhone 12: hero section positioned within viewport",
+    "iPhone 12: contribution section visible and accessible",
+    "iPhone 12: Found 4 navigation links",
+    "iPhone 12: Found 3 contribution option cards",
+    "iPhone 12: Found 2 GitHub repository links",
+    "iPhone 12: Repository links have adequate touch targets",
+    "iPhone 12: Hero title readable (32px)",
+    "iPhone 12: Body text readable (19.2px)",
+    "iPhone 12: Found 14 interactive buttons/links",
+    "iPhone 12: Buttons have adequate touch targets",
+    "iPhone 12: Found 3 elements with accessibility attributes",
+    "iPhone 12: Good page load performance (429ms)",
+    "iPhone 12: Proper viewport meta tag configured",
+    "iPhone 12: Zoom is allowed for accessibility",
+    "iPad Mini: No horizontal scrolling",
+    "iPad Mini: navigation visible and accessible",
+    "iPad Mini: navigation positioned within viewport",
+    "iPad Mini: hero section visible and accessible",
+    "iPad Mini: hero section positioned within viewport",
+    "iPad Mini: contribution section visible and accessible",
+    "iPad Mini: contribution section positioned within viewport",
+    "iPad Mini: Found 4 navigation links",
+    "iPad Mini: Found 3 contribution option cards",
+    "iPad Mini: Found 2 GitHub repository links",
+    "iPad Mini: Repository links have adequate touch targets",
+    "iPad Mini: Hero title readable (40px)",
+    "iPad Mini: Body text readable (19.2px)",
+    "iPad Mini: Found 14 interactive buttons/links",
+    "iPad Mini: Buttons have adequate touch targets",
+    "iPad Mini: Found 3 elements with accessibility attributes",
+    "iPad Mini: Good page load performance (284ms)",
+    "iPad Mini: Proper viewport meta tag configured",
+    "iPad Mini: Zoom is allowed for accessibility"
+  ],
+  "recommendations": [
+    "Ensure all buttons are at least 44x44px for touch interaction",
+    "Use font sizes of 16px+ for body text",
+    "Maintain proper spacing between touch targets",
+    "Test donation flow on actual mobile devices",
+    "Optimize images and assets for mobile networks"
+  ]
+}

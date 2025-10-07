@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Status Checker Blueprint | Dev Blog</title>
+    <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../../index.html" class="nav-logo">
+                <span class="logo-text">Terrell K. Flautt</span>
+            </a>
+            <div class="nav-links">
+                <a href="../../../index.html">Home</a>
+                <a href="../index.html">Dev Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <article style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+        <header>
+            <h1>URL Status Checker Blueprint</h1>
+            <p><time>Oct 12, 2025</time> · 5 min · <a href="https://urlstatuschecker.com" target="_blank">urlstatuschecker.com</a></p>
+        </header>
+
+        <h2>Project Architecture</h2>
+        <pre><code>Frontend: Tailwind CSS + Vanilla JS → S3/CloudFront
+Backend: API Gateway → Lambda → DynamoDB
+Config: SSM Parameters
+Auth: Google OAuth</code></pre>
+
+        <h2>Tailwind CSS Structure</h2>
+        <pre><code>/* Main layout */
+.container { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+.hero-section { @apply bg-gradient-to-br from-blue-900 to-purple-900; }
+
+/* URL checker form */
+.url-input {
+    @apply w-full px-4 py-3 border border-gray-300
+           rounded-lg focus:ring-2 focus:ring-blue-500
+           focus:border-transparent transition-all;
+}
+
+.check-button {
+    @apply bg-blue-600 hover:bg-blue-700 text-white
+           font-medium py-3 px-6 rounded-lg transition-colors
+           disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* Results display */
+.result-grid { @apply grid gap-4 mt-6; }
+.result-item {
+    @apply bg-white rounded-lg shadow-md p-4
+           border-l-4 border-green-500 hover:shadow-lg;
+}
+.status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5
+           rounded-full text-xs font-medium;
+}
+.status-success { @apply bg-green-100 text-green-800; }
+.status-error { @apply bg-red-100 text-red-800; }</code></pre>
+
+        <h2>Frontend JavaScript Core</h2>
+        <pre><code>class URLChecker {
+    constructor() {
+        this.apiEndpoint = 'https://api.urlstatuschecker.com';
+        this.maxBatchSize = 100;
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.loadUserSession();
+    }
+
+    async checkUrls(urls) {
+        const results = [];
+        const chunks = this.chunkArray(urls, 10); // Process in batches
+
+        for (const chunk of chunks) {
+            const promises = chunk.map(url => this.checkSingleUrl(url));
+            const chunkResults = await Promise.allSettled(promises);
+            results.push(...chunkResults);
+            this.updateProgress(results.length, urls.length);
+            await this.delay(1000); // Rate limiting
+        }
+
+        return results;
+    }
+
+    async checkSingleUrl(url) {
+        try {
+            const response = await fetch(`${this.apiEndpoint}/check`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url, userId: this.getUserId() })
+            });
+
+            return await response.json();
+        } catch (error) {
+            return { url, status: 'error', message: error.message };
+        }
+    }
+}</code></pre>
+
+        <h2>Lambda Functions</h2>
+
+        <h3>URL Check Function</h3>
+        <pre><code>exports.checkUrl = async (event) => {
+    const { url, userId } = JSON.parse(event.body);
+
+    // Rate limiting check
+    await checkUserLimits(userId);
+
+    try {
+        const response = await fetch(url, {
+            method: 'HEAD',
+            timeout: 10000,
+            follow: 5
+        });
+
+        // Log check to DynamoDB
+        await dynamoDB.put({
+            TableName: 'url_checks',
+            Item: {
+                id: uuidv4(),
+                url,
+                userId,
+                status: response.status,
+                timestamp: Date.now(),
+                responseTime: Date.now() - startTime
+            }
+        }).promise();
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                url,
+                status: response.status,
+                statusText: response.statusText,
+                responseTime: Date.now() - startTime
+            })
+        };
+    } catch (error) {
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                url,
+                status: 'error',
+                message: error.message
+            })
+        };
+    }
+};</code></pre>
+
+        <h3>User Management</h3>
+        <pre><code>exports.getUserLimits = async (event) => {
+    const userId = event.requestContext.authorizer.principalId;
+
+    const user = await dynamoDB.get({
+        TableName: 'users',
+        Key: { userId }
+    }).promise();
+
+    const plan = user.Item?.plan || 'free';
+    const usage = await getMonthlyUsage(userId);
+
+    const limits = {
+        free: { monthly: 500, batch: 10 },
+        pro: { monthly: 10000, batch: 50 },
+        business: { monthly: 100000, batch: 100 }
+    };
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            plan,
+            usage,
+            limits: limits[plan],
+            remaining: limits[plan].monthly - usage
+        })
+    };
+};</code></pre>
+
+        <h2>DynamoDB Tables</h2>
+        <pre><code>users:
+- userId (string) - partition key
+- email (string)
+- plan (string) - free/pro/business
+- createdAt (string)
+- lastLogin (string)
+
+url_checks:
+- id (string) - partition key
+- userId (string) - GSI partition key
+- url (string)
+- status (number)
+- timestamp (number) - GSI sort key
+- responseTime (number)
+
+rate_limits:
+- key (string) - partition key (userId#date)
+- count (number)
+- ttl (number) - auto-expire</code></pre>
+
+        <h2>SSM Configuration</h2>
+        <pre><code>/urlchecker/google-oauth-client - OAuth client ID
+/urlchecker/google-oauth-secret - OAuth secret
+/urlchecker/jwt-secret - JWT signing key
+/urlchecker/stripe-key - Payment processing
+/urlchecker/database-url - DynamoDB table prefix</code></pre>
+
+        <h2>Key Features</h2>
+
+        <h3>Batch Processing</h3>
+        <pre><code>function processBatch(urls) {
+    const batches = chunkArray(urls, 10);
+    const results = [];
+
+    batches.forEach((batch, index) => {
+        setTimeout(async () => {
+            const batchResults = await Promise.all(
+                batch.map(url => checkUrl(url))
+            );
+            results.push(...batchResults);
+            updateUI(results);
+        }, index * 1000); // 1 second between batches
+    });
+}</code></pre>
+
+        <h3>Real-time Progress</h3>
+        <pre><code>function updateProgress(completed, total) {
+    const percentage = (completed / total) * 100;
+    document.getElementById('progress-bar').style.width = `${percentage}%`;
+    document.getElementById('progress-text').textContent =
+        `${completed}/${total} URLs checked`;
+}</code></pre>
+
+        <h3>Export Results</h3>
+        <pre><code>function exportToCSV(results) {
+    const headers = ['URL', 'Status', 'Response Time', 'Checked At'];
+    const rows = results.map(r => [
+        r.url,
+        r.status,
+        r.responseTime + 'ms',
+        new Date(r.timestamp).toISOString()
+    ]);
+
+    const csvContent = [headers, ...rows]
+        .map(row => row.join(','))
+        .join('\n');
+
+    downloadFile(csvContent, 'url-check-results.csv', 'text/csv');
+}</code></pre>
+
+        <h2>Deployment</h2>
+        <pre><code># Build and deploy
+npm run build
+aws s3 sync dist/ s3://urlstatuschecker-frontend
+aws cloudfront create-invalidation --distribution-id E123 --paths "/*"
+
+# Lambda deployment
+zip -r function.zip .
+aws lambda update-function-code --function-name urlchecker-api --zip-file fileb://function.zip</code></pre>
+
+        <h2>Monitoring</h2>
+        <pre><code>CloudWatch Alarms:
+- Lambda errors > 1%
+- DynamoDB throttling
+- API Gateway 5xx > 2%
+- Frontend 404s > 5%
+
+Custom Metrics:
+- URLs checked per minute
+- Average response time
+- User plan distribution
+- Error rate by URL pattern</code></pre>
+
+        <footer style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #333;">
+            <p><strong>Tech Stack:</strong> Tailwind CSS, Vanilla JS, AWS Lambda, DynamoDB, SSM</p>
+            <p><strong>Performance:</strong> 100+ URLs/min, 500ms avg response</p>
+        </footer>
+    </article>
+</body>
+</html>

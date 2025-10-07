@@ -1,0 +1,397 @@
+service: terrellflautt-voting-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: prod
+  memorySize: 256
+  timeout: 30
+  environment:
+    VOTES_TABLE: ${self:service}-${self:provider.stage}-votes
+    FEEDBACK_TABLE: ${self:service}-${self:provider.stage}-feedback
+    USER_JOURNEY_TABLE: ${self:service}-${self:provider.stage}-user-journeys
+    TRACKING_TABLE: ${self:service}-${self:provider.stage}-tracking
+    TRACKING_EVENTS_TABLE: ${self:service}-${self:provider.stage}-tracking-events
+    HALL_OF_FAME_TABLE: ${self:service}-${self:provider.stage}-hall-of-fame
+    DONATIONS_TABLE: ${self:service}-${self:provider.stage}-donations
+    FORUM_TABLE: ${self:service}-${self:provider.stage}-forum-messages
+    RATE_LIMIT_TABLE: ${self:service}-${self:provider.stage}-forum-rate-limits
+    BUCKET_NAME: forum-snapitsoftware-com
+    STRIPE_SECRET_KEY: ${ssm:/terrellflautt/stripe-live-secret-key}
+    # STRIPE_WEBHOOK_SECRET: Configure after creating webhook in Stripe dashboard
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.VOTES_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.VOTES_TABLE}/index/*"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FEEDBACK_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USER_JOURNEY_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRACKING_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TRACKING_EVENTS_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.HALL_OF_FAME_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DONATIONS_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.FORUM_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RATE_LIMIT_TABLE}"
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+      Resource:
+        - "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: api.terrellflautt.com
+    stage: ${self:provider.stage}
+    certificateName: api.terrellflautt.com
+    createRoute53Record: false
+    endpointType: 'regional'
+    securityPolicy: tls_1_2
+    apiType: rest
+
+functions:
+  vote:
+    handler: vote.handler
+    events:
+      - http:
+          path: vote
+          method: post
+          cors: true
+          throttle:
+            rate: 10
+            burst: 20
+      - http:
+          path: vote/{projectId}
+          method: get
+          cors: true
+          throttle:
+            rate: 50
+            burst: 100
+
+  feedback:
+    handler: feedback.handler
+    events:
+      - http:
+          path: feedback
+          method: post
+          cors: true
+          throttle:
+            rate: 5
+            burst: 10
+
+  analytics:
+    handler: analytics.handler
+    events:
+      - http:
+          path: analytics
+          method: get
+          cors: true
+          throttle:
+            rate: 20
+            burst: 40
+
+  userJourney:
+    handler: userJourney.handler
+    events:
+      - http:
+          path: journey
+          method: post
+          cors: true
+          throttle:
+            rate: 30
+            burst: 60
+      - http:
+          path: journey/{userId}
+          method: get
+          cors: true
+          throttle:
+            rate: 50
+            burst: 100
+
+  tracking:
+    handler: tracking.handler
+    events:
+      - http:
+          path: tracking
+          method: post
+          cors: true
+      - http:
+          path: tracking/{userId}
+          method: get
+          cors: true
+
+  userProfile:
+    handler: user-profile.handler
+    events:
+      - http:
+          path: user-profile
+          method: post
+          cors: true
+      - http:
+          path: user-profile/{userId}
+          method: get
+          cors: true
+      - http:
+          path: user-profile
+          method: options
+          cors: true
+
+  genie:
+    handler: genie.handler
+    events:
+      - http:
+          path: genie
+          method: post
+          cors: true
+      - http:
+          path: genie
+          method: options
+          cors: true
+
+  contributions:
+    handler: contributions.handler
+    events:
+      - http:
+          path: contributions/create-checkout
+          method: post
+          cors: true
+
+  contributionsWebhook:
+    handler: contributions.webhook
+    events:
+      - http:
+          path: contributions/webhook
+          method: post
+
+  createCheckoutSession:
+    handler: stripe-checkout.handler
+    events:
+      - http:
+          path: create-checkout-session
+          method: post
+          cors: true
+          throttle:
+            rate: 10
+            burst: 20
+
+  stripeWebhook:
+    handler: stripe-checkout.webhookHandler
+    events:
+      - http:
+          path: stripe-webhook
+          method: post
+
+  forum:
+    handler: forum.handler
+    events:
+      - http:
+          path: forum/messages
+          method: post
+          cors: true
+          throttle:
+            rate: 5
+            burst: 10
+      - http:
+          path: forum/messages
+          method: get
+          cors: true
+          throttle:
+            rate: 50
+            burst: 100
+      - http:
+          path: forum/rate-limit
+          method: get
+          cors: true
+          throttle:
+            rate: 20
+            burst: 40
+
+  consciousness:
+    handler: consciousness.handler
+    events:
+      - http:
+          path: consciousness/sync
+          method: post
+          cors: true
+      - http:
+          path: consciousness/sync
+          method: options
+          cors: true
+      - http:
+          path: consciousness/{userId}
+          method: get
+          cors: true
+
+  npcAI:
+    handler: npc-ai.handler
+    events:
+      - http:
+          path: npc/chat
+          method: post
+          cors: true
+      - http:
+          path: npc/chat
+          method: options
+          cors: true
+
+resources:
+  Resources:
+    VotesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.VOTES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: projectId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: projectId
+            KeyType: HASH
+          - AttributeName: userId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: ProjectVotesIndex
+            KeySchema:
+              - AttributeName: projectId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    FeedbackTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.FEEDBACK_TABLE}
+        AttributeDefinitions:
+          - AttributeName: feedbackId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: feedbackId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    UserJourneyTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USER_JOURNEY_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    TrackingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TRACKING_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    TrackingEventsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TRACKING_EVENTS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: eventId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: eventId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    HallOfFameTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.HALL_OF_FAME_TABLE}
+        AttributeDefinitions:
+          - AttributeName: category
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: category
+            KeyType: HASH
+          - AttributeName: userId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    DonationsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DONATIONS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: sessionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: sessionId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    ForumMessagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.FORUM_TABLE}
+        AttributeDefinitions:
+          - AttributeName: messageId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: messageId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    ForumRateLimitsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.RATE_LIMIT_TABLE}
+        AttributeDefinitions:
+          - AttributeName: rateLimitKey
+            AttributeType: S
+        KeySchema:
+          - AttributeName: rateLimitKey
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true

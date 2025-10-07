@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard | The Most Mysterious Website on Earth</title>
+    <meta name="description" content="Hall of Fame for digital explorers who have unlocked the secrets of terrellflautt.com. See who has discovered the most easter eggs and achieved transcendental enlightenment.">
+    <meta name="keywords" content="Leaderboard, Easter Eggs, Digital Exploration, Achievements, Transcendental Journey">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"></noscript>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="leaderboard.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <span class="logo-text">T.K.</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#projects" class="nav-link">Projects</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+                <a href="leaderboard.html" class="nav-link active">Leaderboard</a>
+            </div>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Leaderboard Hero Section -->
+    <section class="leaderboard-hero">
+        <div class="particles-container">
+            <canvas id="leaderboard-particles"></canvas>
+        </div>
+        <div class="hero-content">
+            <h1 class="leaderboard-title">
+                <span class="title-glow">🏆 Hall of Digital Explorers 🏆</span>
+            </h1>
+            <p class="leaderboard-subtitle">
+                The brave souls who have unlocked the mysteries and achieved transcendental enlightenment
+            </p>
+            <div class="leaderboard-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="total-explorers">0</span>
+                    <span class="stat-label">Total Explorers</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="total-discoveries">0</span>
+                    <span class="stat-label">Total Discoveries</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="transcendental-masters">0</span>
+                    <span class="stat-label">Transcendental Masters</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievement Categories -->
+    <section class="achievement-categories">
+        <div class="container">
+            <h2 class="section-title">🎯 Achievement Categories</h2>
+            <div class="categories-grid">
+                <div class="category-card" data-category="transcendental">
+                    <div class="category-icon">✨</div>
+                    <h3>Transcendental Masters</h3>
+                    <p>Completed the full personality journey</p>
+                    <span class="category-badge">500 Points</span>
+                </div>
+                <div class="category-card" data-category="easter-eggs">
+                    <div class="category-icon">🥚</div>
+                    <h3>Easter Egg Hunters</h3>
+                    <p>Discovered all hidden secrets</p>
+                    <span class="category-badge">100 Points Each</span>
+                </div>
+                <div class="category-card" data-category="ai-wisdom">
+                    <div class="category-icon">🤖</div>
+                    <h3>AI Wisdom Seekers</h3>
+                    <p>Unlocked both levels of AI wisdom</p>
+                    <span class="category-badge">200 Points</span>
+                </div>
+                <div class="category-card" data-category="speed-run">
+                    <div class="category-icon">⚡</div>
+                    <h3>Speed Runners</h3>
+                    <p>Unlocked everything in under 5 minutes</p>
+                    <span class="category-badge">1000 Points</span>
+                </div>
+                <div class="category-card" data-category="explorer">
+                    <div class="category-icon">🔍</div>
+                    <h3>Master Explorers</h3>
+                    <p>Found all hidden discovery symbols</p>
+                    <span class="category-badge">300 Points</span>
+                </div>
+                <div class="category-card" data-category="returning">
+                    <div class="category-icon">🔄</div>
+                    <h3>Loyal Visitors</h3>
+                    <p>Returned multiple times to explore</p>
+                    <span class="category-badge">50 Points Per Visit</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Leaderboard -->
+    <section class="main-leaderboard">
+        <div class="container">
+            <div class="leaderboard-header">
+                <h2 class="section-title">🥇 Global Leaderboard</h2>
+                <div class="leaderboard-filters">
+                    <button class="filter-btn active" data-filter="all">All Time</button>
+                    <button class="filter-btn" data-filter="week">This Week</button>
+                    <button class="filter-btn" data-filter="month">This Month</button>
+                </div>
+            </div>
+
+            <!-- Top 3 Podium -->
+            <div class="podium-section">
+                <div class="podium">
+                    <div class="podium-place second-place">
+                        <div class="place-medal">🥈</div>
+                        <div class="place-info">
+                            <div class="place-name" id="second-place-name">---</div>
+                            <div class="place-score" id="second-place-score">0</div>
+                            <div class="place-achievements" id="second-place-achievements"></div>
+                        </div>
+                    </div>
+                    <div class="podium-place first-place">
+                        <div class="place-medal">🥇</div>
+                        <div class="place-info">
+                            <div class="place-name" id="first-place-name">---</div>
+                            <div class="place-score" id="first-place-score">0</div>
+                            <div class="place-achievements" id="first-place-achievements"></div>
+                        </div>
+                    </div>
+                    <div class="podium-place third-place">
+                        <div class="place-medal">🥉</div>
+                        <div class="place-info">
+                            <div class="place-name" id="third-place-name">---</div>
+                            <div class="place-score" id="third-place-score">0</div>
+                            <div class="place-achievements" id="third-place-achievements"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Leaderboard Table -->
+            <div class="leaderboard-table">
+                <div class="table-header">
+                    <div class="rank-col">Rank</div>
+                    <div class="explorer-col">Explorer</div>
+                    <div class="score-col">Score</div>
+                    <div class="achievements-col">Achievements</div>
+                    <div class="message-col">Explorer Message</div>
+                </div>
+                <div class="table-body" id="leaderboard-entries">
+                    <!-- Entries will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- User Entry Section -->
+            <div class="user-entry-section" id="user-entry-section">
+                <div class="entry-card">
+                    <h3>🌟 Join the Hall of Fame</h3>
+                    <p>You've achieved something remarkable! Sign your name and leave your mark for future explorers.</p>
+                    <div class="entry-form">
+                        <div class="form-group">
+                            <label for="explorer-name">Your Explorer Name</label>
+                            <input type="text" id="explorer-name" placeholder="Enter your name (3-20 characters)" maxlength="20">
+                        </div>
+                        <div class="form-group">
+                            <label for="explorer-message">Your Message to Future Explorers</label>
+                            <textarea id="explorer-message" placeholder="Share your wisdom, inspiration, or discovery story... (max 280 characters)" maxlength="280" rows="3"></textarea>
+                            <div class="character-count">
+                                <span id="char-count">0</span>/280 characters
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="explorer-location">Location (Optional)</label>
+                            <input type="text" id="explorer-location" placeholder="City, Country or 🌍 Earth" maxlength="30">
+                        </div>
+                        <button id="submit-entry" class="btn btn-primary">
+                            <span class="btn-text">Leave Your Mark ✨</span>
+                            <span class="btn-loading" style="display: none;">Adding to Hall of Fame...</span>
+                        </button>
+                    </div>
+                    <div class="your-achievements" id="your-achievements">
+                        <!-- User's achievements will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievement Details Modal -->
+    <div class="achievement-modal" id="achievement-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Achievement Details</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Achievement details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <p>&copy; 2025 Terrell K. Flautt | <a href="index.html">Return to the Journey</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="user-persistence.js"></script>
+    <script src="leaderboard-particles.js"></script>
+    <script src="leaderboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Design Blog | Terrell K. Flautt</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../easter-eggs.css">
+    <style>
+        .blog-container {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .blog-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .blog-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .article-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .article-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #f093fb;
+        }
+        .article-meta {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .article-excerpt {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .read-more {
+            color: #f093fb;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .read-more:hover {
+            color: #f5576c;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #f093fb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #f5576c;
+        }
+        .daily-update {
+            background: rgba(240, 147, 251, 0.1);
+            border-left: 4px solid #f093fb;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .daily-update h3 {
+            color: #f093fb;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-container">
+        <a href="../../index.html" class="back-link">← Back to Portfolio</a>
+
+        <div class="blog-header">
+            <h1 class="blog-title">Design</h1>
+        </div>
+
+        <div class="daily-update">
+            <h3>Sept 18</h3>
+            <p>Created gradient animations for genie system. Particle effects with canvas rendering.</p>
+        </div>
+
+        <article class="article-card">
+            <h2 class="article-title">CSS Backdrop Filters</h2>
+            <div class="article-meta">Today</div>
+            <div class="article-excerpt">
+                Frosted glass effects without images. Backdrop-filter blur creates depth with minimal code.
+            </div>
+            <a href="css-backdrop-filters.html" class="read-more">View →</a>
+        </article>
+
+        <article class="article-card">
+            <h2 class="article-title">Gradient Animation Systems</h2>
+            <div class="article-meta">Working</div>
+            <div class="article-excerpt">
+                Dynamic color transitions for logo evolution. CSS custom properties with JavaScript control.
+            </div>
+            <a href="gradient-systems.html" class="read-more">View →</a>
+        </article>
+
+        <article class="article-card">
+            <h2 class="article-title">Canvas Particle Effects</h2>
+            <div class="article-meta">Today</div>
+            <div class="article-excerpt">
+                Performance-optimized particle systems. 60fps burst animations with cleanup.
+            </div>
+            <a href="particle-effects.html" class="read-more">View →</a>
+        </article>
+
+        <article class="article-card">
+            <h2 class="article-title">Responsive Grid Layouts</h2>
+            <div class="article-meta">Next</div>
+            <div class="article-excerpt">
+                CSS Grid without media queries. Intrinsic sizing for adaptive layouts.
+            </div>
+            <a href="#" class="read-more">View →</a>
+        </article>
+    </div>
+
+    <script src="../../magic-user-system.js"></script>
+</body>
+</html>

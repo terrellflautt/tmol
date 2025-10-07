@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Automation Platform | SnapIT Agent</title>
+    <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../../index.html" class="nav-logo">
+                <span class="logo-text">Terrell K. Flautt</span>
+            </a>
+            <div class="nav-links">
+                <a href="../../../index.html">Home</a>
+                <a href="../index.html">Dev Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <article style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+        <header>
+            <h1>AI Automation Platform</h1>
+            <p><time>Oct 13, 2025</time> · 7 min · <a href="https://snapitagent.com" target="_blank">snapitagent.com</a></p>
+        </header>
+
+        <h2>Architecture</h2>
+        <pre><code>React Frontend → API Gateway → Lambda Functions
+                    ↓
+            DynamoDB + S3 + SQS Queues
+                    ↓
+        OpenAI/Claude APIs + Webhook System</code></pre>
+
+        <h2>Core Challenge</h2>
+        <p><strong>Problem:</strong> Users need custom AI agents without coding.<br>
+        <strong>Solution:</strong> Visual workflow builder with serverless execution engine.</p>
+
+        <h2>Agent Execution Lambda</h2>
+        <pre><code>exports.executeAgent = async (event) => {
+    const { agentId, inputs, userId } = JSON.parse(event.body);
+
+    // Load agent configuration
+    const agent = await dynamoDB.get({
+        TableName: 'agents',
+        Key: { id: agentId }
+    }).promise();
+
+    const workflow = agent.Item.workflow;
+    let context = { ...inputs };
+
+    // Execute workflow steps
+    for (const step of workflow.steps) {
+        switch (step.type) {
+            case 'ai_prompt':
+                context = await executeAIStep(step, context);
+                break;
+            case 'data_transform':
+                context = await transformData(step, context);
+                break;
+            case 'webhook':
+                context = await callWebhook(step, context);
+                break;
+            case 'condition':
+                if (evaluateCondition(step, context)) {
+                    workflow.steps = step.trueBranch;
+                } else {
+                    workflow.steps = step.falseBranch;
+                }
+                break;
+        }
+
+        // Store execution state
+        await dynamoDB.put({
+            TableName: 'executions',
+            Item: {
+                id: uuidv4(),
+                agentId,
+                stepId: step.id,
+                context,
+                timestamp: Date.now(),
+                userId
+            }
+        }).promise();
+    }
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify({ result: context })
+    };
+};</code></pre>
+
+        <h2>Visual Workflow Builder</h2>
+        <pre><code>// React Flow integration
+function WorkflowBuilder({ agentId }) {
+    const [nodes, setNodes] = useState([]);
+    const [edges, setEdges] = useState([]);
+
+    const nodeTypes = {
+        aiPrompt: AIPromptNode,
+        dataTransform: DataTransformNode,
+        webhook: WebhookNode,
+        condition: ConditionNode
+    };
+
+    const onNodesChange = useCallback(
+        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+        []
+    );
+
+    const saveWorkflow = async () => {
+        const workflow = { nodes, edges };
+        await fetch('/api/agents/save', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ agentId, workflow })
+        });
+    };
+
+    return (
+        &lt;ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            nodeTypes={nodeTypes}
+            fitView
+        &gt;
+            &lt;Background variant="dots" /&gt;
+            &lt;Controls /&gt;
+            &lt;MiniMap /&gt;
+        &lt;/ReactFlow&gt;
+    );
+}</code></pre>
+
+        <h2>AI Integration Layer</h2>
+        <pre><code>async function executeAIStep(step, context) {
+    const { provider, model, prompt, temperature } = step.config;
+
+    // Get API key from SSM
+    const apiKey = await ssm.getParameter({
+        Name: `/snapitagent/${provider}-api-key`,
+        WithDecryption: true
+    }).promise();
+
+    let response;
+    switch (provider) {
+        case 'openai':
+            response = await openai.chat.completions.create({
+                model: model || 'gpt-4',
+                messages: [{ role: 'user', content: interpolatePrompt(prompt, context) }],
+                temperature: temperature || 0.7
+            });
+            context.aiResponse = response.choices[0].message.content;
+            break;
+
+        case 'claude':
+            response = await anthropic.messages.create({
+                model: model || 'claude-3-sonnet-20240229',
+                messages: [{ role: 'user', content: interpolatePrompt(prompt, context) }],
+                max_tokens: 4000
+            });
+            context.aiResponse = response.content[0].text;
+            break;
+    }
+
+    return context;
+}</code></pre>
+
+        <h2>SQS Queue Processing</h2>
+        <pre><code>exports.processQueue = async (event) => {
+    for (const record of event.Records) {
+        const { agentId, executionId, delay } = JSON.parse(record.body);
+
+        if (delay) {
+            // Delayed execution
+            await new Promise(resolve => setTimeout(resolve, delay * 1000));
+        }
+
+        // Continue agent execution
+        const execution = await dynamoDB.get({
+            TableName: 'executions',
+            Key: { id: executionId }
+        }).promise();
+
+        await continueExecution(execution.Item);
+    }
+};</code></pre>
+
+        <h2>DynamoDB Schema</h2>
+        <pre><code>agents:
+- id (string) - partition key
+- name (string) - agent name
+- userId (string) - GSI partition key
+- workflow (map) - workflow definition
+- status (string) - active/inactive
+- createdAt (string)
+
+executions:
+- id (string) - partition key
+- agentId (string) - GSI partition key
+- stepId (string) - current step
+- context (map) - execution context
+- timestamp (number) - GSI sort key
+- userId (string)
+- status (string) - running/completed/failed
+
+templates:
+- id (string) - partition key
+- category (string) - GSI partition key
+- template (map) - workflow template
+- popularity (number) - usage count</code></pre>
+
+        <h2>Key Features</h2>
+
+        <h3>Template Marketplace</h3>
+        <pre><code>function TemplateMarketplace() {
+    const [templates] = useTemplates();
+
+    const categories = [
+        'Content Creation',
+        'Data Processing',
+        'Social Media',
+        'Customer Support',
+        'Analytics'
+    ];
+
+    return (
+        &lt;div className="template-grid"&gt;
+            {templates.map(template =&gt; (
+                &lt;TemplateCard
+                    key={template.id}
+                    template={template}
+                    onSelect={importTemplate}
+                /&gt;
+            ))}
+        &lt;/div&gt;
+    );
+}</code></pre>
+
+        <h3>Real-time Monitoring</h3>
+        <pre><code>// WebSocket connection for live execution
+const ws = new WebSocket('wss://api.snapitagent.com/executions');
+
+ws.onmessage = (event) => {
+    const { executionId, status, output } = JSON.parse(event.data);
+    updateExecutionStatus(executionId, status, output);
+};</code></pre>
+
+        <h2>SSM Configuration</h2>
+        <pre><code>/snapitagent/openai-api-key - OpenAI API access
+/snapitagent/claude-api-key - Anthropic Claude API
+/snapitagent/webhook-secret - Webhook validation
+/snapitagent/jwt-secret - Authentication
+/snapitagent/stripe-key - Payment processing</code></pre>
+
+        <h2>Scaling & Performance</h2>
+        <ul>
+            <li><strong>Execution Time:</strong> 500ms average per step</li>
+            <li><strong>Concurrency:</strong> 1000+ agents simultaneously</li>
+            <li><strong>Cost:</strong> $0.10 per 100 executions</li>
+            <li><strong>Reliability:</strong> 99.95% uptime with DLQ handling</li>
+        </ul>
+
+        <footer style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #333;">
+            <p><strong>Stack:</strong> React Flow, S3, API Gateway, Lambda, DynamoDB, SQS, SSM</p>
+        </footer>
+    </article>
+</body>
+</html>

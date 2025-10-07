@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Serverless Architecture | URL Status Checker</title>
+    <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../../index.html" class="nav-logo">
+                <span class="logo-text">Terrell K. Flautt</span>
+            </a>
+            <div class="nav-links">
+                <a href="../../../index.html">Home</a>
+                <a href="../index.html">Dev Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <article style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+        <header>
+            <h1>Complete Serverless Architecture</h1>
+            <p><time>Oct 11, 2025</time> · 12 min · Complete project breakdown</p>
+        </header>
+
+        <h2>serverless.yml Configuration</h2>
+        <pre><code>service: urlstatuschecker-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    STAGE: ${self:provider.stage}
+    USERS_TABLE: ${self:service}-users-${self:provider.stage}
+    CHECKS_TABLE: ${self:service}-checks-${self:provider.stage}
+    LIMITS_TABLE: ${self:service}-limits-${self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:provider.environment.USERS_TABLE}"
+        - "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:provider.environment.CHECKS_TABLE}"
+        - "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:provider.environment.LIMITS_TABLE}"
+    - Effect: Allow
+      Action:
+        - ssm:GetParameter
+        - ssm:GetParameters
+      Resource: "arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/urlchecker/*"
+
+functions:
+  checkUrl:
+    handler: src/handlers/checkUrl.handler
+    timeout: 30
+    events:
+      - http:
+          path: /check
+          method: post
+          cors: true
+          authorizer: auth
+
+  batchCheck:
+    handler: src/handlers/batchCheck.handler
+    timeout: 300
+    events:
+      - http:
+          path: /batch-check
+          method: post
+          cors: true
+          authorizer: auth
+
+  getUserData:
+    handler: src/handlers/getUserData.handler
+    events:
+      - http:
+          path: /user
+          method: get
+          cors: true
+          authorizer: auth
+
+  updateUserPlan:
+    handler: src/handlers/updateUserPlan.handler
+    events:
+      - http:
+          path: /user/plan
+          method: put
+          cors: true
+          authorizer: auth
+
+  processPayment:
+    handler: src/handlers/processPayment.handler
+    events:
+      - http:
+          path: /payment
+          method: post
+          cors: true
+
+  auth:
+    handler: src/handlers/auth.handler
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    ChecksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.CHECKS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: checkId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          - AttributeName: checkId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: UserTimeIndex
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: timestamp
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+
+    LimitsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.LIMITS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: limitKey
+            AttributeType: S
+        KeySchema:
+          - AttributeName: limitKey
+            KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+        BillingMode: PAY_PER_REQUEST</code></pre>
+
+        <h2>Lambda Functions</h2>
+
+        <h3>1. URL Check Handler</h3>
+        <pre><code>// src/handlers/checkUrl.js
+const AWS = require('aws-sdk');
+const fetch = require('node-fetch');
+const { v4: uuidv4 } = require('uuid');
+
+const dynamodb = new AWS.DynamoDB.DocumentClient();
+
+exports.handler = async (event) => {
+    try {
+        const { url } = JSON.parse(event.body);
+        const userId = event.requestContext.authorizer.principalId;
+
+        // Validate URL
+        if (!isValidUrl(url)) {
+            return errorResponse(400, 'Invalid URL format');
+        }
+
+        // Check rate limits
+        await checkRateLimit(userId);
+
+        // Perform URL check
+        const startTime = Date.now();
+        const result = await checkUrlStatus(url);
+        const responseTime = Date.now() - startTime;
+
+        // Save to DynamoDB
+        const checkRecord = {
+            checkId: uuidv4(),
+            userId,
+            url,
+            status: result.status,
+            statusText: result.statusText,
+            responseTime,
+            timestamp: Date.now(),
+            headers: result.headers
+        };
+
+        await dynamodb.put({
+            TableName: process.env.CHECKS_TABLE,
+            Item: checkRecord
+        }).promise();
+
+        // Update user usage
+        await updateUserUsage(userId);
+
+        return successResponse({
+            url,
+            status: result.status,
+            statusText: result.statusText,
+            responseTime,
+            timestamp: checkRecord.timestamp
+        });
+
+    } catch (error) {
+        console.error('Error checking URL:', error);
+        return errorResponse(500, 'Internal server error');
+    }
+};
+
+async function checkUrlStatus(url) {
+    try {
+        const response = await fetch(url, {
+            method: 'HEAD',
+            timeout: 10000,
+            follow: 5,
+            headers: {
+                'User-Agent': 'URLStatusChecker/1.0 (+https://urlstatuschecker.com)'
+            }
+        });
+
+        return {
+            status: response.status,
+            statusText: response.statusText,
+            headers: Object.fromEntries(response.headers)
+        };
+    } catch (error) {
+        return {
+            status: 0,
+            statusText: error.message,
+            headers: {}
+        };
+    }
+}</code></pre>
+
+        <h3>2. Batch Check Handler</h3>
+        <pre><code>// src/handlers/batchCheck.js
+exports.handler = async (event) => {
+    try {
+        const { urls } = JSON.parse(event.body);
+        const userId = event.requestContext.authorizer.principalId;
+
+        // Validate batch size
+        const userLimits = await getUserLimits(userId);
+        if (urls.length > userLimits.batchSize) {
+            return errorResponse(400, `Batch size exceeds limit of ${userLimits.batchSize}`);
+        }
+
+        // Check monthly usage
+        const usage = await getMonthlyUsage(userId);
+        if (usage + urls.length > userLimits.monthlyLimit) {
+            return errorResponse(429, 'Monthly usage limit exceeded');
+        }
+
+        // Process URLs in chunks to avoid timeout
+        const chunkSize = 10;
+        const results = [];
+
+        for (let i = 0; i < urls.length; i += chunkSize) {
+            const chunk = urls.slice(i, i + chunkSize);
+            const chunkPromises = chunk.map(url => checkUrlWithRetry(url));
+            const chunkResults = await Promise.allSettled(chunkPromises);
+
+            results.push(...chunkResults.map((result, index) => ({
+                url: chunk[index],
+                ...result.value || { status: 0, statusText: 'Check failed' }
+            })));
+
+            // Rate limiting between chunks
+            if (i + chunkSize < urls.length) {
+                await delay(1000);
+            }
+        }
+
+        // Bulk insert to DynamoDB
+        await saveBatchResults(userId, results);
+
+        return successResponse({
+            totalChecked: results.length,
+            results: results
+        });
+
+    } catch (error) {
+        console.error('Batch check error:', error);
+        return errorResponse(500, 'Batch check failed');
+    }
+};</code></pre>
+
+        <h3>3. User Data Handler</h3>
+        <pre><code>// src/handlers/getUserData.js
+exports.handler = async (event) => {
+    try {
+        const userId = event.requestContext.authorizer.principalId;
+
+        // Get user profile
+        const user = await dynamodb.get({
+            TableName: process.env.USERS_TABLE,
+            Key: { userId }
+        }).promise();
+
+        if (!user.Item) {
+            return errorResponse(404, 'User not found');
+        }
+
+        // Get monthly usage
+        const usage = await getMonthlyUsage(userId);
+
+        // Get recent checks
+        const recentChecks = await dynamodb.query({
+            TableName: process.env.CHECKS_TABLE,
+            IndexName: 'UserTimeIndex',
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+                ':userId': userId
+            },
+            ScanIndexForward: false,
+            Limit: 50
+        }).promise();
+
+        const userData = {
+            ...user.Item,
+            usage: {
+                monthly: usage,
+                remaining: getUserLimits(user.Item.plan).monthlyLimit - usage
+            },
+            recentChecks: recentChecks.Items
+        };
+
+        // Remove sensitive data
+        delete userData.password;
+        delete userData.stripeCustomerId;
+
+        return successResponse(userData);
+
+    } catch (error) {
+        console.error('Get user data error:', error);
+        return errorResponse(500, 'Failed to get user data');
+    }
+};</code></pre>
+
+        <h3>4. Payment Processing</h3>
+        <pre><code>// src/handlers/processPayment.js
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+exports.handler = async (event) => {
+    try {
+        const { planId, paymentMethodId, userId } = JSON.parse(event.body);
+
+        const plans = {
+            pro: { price: 2.99, name: 'Pro Plan' },
+            business: { price: 9.99, name: 'Business Plan' }
+        };
+
+        if (!plans[planId]) {
+            return errorResponse(400, 'Invalid plan selected');
+        }
+
+        // Create or retrieve customer
+        let customer = await getStripeCustomer(userId);
+        if (!customer) {
+            customer = await stripe.customers.create({
+                metadata: { userId }
+            });
+            await saveStripeCustomer(userId, customer.id);
+        }
+
+        // Create subscription
+        const subscription = await stripe.subscriptions.create({
+            customer: customer.id,
+            items: [{
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: plans[planId].name
+                    },
+                    unit_amount: Math.round(plans[planId].price * 100),
+                    recurring: {
+                        interval: 'month'
+                    }
+                }
+            }],
+            default_payment_method: paymentMethodId,
+            expand: ['latest_invoice.payment_intent']
+        });
+
+        // Update user plan
+        await dynamodb.update({
+            TableName: process.env.USERS_TABLE,
+            Key: { userId },
+            UpdateExpression: 'SET plan = :plan, stripeSubscriptionId = :subId, updatedAt = :now',
+            ExpressionAttributeValues: {
+                ':plan': planId,
+                ':subId': subscription.id,
+                ':now': new Date().toISOString()
+            }
+        }).promise();
+
+        return successResponse({
+            subscriptionId: subscription.id,
+            status: subscription.status,
+            clientSecret: subscription.latest_invoice.payment_intent.client_secret
+        });
+
+    } catch (error) {
+        console.error('Payment processing error:', error);
+        return errorResponse(500, 'Payment processing failed');
+    }
+};</code></pre>
+
+        <h3>5. Authorization Handler</h3>
+        <pre><code>// src/handlers/auth.js
+const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+exports.handler = async (event) => {
+    try {
+        const token = event.authorizationToken.replace('Bearer ', '');
+
+        // Verify JWT token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.sub;
+
+        // Generate policy
+        return generatePolicy(userId, 'Allow', event.methodArn);
+
+    } catch (error) {
+        console.error('Auth error:', error);
+        return generatePolicy('unauthorized', 'Deny', event.methodArn);
+    }
+};
+
+function generatePolicy(principalId, effect, resource) {
+    return {
+        principalId,
+        policyDocument: {
+            Version: '2012-10-17',
+            Statement: [{
+                Action: 'execute-api:Invoke',
+                Effect: effect,
+                Resource: resource
+            }]
+        }
+    };
+}</code></pre>
+
+        <h2>Frontend Components</h2>
+
+        <h3>URL Checker Interface</h3>
+        <pre><code>// js/URLChecker.js
+class URLChecker {
+    constructor() {
+        this.apiBase = 'https://api.urlstatuschecker.com';
+        this.authToken = localStorage.getItem('authToken');
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.loadUserData();
+    }
+
+    setupEventListeners() {
+        // Single URL check
+        document.getElementById('single-check-btn').addEventListener('click', () => {
+            const url = document.getElementById('url-input').value;
+            this.checkSingleUrl(url);
+        });
+
+        // Batch URL check
+        document.getElementById('batch-check-btn').addEventListener('click', () => {
+            const urls = this.parseUrlList(document.getElementById('url-list').value);
+            this.checkBatchUrls(urls);
+        });
+
+        // Export results
+        document.getElementById('export-btn').addEventListener('click', () => {
+            this.exportResults();
+        });
+    }
+
+    async checkSingleUrl(url) {
+        this.showLoading(true);
+
+        try {
+            const response = await fetch(`${this.apiBase}/check`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.authToken}`
+                },
+                body: JSON.stringify({ url })
+            });
+
+            const result = await response.json();
+            this.displaySingleResult(result);
+
+        } catch (error) {
+            this.showError('Failed to check URL');
+        } finally {
+            this.showLoading(false);
+        }
+    }
+
+    async checkBatchUrls(urls) {
+        this.showBatchProgress(0, urls.length);
+
+        try {
+            const response = await fetch(`${this.apiBase}/batch-check`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.authToken}`
+                },
+                body: JSON.stringify({ urls })
+            });
+
+            const result = await response.json();
+            this.displayBatchResults(result.results);
+
+        } catch (error) {
+            this.showError('Batch check failed');
+        }
+    }
+}</code></pre>
+
+        <h3>Pricing Component</h3>
+        <pre><code>// js/PricingManager.js
+class PricingManager {
+    constructor() {
+        this.stripe = Stripe('pk_live_...');
+        this.plans = {
+            free: { price: 0, checks: 500, batch: 10 },
+            pro: { price: 2.99, checks: 10000, batch: 50 },
+            business: { price: 9.99, checks: 100000, batch: 100 }
+        };
+        this.init();
+    }
+
+    init() {
+        this.renderPricingCards();
+        this.setupPlanSelection();
+    }
+
+    renderPricingCards() {
+        const container = document.getElementById('pricing-cards');
+
+        Object.entries(this.plans).forEach(([planId, plan]) => {
+            const card = this.createPricingCard(planId, plan);
+            container.appendChild(card);
+        });
+    }
+
+    createPricingCard(planId, plan) {
+        const card = document.createElement('div');
+        card.className = `pricing-card ${planId === 'pro' ? 'featured' : ''}`;
+        card.innerHTML = `
+            <div class="plan-header">
+                <h3>${planId.charAt(0).toUpperCase() + planId.slice(1)}</h3>
+                <div class="price">
+                    <span class="currency">$</span>
+                    <span class="amount">${plan.price}</span>
+                    <span class="period">/month</span>
+                </div>
+            </div>
+            <div class="plan-features">
+                <div class="feature">✓ ${plan.checks.toLocaleString()} monthly checks</div>
+                <div class="feature">✓ ${plan.batch} URLs per batch</div>
+                <div class="feature">✓ Export results</div>
+                ${planId !== 'free' ? '<div class="feature">✓ Favorites & history</div>' : ''}
+                ${planId === 'business' ? '<div class="feature">✓ API access</div>' : ''}
+            </div>
+            <button class="plan-button" data-plan="${planId}">
+                ${planId === 'free' ? 'Current Plan' : 'Upgrade'}
+            </button>
+        `;
+
+        return card;
+    }
+
+    async processPlanUpgrade(planId, paymentMethodId) {
+        try {
+            const response = await fetch('/api/payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.authToken}`
+                },
+                body: JSON.stringify({
+                    planId,
+                    paymentMethodId,
+                    userId: this.getCurrentUserId()
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.clientSecret) {
+                // 3D Secure authentication required
+                await this.stripe.confirmCardPayment(result.clientSecret);
+            }
+
+            this.showSuccess('Plan upgraded successfully!');
+            this.updateUserInterface(planId);
+
+        } catch (error) {
+            this.showError('Payment failed. Please try again.');
+        }
+    }
+}</code></pre>
+
+        <h2>API Endpoints Summary</h2>
+        <pre><code>POST /check - Single URL check
+POST /batch-check - Multiple URLs check
+GET /user - Get user data and usage
+PUT /user/plan - Update user subscription
+POST /payment - Process Stripe payment
+POST /auth - Google OAuth authentication
+GET /usage - Get usage statistics
+DELETE /user - Delete user account</code></pre>
+
+        <h2>Deployment Pipeline</h2>
+        <pre><code># package.json scripts
+{
+  "scripts": {
+    "deploy:dev": "serverless deploy --stage dev",
+    "deploy:prod": "serverless deploy --stage prod",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "lint": "eslint src/",
+    "tailwind:build": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --minify"
+  }
+}
+
+# Deployment process
+npm run lint
+npm run test
+npm run build
+npm run tailwind:build
+npm run deploy:prod</code></pre>
+
+        <footer style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #333;">
+            <p><strong>Complete Stack:</strong> Serverless Framework, AWS Lambda, DynamoDB, Tailwind CSS, Stripe</p>
+            <p><strong>Security:</strong> JWT auth, rate limiting, input validation, SSM parameters</p>
+        </footer>
+    </article>
+</body>
+</html>

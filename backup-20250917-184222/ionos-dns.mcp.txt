@@ -1,0 +1,14 @@
+
+  🔒 DNS Validation Records for IONOS
+
+  Record 1 (Root Domain):
+  - Type: CNAME
+  - Name: _a5b69b289d4df1443afc6bbbbeda99e7
+  - Value: _f7e20ea234f2713cd5edd7a6fb3a0201.xlfgrmvvlj.acm-validations.aws.
+  - TTL: 300
+
+  Record 2 (WWW Subdomain):
+  - Type: CNAME
+  - Name: _11e7b71b434426cd66fcabb8f1f776d1.www
+  - Value: _89a1b68c88532db5134852d71d026d50.xlfgrmvvlj.acm-validations.aws.
+  - TTL: 300

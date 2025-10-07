@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journey Analytics Dashboard</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            color: #00ffff;
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #fff;
+        }
+        .recommendations {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .recommendation {
+            border-left: 3px solid #ff6b6b;
+            padding-left: 15px;
+            margin: 15px 0;
+        }
+        .recommendation.high { border-color: #ff6b6b; }
+        .recommendation.medium { border-color: #ffd93d; }
+        .recommendation.low { border-color: #6bcf7f; }
+        .discovery-list {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .discovery-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+        .discovery-item:last-child { border-bottom: none; }
+        .progress-bar {
+            background: #333;
+            height: 4px;
+            border-radius: 2px;
+            overflow: hidden;
+            width: 100px;
+        }
+        .progress-fill {
+            background: #00ffff;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .refresh-btn {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>Journey Analytics Dashboard</h1>
+            <p>Real-time insights for optimizing user journeys</p>
+            <button class="refresh-btn" onclick="loadDashboard()">Refresh Data</button>
+        </div>
+
+        <div id="loading" class="loading">Loading analytics data...</div>
+
+        <div id="dashboard-content" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <div class="stat-value" id="totalUsers">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Journey Steps</h3>
+                    <div class="stat-value" id="avgSteps">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>High Engagement Users</h3>
+                    <div class="stat-value" id="highEngagement">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Discovery Completion Rate</h3>
+                    <div class="stat-value" id="discoveryRate">-</div>
+                </div>
+            </div>
+
+            <div class="recommendations">
+                <h3>Development Recommendations</h3>
+                <div id="recommendations"></div>
+            </div>
+
+            <div class="discovery-list">
+                <h3>Discovery Performance</h3>
+                <div id="discoveryStats"></div>
+            </div>
+
+            <div class="discovery-list">
+                <h3>Drop-off Points</h3>
+                <div id="dropoffPoints"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadDashboard() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('dashboard-content').style.display = 'none';
+
+            try {
+                // Load all analytics data
+                const [insights, dropoffs, engagement, discoveries] = await Promise.all([
+                    fetch('/api/journey/insights').then(r => r.json()),
+                    fetch('/api/journey/dropoffs').then(r => r.json()),
+                    fetch('/api/journey/engagement').then(r => r.json()),
+                    fetch('/api/journey/discoveries').then(r => r.json())
+                ]);
+
+                // Update stats
+                document.getElementById('totalUsers').textContent = insights.totalUsers;
+                document.getElementById('avgSteps').textContent = insights.journeyProgression.averageSteps.toFixed(1);
+                document.getElementById('highEngagement').textContent = engagement.highEngagement.length;
+                document.getElementById('discoveryRate').textContent =
+                    Math.round((discoveries.discoveryStats.reduce((sum, d) => sum + d.count, 0) / insights.totalUsers) * 100) + '%';
+
+                // Update recommendations
+                updateRecommendations(insights.recommendations);
+
+                // Update discovery stats
+                updateDiscoveryStats(discoveries.discoveryStats);
+
+                // Update dropoff points
+                updateDropoffPoints(dropoffs);
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard-content').style.display = 'block';
+
+            } catch (error) {
+                console.error('Failed to load dashboard:', error);
+                document.getElementById('loading').innerHTML = 'Failed to load data. Please try again.';
+            }
+        }
+
+        function updateRecommendations(recommendations) {
+            const container = document.getElementById('recommendations');
+            container.innerHTML = '';
+
+            recommendations.forEach(rec => {
+                const div = document.createElement('div');
+                div.className = `recommendation ${rec.priority}`;
+                div.innerHTML = `
+                    <h4>${rec.issue}</h4>
+                    <p>${rec.suggestion}</p>
+                    <small>Affects ${rec.affectedUsers} users • Expected impact: ${rec.expectedImpact}</small>
+                `;
+                container.appendChild(div);
+            });
+
+            if (recommendations.length === 0) {
+                container.innerHTML = '<p>No critical recommendations at this time.</p>';
+            }
+        }
+
+        function updateDiscoveryStats(discoveries) {
+            const container = document.getElementById('discoveryStats');
+            container.innerHTML = '';
+
+            discoveries.slice(0, 10).forEach(discovery => {
+                const div = document.createElement('div');
+                div.className = 'discovery-item';
+
+                const completionRate = (discovery.count / parseInt(document.getElementById('totalUsers').textContent)) * 100;
+
+                div.innerHTML = `
+                    <div>
+                        <strong>${discovery.title}</strong><br>
+                        <small>${discovery.count} completions</small>
+                    </div>
+                    <div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${completionRate}%"></div>
+                        </div>
+                        <small>${Math.round(completionRate)}%</small>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateDropoffPoints(dropoffs) {
+            const container = document.getElementById('dropoffPoints');
+            container.innerHTML = '';
+
+            dropoffs.slice(0, 8).forEach(dropoff => {
+                const div = document.createElement('div');
+                div.className = 'discovery-item';
+                div.innerHTML = `
+                    <div>
+                        <strong>${dropoff.step}</strong><br>
+                        <small>${dropoff.action}</small>
+                    </div>
+                    <div>
+                        <strong>${dropoff.count}</strong> users
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Auto-refresh every 5 minutes
+        setInterval(loadDashboard, 5 * 60 * 1000);
+
+        // Load dashboard on page load
+        loadDashboard();
+    </script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Scalable URL Monitoring System | Dev Blog</title>
+    <meta name="description" content="The challenges and solutions behind URL Status Checker - from rate limiting to real-time monitoring.">
+    <link rel="stylesheet" href="../../../styles.css">
+    <style>
+        .blog-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .code-block {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .challenge-box {
+            background: rgba(255, 59, 48, 0.1);
+            border-left: 4px solid #ff3b30;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .solution-box {
+            background: rgba(52, 199, 89, 0.1);
+            border-left: 4px solid #34c759;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../../index.html" class="nav-logo">
+                <span class="logo-text">Terrell K. Flautt</span>
+            </a>
+            <div class="nav-links">
+                <a href="../../../index.html">Home</a>
+                <a href="../index.html">Dev Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <article class="blog-content">
+        <header>
+            <h1>Building a Scalable URL Monitoring System</h1>
+            <p class="meta">
+                <time datetime="2024-12-15">December 15, 2024</time> ·
+                <span>12 min read</span> ·
+                <a href="https://urlstatuschecker.com" target="_blank">Live Project</a>
+            </p>
+        </header>
+
+        <p>When I set out to build <strong>URL Status Checker</strong>, I thought it would be a simple weekend project. "Just ping some URLs and show the status codes," I told myself. Three months later, I had learned painful lessons about rate limiting, user session management, and the complexity of building a reliable monitoring service.</p>
+
+        <h2>The Initial Challenge</h2>
+
+        <div class="challenge-box">
+            <h3>🚨 Problem</h3>
+            <p>Users wanted to check 100+ URLs at once, but naive implementation would either crash the browser or get IP-banned by target servers.</p>
+        </div>
+
+        <p>The first version was embarrassingly simple:</p>
+
+        <div class="code-block">
+<pre><code>// Don't do this - it will break everything
+async function checkUrls(urls) {
+    const results = [];
+    for (const url of urls) {
+        const response = await fetch(url);
+        results.push({ url, status: response.status });
+    }
+    return results;
+}</code></pre>
+        </div>
+
+        <p>This approach had several critical flaws:</p>
+        <ul>
+            <li>No rate limiting - servers would ban our IP</li>
+            <li>No error handling - one bad URL broke everything</li>
+            <li>No progress indication - users thought it was frozen</li>
+            <li>No concurrency control - browser would timeout</li>
+        </ul>
+
+        <h2>Solution 1: Intelligent Rate Limiting</h2>
+
+        <div class="solution-box">
+            <h3>✅ Solution</h3>
+            <p>Implemented a sophisticated rate limiting system with exponential backoff and domain-based throttling.</p>
+        </div>
+
+        <div class="code-block">
+<pre><code>class URLChecker {
+    constructor() {
+        this.domainQueues = new Map();
+        this.maxConcurrent = 5;
+        this.domainDelay = 1000; // 1 second between requests to same domain
+    }
+
+    async checkUrlsBatch(urls, onProgress) {
+        const chunks = this.chunkByDomain(urls);
+        const results = [];
+
+        for (let i = 0; i < chunks.length; i += this.maxConcurrent) {
+            const batch = chunks.slice(i, i + this.maxConcurrent);
+            const batchResults = await Promise.allSettled(
+                batch.map(chunk => this.processChunk(chunk))
+            );
+
+            results.push(...batchResults.flat());
+            onProgress(results.length, urls.length);
+
+            // Rate limit between batches
+            if (i + this.maxConcurrent < chunks.length) {
+                await this.delay(500);
+            }
+        }
+
+        return results;
+    }
+
+    chunkByDomain(urls) {
+        const domainChunks = new Map();
+
+        urls.forEach(url => {
+            const domain = new URL(url).hostname;
+            if (!domainChunks.has(domain)) {
+                domainChunks.set(domain, []);
+            }
+            domainChunks.get(domain).push(url);
+        });
+
+        return Array.from(domainChunks.values());
+    }
+}</code></pre>
+        </div>
+
+        <h2>The Authentication Complexity</h2>
+
+        <p>Initially, I thought I'd just store favorites in localStorage. Then users started asking: "Can I access my lists from multiple devices?" This led me down the rabbit hole of user authentication and session management.</p>
+
+        <div class="challenge-box">
+            <h3>🚨 Problem</h3>
+            <p>Users needed persistent storage across devices, but I wanted to avoid the complexity of user accounts and passwords.</p>
+        </div>
+
+        <p>Google Sign-In seemed like the perfect solution, but integrating it properly was trickier than expected:</p>
+
+        <div class="code-block">
+<pre><code>class AuthManager {
+    constructor() {
+        this.user = null;
+        this.isInitialized = false;
+    }
+
+    async initialize() {
+        return new Promise((resolve) => {
+            gapi.load('auth2', async () => {
+                try {
+                    this.auth2 = await gapi.auth2.init({
+                        client_id: '463808979755-your-client-id.googleusercontent.com'
+                    });
+
+                    // Check if user is already signed in
+                    if (this.auth2.isSignedIn.get()) {
+                        this.user = this.auth2.currentUser.get();
+                        this.updateUI();
+                    }
+
+                    this.isInitialized = true;
+                    resolve();
+                } catch (error) {
+                    console.error('Auth initialization failed:', error);
+                    this.gracefulFallback();
+                    resolve();
+                }
+            });
+        });
+    }
+
+    gracefulFallback() {
+        // If Google Auth fails, fall back to localStorage
+        console.log('Using localStorage fallback for user data');
+        this.updateUI();
+    }
+}</code></pre>
+        </div>
+
+        <h2>The Pricing Model Dilemma</h2>
+
+        <p>This was where business meets technical implementation. I needed to create a system that was:</p>
+        <ul>
+            <li>Fair to users with different needs</li>
+            <li>Technically enforceable</li>
+            <li>Easy to understand</li>
+            <li>Profitable but accessible</li>
+        </ul>
+
+        <div class="solution-box">
+            <h3>✅ Solution</h3>
+            <p>Implemented a credit-based system with different rate limits per plan tier.</p>
+        </div>
+
+        <div class="code-block">
+<pre><code>const PLANS = {
+    free: {
+        name: 'Free',
+        monthlyChecks: 500,
+        batchSize: 10,
+        rateLimit: 5000, // 5 seconds between batches
+        features: ['Basic checking', 'Export results']
+    },
+    pro: {
+        name: 'Pro',
+        monthlyChecks: 10000,
+        batchSize: 50,
+        rateLimit: 2000, // 2 seconds between batches
+        features: ['Priority checking', 'Favorites', 'API access']
+    },
+    business: {
+        name: 'Business',
+        monthlyChecks: 100000,
+        batchSize: 100,
+        rateLimit: 1000, // 1 second between batches
+        features: ['Unlimited favorites', 'Team access', 'Webhooks']
+    }
+};
+
+class PlanManager {
+    checkUserLimits(user, requestedChecks) {
+        const plan = PLANS[user.plan || 'free'];
+        const usage = this.getMonthlyUsage(user);
+
+        if (usage + requestedChecks > plan.monthlyChecks) {
+            throw new Error(`Monthly limit exceeded. Upgrade to check more URLs.`);
+        }
+
+        if (requestedChecks > plan.batchSize) {
+            throw new Error(`Batch size too large. Maximum ${plan.batchSize} URLs per check.`);
+        }
+
+        return {
+            allowed: true,
+            remaining: plan.monthlyChecks - usage,
+            rateLimit: plan.rateLimit
+        };
+    }
+}</code></pre>
+        </div>
+
+        <h2>Performance Optimization Discoveries</h2>
+
+        <p>The biggest performance wins came from unexpected places:</p>
+
+        <h3>1. Debounced Input Validation</h3>
+        <p>Users would paste large lists of URLs, and validating each one on every keystroke was killing performance.</p>
+
+        <div class="code-block">
+<pre><code>const debouncedValidation = debounce((urls) => {
+    const results = urls.map(url => ({
+        url,
+        isValid: this.isValidUrl(url),
+        issues: this.validateUrl(url)
+    }));
+    this.updateValidationUI(results);
+}, 300);</code></pre>
+        </div>
+
+        <h3>2. Progressive Results Loading</h3>
+        <p>Instead of waiting for all URLs to complete, I streamed results as they came in.</p>
+
+        <div class="code-block">
+<pre><code>async processUrlStream(urls, onResult) {
+    const stream = new ReadableStream({
+        async start(controller) {
+            for (const url of urls) {
+                try {
+                    const result = await checkSingleUrl(url);
+                    controller.enqueue(result);
+                    onResult(result); // Update UI immediately
+                } catch (error) {
+                    controller.enqueue({ url, error: error.message });
+                }
+            }
+            controller.close();
+        }
+    });
+
+    return stream;
+}</code></pre>
+        </div>
+
+        <h2>The Hardest Bug: Silent Failures</h2>
+
+        <p>The most frustrating bug took weeks to track down. Users reported that some URLs would show as "failed" when they were clearly working. The issue? CORS policies and mixed content blocking.</p>
+
+        <div class="challenge-box">
+            <h3>🚨 Problem</h3>
+            <p>Browser security policies prevented direct URL checking for many sites, but errors were being silently swallowed.</p>
+        </div>
+
+        <p>The solution required a hybrid approach:</p>
+
+        <div class="code-block">
+<pre><code>async function checkUrlWithFallback(url) {
+    try {
+        // Try direct fetch first
+        const response = await fetch(url, {
+            mode: 'no-cors',
+            method: 'HEAD'
+        });
+        return { url, status: 'reachable', method: 'direct' };
+    } catch (directError) {
+        try {
+            // Fallback to server-side check
+            const proxyResponse = await fetch('/api/check-url', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url })
+            });
+            const result = await proxyResponse.json();
+            return { url, ...result, method: 'proxy' };
+        } catch (proxyError) {
+            return {
+                url,
+                status: 'failed',
+                error: 'Unable to reach URL',
+                method: 'none'
+            };
+        }
+    }
+}</code></pre>
+        </div>
+
+        <h2>Lessons Learned</h2>
+
+        <ol>
+            <li><strong>Start with constraints:</strong> Rate limiting should be designed first, not added later.</li>
+            <li><strong>Graceful degradation:</strong> Always have a fallback when external services fail.</li>
+            <li><strong>User feedback:</strong> Show progress, explain delays, and communicate limitations clearly.</li>
+            <li><strong>Plan for scale:</strong> Even simple tools can get popular quickly.</li>
+            <li><strong>Monitor real usage:</strong> Users will find edge cases you never considered.</li>
+        </ol>
+
+        <h2>Current Status & Future Plans</h2>
+
+        <p>URL Status Checker now serves thousands of checks daily with a 99.9% uptime. The next major features in development:</p>
+
+        <ul>
+            <li><strong>Scheduled monitoring:</strong> Automatic health checks</li>
+            <li><strong>Team collaboration:</strong> Shared URL lists</li>
+            <li><strong>Advanced analytics:</strong> Response time trends</li>
+            <li><strong>Webhook integrations:</strong> Alert external systems</li>
+        </ul>
+
+        <p>Building a "simple" URL checker taught me that there's no such thing as a simple web service. Every feature decision creates ripple effects, and the real challenges only emerge when users start pushing your assumptions.</p>
+
+        <footer style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #333;">
+            <p><strong>Try it yourself:</strong> <a href="https://urlstatuschecker.com" target="_blank">urlstatuschecker.com</a></p>
+            <p><strong>Stack:</strong> Vanilla JavaScript, Tailwind CSS, Google OAuth, Custom REST API</p>
+            <p><strong>Read time:</strong> 12 minutes</p>
+        </footer>
+    </article>
+</body>
+</html>

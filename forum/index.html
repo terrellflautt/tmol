@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is this website? - SnapIt Software Forum</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="forum-header">
+            <div class="header-glow"></div>
+            <h1 class="forum-title">
+                <span class="forum-icon">💬</span>
+                What is this website?
+            </h1>
+            <p class="forum-subtitle">
+                For those who discovered forum.snapitsoftware.com
+            </p>
+            <div class="discovery-badge">
+                <span class="badge-icon">🔍</span>
+                <span class="badge-text">You found it</span>
+            </div>
+        </header>
+
+        <!-- Rate Limit Display -->
+        <div id="rateLimitDisplay" class="rate-limit-display">
+            <span class="rate-limit-icon">⏱️</span>
+            <span id="rateLimitText">Loading...</span>
+        </div>
+
+        <!-- Post Form -->
+        <div class="post-form-container">
+            <h2 class="section-title">Share Your Thoughts</h2>
+            <form id="postForm" class="post-form">
+                <div class="form-group">
+                    <label for="username">Name (optional)</label>
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Anonymous Explorer"
+                        maxlength="50"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="message">
+                        Message <span class="required">*</span>
+                        <span id="charCount" class="char-count">0/1000</span>
+                    </label>
+                    <textarea
+                        id="message"
+                        required
+                        placeholder="What brought you here? What do you think of this place?"
+                        rows="5"
+                        maxlength="1000"
+                    ></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="btn-icon">✨</span>
+                    <span class="btn-text">Post Message</span>
+                </button>
+                <div id="formMessage" class="form-message"></div>
+            </form>
+        </div>
+
+        <!-- Messages List -->
+        <div class="messages-container">
+            <div class="messages-header">
+                <h2 class="section-title">
+                    Discoveries & Reflections
+                    <span id="messageCount" class="message-count">0</span>
+                </h2>
+                <button id="refreshBtn" class="refresh-btn" title="Refresh messages">
+                    <span class="refresh-icon">🔄</span>
+                </button>
+            </div>
+            <div id="messagesList" class="messages-list">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading messages...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="forum-footer">
+            <p>
+                Part of the <a href="https://terrellflautt.com" target="_blank">terrellflautt.com</a> discovery experience
+            </p>
+            <p class="footer-hint">
+                <span class="hint-icon">💡</span>
+                Finding this forum is just the beginning...
+            </p>
+        </footer>
+    </div>
+
+    <script src="forum.js"></script>
+</body>
+</html>

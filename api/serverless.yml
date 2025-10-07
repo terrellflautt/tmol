@@ -1,0 +1,176 @@
+service: terrellflautt-user-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: ${opt:stage, 'prod'}
+  environment:
+    STAGE: ${self:provider.stage}
+    USER_PROFILES_TABLE: ${self:service}-profiles-${self:provider.stage}
+    USER_INTELLIGENCE_TABLE: ${self:service}-intelligence-${self:provider.stage}
+    USER_TRACKING_TABLE: ${self:service}-tracking-${self:provider.stage}
+    OPENAI_API_KEY: ${ssm:/terrellflautt/openai-api-key}
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USER_PROFILES_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USER_INTELLIGENCE_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USER_TRACKING_TABLE}"
+
+functions:
+  # Store user profile
+  storeProfile:
+    handler: store-user-profile.storeProfile
+    events:
+      - http:
+          path: /user-profile
+          method: post
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+              - http://localhost:3000
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: true
+      - http:
+          path: /user-profile
+          method: options
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+              - http://localhost:3000
+
+  # Get user intelligence
+  getUserIntelligence:
+    handler: store-user-profile.getUserIntelligence
+    events:
+      - http:
+          path: /user-profile/{userId}
+          method: get
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+              - http://localhost:3000
+
+  # Journey progress tracking
+  saveJourneyProgress:
+    handler: journey-handler.saveProgress
+    events:
+      - http:
+          path: /journey/progress/{userId}
+          method: post
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+              - http://localhost:3000
+
+  # Get journey progress
+  getJourneyProgress:
+    handler: journey-handler.getProgress
+    events:
+      - http:
+          path: /journey/progress/{userId}
+          method: get
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+              - http://localhost:3000
+
+  # Journey analytics
+  getJourneyAnalytics:
+    handler: journey-analytics.getAnalytics
+    events:
+      - http:
+          path: /journey/analytics
+          method: get
+          cors:
+            origin:
+              - https://terrellflautt.com
+              - https://www.terrellflautt.com
+              - http://localhost:3000
+
+resources:
+  Resources:
+    # User Profiles Table
+    UserProfilesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USER_PROFILES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    # User Intelligence Table
+    UserIntelligenceTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USER_INTELLIGENCE_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    # User Tracking Table
+    UserTrackingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USER_TRACKING_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    # Custom domain for API
+    ApiDomainName:
+      Type: AWS::ApiGatewayV2::DomainName
+      Properties:
+        DomainName: api.terrellflautt.com
+        DomainNameConfigurations:
+          - CertificateArn: ${ssm:/terrellflautt/ssl-certificate-arn}
+            EndpointType: REGIONAL
+
+    ApiMapping:
+      Type: AWS::ApiGatewayV2::ApiMapping
+      Properties:
+        DomainName: !Ref ApiDomainName
+        ApiId: !Ref HttpApi
+        Stage: ${self:provider.stage}
+
+plugins:
+  - serverless-offline

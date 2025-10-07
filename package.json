@@ -1,0 +1,51 @@
+{
+  "name": "terrellflautt-website",
+  "version": "1.0.0",
+  "description": "Terrell K. Flautt - Lead DevOps Engineer Portfolio Website",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "dev:static": "python3 -m http.server 3001",
+    "serve": "node server.js",
+    "test": "echo 'No tests specified' && exit 0",
+    "build": "echo 'Building static site...' && npm run optimize",
+    "optimize": "echo 'Optimizing assets...'",
+    "deploy": "chmod +x deploy.sh && ./deploy.sh",
+    "deploy:ssl": "chmod +x deploy-ssl.sh && ./deploy-ssl.sh",
+    "deploy:s3": "aws s3 sync . s3://terrellflautt-com --exclude '*.sh' --exclude '*.json' --exclude '*.md' --exclude '.git/*' --delete",
+    "invalidate": "aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths '/*'",
+    "status": "aws cloudfront get-distribution --id ${CLOUDFRONT_DISTRIBUTION_ID} --query 'Distribution.Status' --output text"
+  },
+  "keywords": [
+    "portfolio",
+    "devops",
+    "aws",
+    "cloudfront",
+    "static-site"
+  ],
+  "author": "Terrell K. Flautt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/terrellflautt/terrellflautt.com.git"
+  },
+  "bugs": {
+    "url": "https://github.com/terrellflautt/terrellflautt.com/issues"
+  },
+  "homepage": "https://terrellflautt.com",
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "playwright": "^1.55.0",
+    "stripe": "^14.21.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

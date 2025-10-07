@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Privacy-First Forum Platform | Chimera Project</title>
+    <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../../index.html" class="nav-logo">
+                <span class="logo-text">Terrell K. Flautt</span>
+            </a>
+            <div class="nav-links">
+                <a href="../../../index.html">Home</a>
+                <a href="../index.html">Dev Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <article style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+        <header>
+            <h1>Building a Privacy-First Forum Platform</h1>
+            <p><time>Oct 15, 2025</time> · 10 min · <a href="https://forum.snapitsoftware.com" target="_blank">forum.snapitsoftware.com</a></p>
+        </header>
+
+        <h2>The Chimera Vision</h2>
+        <p><strong>Problem:</strong> Discord, Reddit, and traditional forums sacrifice user privacy for convenience.<br>
+        <strong>Solution:</strong> Zero-knowledge encrypted forum platform that literally cannot read your messages.</p>
+
+        <h2>Architecture</h2>
+        <pre><code>React PWA Frontend → CloudFront → API Gateway
+                    ↓
+    Lambda Functions → DynamoDB + S3
+                    ↓
+        PGP 4096-bit End-to-End Encryption</code></pre>
+
+        <h3>Zero-Knowledge Principle</h3>
+        <p>The server never has access to unencrypted content. All encryption/decryption happens client-side using PGP keys generated in the browser.</p>
+
+        <h2>Core Features</h2>
+
+        <h3>1. End-to-End PGP Encryption</h3>
+        <pre><code>// Client-side message encryption
+import openpgp from 'openpgp';
+
+async function encryptMessage(message, recipientPublicKey) {
+    const encrypted = await openpgp.encrypt({
+        message: await openpgp.createMessage({ text: message }),
+        encryptionKeys: await openpgp.readKey({ armoredKey: recipientPublicKey }),
+        format: 'armored'
+    });
+
+    return encrypted;
+}
+
+async function decryptMessage(encryptedMessage, privateKey, passphrase) {
+    const message = await openpgp.readMessage({ armoredMessage: encryptedMessage });
+    const privateKeyObj = await openpgp.decryptKey({
+        privateKey: await openpgp.readPrivateKey({ armoredKey: privateKey }),
+        passphrase
+    });
+
+    const { data: decrypted } = await openpgp.decrypt({
+        message,
+        decryptionKeys: privateKeyObj
+    });
+
+    return decrypted;
+}</code></pre>
+
+        <h3>2. Ephemeral Messaging</h3>
+        <pre><code>// Auto-delete after 60 seconds
+const MESSAGE_TTL = 60;
+
+exports.createMessage = async (event) => {
+    const { encryptedContent, channelId } = JSON.parse(event.body);
+
+    const message = {
+        id: uuidv4(),
+        channelId,
+        encryptedContent,  // Server only stores encrypted blobs
+        createdAt: Date.now(),
+        ttl: Math.floor(Date.now() / 1000) + MESSAGE_TTL
+    };
+
+    await dynamodb.put({
+        TableName: 'Messages',
+        Item: message
+    }).promise();
+
+    // Publish to WebSocket subscribers
+    await notifyChannel(channelId, message);
+
+    return { statusCode: 200, body: JSON.stringify(message) };
+};</code></pre>
+
+        <h3>3. Anonymous Forums</h3>
+        <p>Users don't need accounts to participate. Temporary pseudonymous identities are generated per session.</p>
+
+        <pre><code>// Session-based anonymous identity
+function generateAnonymousId() {
+    const sessionId = crypto.randomUUID();
+    const fingerprint = generateFingerprint();
+
+    return {
+        displayName: `Anon_${sessionId.slice(0, 8)}`,
+        sessionId,
+        fingerprint,  // For anti-spam, not tracking
+        publicKey: null  // Generated client-side if user wants encryption
+    };
+}</code></pre>
+
+        <h3>4. Dead Man's Switch</h3>
+        <pre><code>// Automatic message release if user doesn't check in
+exports.checkDeadManSwitches = async () => {
+    const switches = await dynamodb.query({
+        TableName: 'DeadManSwitches',
+        FilterExpression: 'lastCheckIn < :threshold',
+        ExpressionAttributeValues: {
+            ':threshold': Date.now() - (24 * 60 * 60 * 1000)  // 24 hours
+        }
+    }).promise();
+
+    for (const switchItem of switches.Items) {
+        // Release the encrypted message to designated recipients
+        await releaseEncryptedMessage(switchItem.messageId, switchItem.recipients);
+    }
+};</code></pre>
+
+        <h3>5. Whistleblower-Safe Polling</h3>
+        <pre><code>// Zero-knowledge polls with encrypted votes
+async function createPoll(question, options, anonymous = true) {
+    const pollId = uuidv4();
+
+    // Generate unique encryption key for this poll
+    const pollKey = await openpgp.generateKey({
+        type: 'rsa',
+        rsaBits: 2048,
+        userIDs: [{ name: `Poll ${pollId}` }]
+    });
+
+    await dynamodb.put({
+        TableName: 'Polls',
+        Item: {
+            id: pollId,
+            question: await encryptForPoll(question, pollKey.publicKey),
+            options: await Promise.all(
+                options.map(opt => encryptForPoll(opt, pollKey.publicKey))
+            ),
+            anonymous,
+            privateKey: pollKey.privateKey,  // Only admin can decrypt results
+            votes: []
+        }
+    }).promise();
+
+    return pollId;
+}</code></pre>
+
+        <h2>Progressive Web App</h2>
+
+        <h3>Service Worker for Offline Access</h3>
+        <pre><code>// sw.js - Offline-first forum
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            if (response) return response;
+
+            return fetch(event.request).then((response) => {
+                // Cache encrypted messages for offline viewing
+                if (event.request.url.includes('/api/messages')) {
+                    const responseClone = response.clone();
+                    caches.open('forum-messages-v1').then((cache) => {
+                        cache.put(event.request, responseClone);
+                    });
+                }
+                return response;
+            });
+        })
+    );
+});</code></pre>
+
+        <h3>Mobile App (React Native)</h3>
+        <p>Same codebase, native performance. Biometric authentication for key storage.</p>
+
+        <pre><code>import * as LocalAuthentication from 'expo-local-authentication';
+import * as SecureStore from 'expo-secure-store';
+
+async function storePrivateKey(privateKey) {
+    const hasAuth = await LocalAuthentication.hasHardwareAsync();
+
+    if (hasAuth) {
+        await LocalAuthentication.authenticateAsync({
+            promptMessage: 'Authenticate to secure your encryption keys'
+        });
+
+        await SecureStore.setItemAsync('pgp_private_key', privateKey, {
+            keychainAccessible: SecureStore.WHEN_PASSCODE_SET_THIS_DEVICE_ONLY
+        });
+    }
+}</code></pre>
+
+        <h2>Security Features</h2>
+
+        <h3>No User Tracking</h3>
+        <ul>
+            <li>No cookies (uses sessionStorage only)</li>
+            <li>No IP logging beyond rate limiting</li>
+            <li>No analytics or telemetry</li>
+            <li>Tor-friendly (works over .onion)</li>
+        </ul>
+
+        <h3>Rate Limiting Without Identity</h3>
+        <pre><code>// Rate limit based on fingerprint, not user ID
+function getRateLimitKey(event) {
+    const fingerprint = event.headers['x-fingerprint'];
+    const ip = event.requestContext.identity.sourceIp;
+
+    // Combine but hash to prevent tracking
+    return crypto
+        .createHash('sha256')
+        .update(`${fingerprint}:${ip}`)
+        .digest('hex');
+}
+
+async function checkRateLimit(key) {
+    const count = await redis.incr(key);
+    await redis.expire(key, 60);  // 1 minute window
+
+    return count <= 10;  // 10 requests per minute
+}</code></pre>
+
+        <h2>Deployment</h2>
+
+        <h3>Infrastructure as Code</h3>
+        <pre><code>service: snapit-forum-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  environment:
+    MESSAGES_TABLE: ${self:service}-messages-${self:provider.stage}
+    POLLS_TABLE: ${self:service}-polls-${self:provider.stage}
+
+functions:
+  createMessage:
+    handler: messages.create
+    events:
+      - http:
+          path: messages
+          method: post
+          cors: true
+
+  wsConnect:
+    handler: websocket.connect
+    events:
+      - websocket:
+          route: $connect
+
+  wsDisconnect:
+    handler: websocket.disconnect
+    events:
+      - websocket:
+          route: $disconnect</code></pre>
+
+        <h2>What Makes Chimera Different</h2>
+        <ul>
+            <li><strong>No server access to content</strong> - True zero-knowledge architecture</li>
+            <li><strong>No accounts required</strong> - Participate anonymously</li>
+            <li><strong>Works offline</strong> - PWA with service worker caching</li>
+            <li><strong>Ephemeral by default</strong> - Messages auto-delete</li>
+            <li><strong>Whistleblower features</strong> - Dead man's switch, secure polling</li>
+        </ul>
+
+        <h2>Tech Stack Summary</h2>
+        <ul>
+            <li>Frontend: React + OpenPGP.js</li>
+            <li>Backend: AWS Lambda + API Gateway + WebSocket API</li>
+            <li>Database: DynamoDB with TTL</li>
+            <li>Storage: S3 for encrypted file attachments</li>
+            <li>Mobile: React Native (iOS/Android)</li>
+        </ul>
+
+        <p><a href="https://forum.snapitsoftware.com">Try Chimera Forum →</a></p>
+    </article>
+</body>
+</html>

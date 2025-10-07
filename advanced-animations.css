@@ -1,0 +1,406 @@
+/* 🎬 Advanced Animation Styles */
+/* Cutting-edge motion design CSS */
+
+:root {
+    --dynamic-hue: 180;
+    --scroll-progress: 0;
+    --easing-mystical: cubic-bezier(0.25, 0.1, 0.25, 1);
+    --easing-ethereal: cubic-bezier(0.175, 0.885, 0.32, 1);
+    --easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth scroll setup */
+html {
+    scroll-behavior: smooth;
+}
+
+[data-scroll-container] {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* WebGL Background Canvas */
+#webgl-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
+    mix-blend-mode: overlay;
+}
+
+/* Dynamic color system based on scroll */
+.dynamic-colors {
+    color: hsl(calc(var(--dynamic-hue) + 30), 70%, 85%);
+    transition: color 0.3s var(--easing-smooth);
+}
+
+.dynamic-bg {
+    background: linear-gradient(
+        135deg,
+        hsl(var(--dynamic-hue), 60%, 15%),
+        hsl(calc(var(--dynamic-hue) + 60), 50%, 10%)
+    );
+    transition: background 0.5s var(--easing-smooth);
+}
+
+/* Split text character animations */
+.char {
+    display: inline-block;
+    transform-origin: center bottom;
+    will-change: transform, opacity;
+}
+
+/* Typewriter effect */
+.typewriter {
+    overflow: hidden;
+    border-right: 2px solid rgba(255, 255, 255, 0.7);
+    white-space: nowrap;
+    animation: blink-caret 1s step-end infinite;
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: rgba(255, 255, 255, 0.7) }
+}
+
+/* Advanced hover effects */
+.morphing-card {
+    transform-style: preserve-3d;
+    transition: all 0.6s var(--easing-ethereal);
+    will-change: transform;
+}
+
+.morphing-card:hover {
+    transform:
+        perspective(1000px)
+        rotateX(10deg)
+        rotateY(-10deg)
+        translateZ(50px)
+        scale(1.05);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 40px hsla(var(--dynamic-hue), 70%, 60%, 0.3);
+}
+
+/* Floating elements */
+.float-element {
+    will-change: transform;
+    animation: float-gentle 6s ease-in-out infinite;
+}
+
+@keyframes float-gentle {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+/* Scroll-triggered elements */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(100px) rotateX(45deg);
+    transition: all 1s var(--easing-mystical);
+    will-change: transform, opacity;
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+}
+
+/* Advanced particle container */
+.particle-enhanced {
+    position: relative;
+    overflow: hidden;
+}
+
+.particle-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 25% 25%, hsla(calc(var(--dynamic-hue) + 30), 70%, 60%, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, hsla(calc(var(--dynamic-hue) - 30), 70%, 60%, 0.1) 0%, transparent 50%);
+    animation: particle-dance 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes particle-dance {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Sticky navigation enhancement */
+.nav.sticky {
+    backdrop-filter: blur(20px) saturate(180%);
+    background: hsla(var(--dynamic-hue), 20%, 5%, 0.8);
+    border-bottom: 1px solid hsla(var(--dynamic-hue), 30%, 30%, 0.3);
+    transition: all 0.3s var(--easing-smooth);
+}
+
+/* Project cards with advanced 3D effects */
+.project-card {
+    transform-style: preserve-3d;
+    transition: all 0.8s var(--easing-ethereal);
+    will-change: transform;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        hsla(var(--dynamic-hue), 70%, 70%, 0.2),
+        transparent
+    );
+    transition: left 0.8s var(--easing-smooth);
+}
+
+.project-card:hover::before {
+    left: 100%;
+}
+
+.project-card:hover {
+    transform:
+        perspective(1000px)
+        rotateY(15deg)
+        translateZ(30px);
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.4),
+        0 0 50px hsla(var(--dynamic-hue), 70%, 60%, 0.4);
+}
+
+/* Skills grid with morphing animations */
+.skills-grid {
+    perspective: 1000px;
+}
+
+.skill-item {
+    transform-style: preserve-3d;
+    transition: all 0.6s var(--easing-mystical);
+    will-change: transform;
+    position: relative;
+}
+
+.skill-item:hover {
+    transform:
+        rotateX(20deg)
+        rotateY(10deg)
+        translateZ(20px)
+        scale(1.05);
+}
+
+.skill-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        45deg,
+        hsla(var(--dynamic-hue), 60%, 50%, 0),
+        hsla(var(--dynamic-hue), 60%, 50%, 0.1)
+    );
+    opacity: 0;
+    transition: opacity 0.3s var(--easing-smooth);
+    pointer-events: none;
+}
+
+.skill-item:hover::after {
+    opacity: 1;
+}
+
+/* Hero section enhancements */
+.hero {
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+        conic-gradient(
+            from 0deg at 50% 50%,
+            hsla(var(--dynamic-hue), 60%, 20%, 0) 0deg,
+            hsla(var(--dynamic-hue), 60%, 20%, 0.1) 90deg,
+            hsla(var(--dynamic-hue), 60%, 20%, 0) 180deg,
+            hsla(var(--dynamic-hue), 60%, 20%, 0.1) 270deg,
+            hsla(var(--dynamic-hue), 60%, 20%, 0) 360deg
+        );
+    animation: hero-rotation 30s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes hero-rotation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Scroll progress indicator */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(var(--scroll-progress) * 100%);
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        hsl(var(--dynamic-hue), 70%, 60%),
+        hsl(calc(var(--dynamic-hue) + 60), 70%, 60%)
+    );
+    z-index: 10000;
+    transition: width 0.1s ease-out;
+}
+
+/* Magnetic elements */
+.magnetic {
+    transition: transform 0.3s var(--easing-smooth);
+    will-change: transform;
+}
+
+/* Liquid morphing buttons */
+.liquid-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s var(--easing-ethereal);
+}
+
+.liquid-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: hsla(var(--dynamic-hue), 70%, 60%, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.6s var(--easing-ethereal);
+}
+
+.liquid-button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Text glow effects */
+.glow-text {
+    text-shadow:
+        0 0 10px hsla(var(--dynamic-hue), 70%, 70%, 0.5),
+        0 0 20px hsla(var(--dynamic-hue), 70%, 70%, 0.3),
+        0 0 30px hsla(var(--dynamic-hue), 70%, 70%, 0.1);
+    transition: text-shadow 0.3s var(--easing-smooth);
+}
+
+.glow-text:hover {
+    text-shadow:
+        0 0 15px hsla(var(--dynamic-hue), 70%, 70%, 0.8),
+        0 0 30px hsla(var(--dynamic-hue), 70%, 70%, 0.5),
+        0 0 45px hsla(var(--dynamic-hue), 70%, 70%, 0.3);
+}
+
+/* Intersection observer fade */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s var(--easing-mystical);
+}
+
+.fade-in-up.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Cursor enhancements */
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background: hsl(var(--dynamic-hue), 70%, 70%);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease-out;
+}
+
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 2px solid hsla(var(--dynamic-hue), 70%, 70%, 0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: all 0.15s ease-out;
+}
+
+/* Performance optimizations */
+.will-animate {
+    will-change: transform, opacity, filter;
+}
+
+.gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Responsive enhancements */
+@media (max-width: 768px) {
+    .morphing-card:hover {
+        transform: scale(1.02);
+    }
+
+    .project-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .skill-item:hover {
+        transform: scale(1.05);
+    }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .dynamic-colors {
+        color: #ffffff;
+    }
+
+    .glow-text {
+        text-shadow: none;
+        font-weight: bold;
+    }
+}

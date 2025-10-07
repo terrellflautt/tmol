@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invisible User Intent Detection: Building Adaptive Navigation</title>
+    <meta name="description" content="Menu systems that read user behavior. Mouse tracking, scroll analysis, click patterns create personalized navigation without permission.">
+    <meta name="keywords" content="behavioral analytics, adaptive UI, user intent detection, mousemove tracking, progressive enhancement, personalization">
+    <meta name="author" content="Terrell K. Flautt">
+    <meta property="og:title" content="Adaptive Navigation Through Behavioral Analysis">
+    <meta property="og:description" content="Building menus that appear based on user behavior patterns and interest detection.">
+    <meta property="og:type" content="article">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Invisible User Intent Detection: Building Adaptive Navigation",
+        "author": {"@type": "Person", "name": "Terrell K. Flautt"},
+        "datePublished": "2024-09-18"
+    }
+    </script>
+    <link rel="stylesheet" href="../../styles.css">
+    <style>
+        .article-container {
+            max-width: 700px;
+            margin: 100px auto 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .article-header {
+            margin-bottom: 30px;
+        }
+        .article-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        .article-meta {
+            color: #888;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            color: #667eea;
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        .article-content {
+            line-height: 1.6;
+        }
+        .article-content p {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="article-container">
+        <a href="index.html" class="back-link">← Back to Code</a>
+
+        <div class="article-header">
+            <h1 class="article-title">Adaptive Menu System</h1>
+            <div class="article-meta">Oct 1, 2025</div>
+        </div>
+
+        <div class="article-content">
+            <h2>Intent Through Motion</h2>
+            <p>Mouse patterns reveal focus. Scroll depth shows commitment. Navigation adapts invisibly.</p>
+
+            <div class="code-block">
+// Micro-interactions accumulate intent
+document.addEventListener('mousemove', (e) => {
+    const target = document.elementFromPoint(e.clientX, e.clientY);
+    const content = target.textContent?.toLowerCase() || '';
+
+    // Weight by interaction type
+    if (content.includes('react')) interests.programming += 0.02;
+    if (content.includes('design')) interests.visual += 0.02;
+
+    trackGazeTime(target, Date.now());
+});
+            </div>
+
+            <h3>Behavioral Accumulation</h3>
+            <p>Small signals aggregate. Hover duration matters more than clicks. Scroll patterns reveal interest depth.</p>
+
+            <div class="code-block">
+// Threshold-based revelation
+function revealRelevantLinks() {
+    const peak = Math.max(...Object.values(interests));
+
+    if (peak > 0.5) {
+        materializeMenu(getDominantInterest());
+    }
+}
+
+function getDominantInterest() {
+    return Object.entries(interests)
+        .sort(([,a], [,b]) => b - a)[0][0];
+}
+            </div>
+
+            <h3>Appearance Mechanics</h3>
+            <p>Links emerge organically. Bounce suggests responsiveness. Glow implies intelligence.</p>
+
+            <div class="code-block">
+// Physics-based entrance
+const link = createElement('a');
+link.style.cssText = `
+    opacity: 0;
+    transform: translateY(-20px) scale(0.8);
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+`;
+
+setTimeout(() => {
+    link.style.opacity = '1';
+    link.style.transform = 'translateY(0) scale(1)';
+}, 200);
+            </div>
+
+            <h3>Why It Works</h3>
+            <p>Users assume coincidence. Feel understood without feeling watched. Permission-free personalization.</p>
+
+            <p>Built for my portfolio. Demonstrates behavioral intelligence without surveillance aesthetics.</p>
+        </div>
+    </div>
+
+    <script src="../../magic-user-system.js"></script>
+</body>
+</html>

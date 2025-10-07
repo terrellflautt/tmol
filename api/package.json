@@ -1,0 +1,38 @@
+{
+  "name": "genie-ai-api",
+  "version": "1.0.0",
+  "description": "Mystical AI Genie API with DynamoDB Integration",
+  "main": "genie-endpoint.js",
+  "scripts": {
+    "start": "node genie-endpoint.js",
+    "dev": "nodemon genie-endpoint.js",
+    "test": "jest",
+    "deploy": "npm run build && pm2 restart genie-api"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1490.0",
+    "axios": "^1.6.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "openai": "^4.20.1",
+    "serverless-offline": "^14.4.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "ai",
+    "genie",
+    "openai",
+    "dynamodb",
+    "personalized",
+    "assistant"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

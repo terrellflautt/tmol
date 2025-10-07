@@ -1,0 +1,19 @@
+{
+  "name": "terrellflautt-voting-api",
+  "version": "1.0.0",
+  "description": "Voting and feedback API for terrellflautt.com",
+  "scripts": {
+    "deploy": "serverless deploy",
+    "remove": "serverless remove",
+    "logs": "serverless logs -f vote -t"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1490.0",
+    "stripe": "^18.5.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "serverless": "^3.38.0",
+    "serverless-domain-manager": "^7.0.0"
+  }
+}

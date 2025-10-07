@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serverless Form Handling at Scale | SnapIT Forms</title>
+    <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="../../../index.html" class="nav-logo">
+                <span class="logo-text">Terrell K. Flautt</span>
+            </a>
+            <div class="nav-links">
+                <a href="../../../index.html">Home</a>
+                <a href="../index.html">Dev Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <article style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+        <header>
+            <h1>Serverless Form Handling at Scale</h1>
+            <p><time>Oct 6, 2025</time> · 8 min · <a href="https://snapitforms.com" target="_blank">snapitforms.com</a></p>
+        </header>
+
+        <h2>Architecture</h2>
+        <pre><code>S3 Static Site → API Gateway → Lambda → DynamoDB
+                    ↓
+            SES Email → SNS Notifications</code></pre>
+
+        <h2>Core Challenge</h2>
+        <p><strong>Problem:</strong> Handle form submissions without backend coding for users.<br>
+        <strong>Solution:</strong> Serverless API that receives any form POST and processes intelligently.</p>
+
+        <h2>Lambda Function Core</h2>
+        <pre><code>exports.handler = async (event) => {
+    const formData = JSON.parse(event.body);
+
+    // Rate limiting
+    await checkRateLimit(formData.access_key);
+
+    // Store submission
+    await dynamoDB.put({
+        TableName: 'submissions',
+        Item: {
+            id: uuidv4(),
+            formKey: formData.access_key,
+            data: formData,
+            timestamp: Date.now(),
+            ip: event.requestContext.identity.sourceIp
+        }
+    }).promise();
+
+    // Send email
+    await ses.sendEmail({
+        Source: 'forms@snapitforms.com',
+        Destination: { ToAddresses: [formData.email] },
+        Message: {
+            Subject: { Data: formData.subject || 'New Form Submission' },
+            Body: { Text: { Data: formatFormData(formData) }}
+        }
+    }).promise();
+
+    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+};</code></pre>
+
+        <h2>Key Fixes</h2>
+
+        <h3>CORS Issues</h3>
+        <p><strong>Problem:</strong> Forms failed from different domains.<br>
+        <strong>Fix:</strong> Dynamic CORS headers based on origin whitelist.</p>
+
+        <pre><code>const headers = {
+    'Access-Control-Allow-Origin': getAllowedOrigin(event.headers.origin),
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+};</code></pre>
+
+        <h3>Rate Limiting</h3>
+        <p><strong>Problem:</strong> Spam submissions draining SES quota.<br>
+        <strong>Fix:</strong> DynamoDB TTL-based rate limiting.</p>
+
+        <pre><code>await dynamoDB.put({
+    TableName: 'rate_limits',
+    Item: {
+        key: `${formKey}_${ip}`,
+        count: 1,
+        ttl: Math.floor(Date.now() / 1000) + 3600 // 1 hour
+    },
+    ConditionExpression: 'attribute_not_exists(#key) OR #count < :limit'
+}).promise();</code></pre>
+
+        <h3>Email Formatting</h3>
+        <p><strong>Problem:</strong> Form data arrived as unreadable JSON.<br>
+        <strong>Fix:</strong> Smart formatting based on field names.</p>
+
+        <pre><code>function formatFormData(data) {
+    const formatted = Object.entries(data)
+        .filter(([key]) => !['access_key', 'subject'].includes(key))
+        .map(([key, value]) => `${key.replace('_', ' ').toUpperCase()}: ${value}`)
+        .join('\n');
+    return formatted;
+}</code></pre>
+
+        <h2>Scaling</h2>
+        <ul>
+            <li><strong>Auto-scaling:</strong> Lambda handles 0-1000+ concurrent requests</li>
+            <li><strong>Cost:</strong> $0.02 per 1000 submissions</li>
+            <li><strong>Performance:</strong> 200ms average response time</li>
+            <li><strong>Reliability:</strong> 99.9% uptime with DLQ handling</li>
+        </ul>
+
+        <h2>Monitoring</h2>
+        <pre><code>CloudWatch Alarms:
+- Lambda errors > 1%
+- DynamoDB throttling
+- SES bounces > 5%
+- API Gateway 5xx errors</code></pre>
+
+        <footer style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #333;">
+            <p><strong>Stack:</strong> S3, CloudFront, API Gateway, Lambda, DynamoDB, SES</p>
+        </footer>
+    </article>
+</body>
+</html>
