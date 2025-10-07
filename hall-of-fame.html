@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall of Fame - Terrell K. Flautt</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/character-sheet.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        .hall-of-fame-page {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8d5b7;
+        }
+
+        .hall-container {
+            max-width: 1400px;
+            margin: 80px auto 40px;
+            padding: 40px 20px;
+        }
+
+        .hall-title {
+            text-align: center;
+            font-size: 56px;
+            color: #d4af37;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 3px 3px 6px rgba(0, 0, 0, 0.8);
+            margin: 0 0 20px 0;
+            letter-spacing: 3px;
+        }
+
+        .hall-subtitle {
+            text-align: center;
+            font-size: 24px;
+            color: #c9a961;
+            font-style: italic;
+            margin-bottom: 50px;
+        }
+
+        .leaderboard-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .leaderboard-tab {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #8b6914;
+            background: rgba(44, 24, 16, 0.6);
+            border: 2px solid #8b6914;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 105, 20, 0.3);
+        }
+
+        .leaderboard-tab.active {
+            background: linear-gradient(135deg, #8b6914 0%, #d4af37 100%);
+            color: #1a1410;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .leaderboard-content {
+            display: none;
+        }
+
+        .leaderboard-content.active {
+            display: block;
+        }
+
+        .leaderboard-table {
+            background: linear-gradient(135deg, rgba(44, 24, 16, 0.9) 0%, rgba(74, 44, 26, 0.9) 100%);
+            border: 3px solid #8b6914;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            overflow-x: auto;
+        }
+
+        .leaderboard-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th {
+            padding: 15px;
+            text-align: left;
+            color: #d4af37;
+            font-size: 18px;
+            border-bottom: 2px solid #8b6914;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .leaderboard-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(139, 105, 20, 0.2);
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(139, 105, 20, 0.1);
+        }
+
+        .rank-badge {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .rank-1 {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a1410;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .rank-2 {
+            background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+            color: #1a1410;
+            box-shadow: 0 0 15px rgba(192, 192, 192, 0.6);
+        }
+
+        .rank-3 {
+            background: linear-gradient(135deg, #cd7f32 0%, #e8a87c 100%);
+            color: #1a1410;
+            box-shadow: 0 0 15px rgba(205, 127, 50, 0.6);
+        }
+
+        .rank-other {
+            background: rgba(139, 105, 20, 0.3);
+            color: #d4af37;
+        }
+
+        .player-name {
+            font-weight: bold;
+            color: #e8d5b7;
+            font-size: 18px;
+        }
+
+        .player-class {
+            color: #c9a961;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #d4af37;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 60px;
+            font-size: 24px;
+            color: #d4af37;
+        }
+
+        .loading-spinner::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        @media (max-width: 768px) {
+            .hall-title {
+                font-size: 36px;
+            }
+
+            .leaderboard-tab {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .leaderboard-table {
+                padding: 15px;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 10px 5px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="hall-of-fame-page">
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><span class="logo-text">Terrell K. Flautt</span></a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#projects" class="nav-link">Projects</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+                <a href="character.html" class="nav-link">Character</a>
+                <a href="hall-of-fame.html" class="nav-link active">Hall of Fame</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hall-container">
+        <h1 class="hall-title">🏆 Hall of Fame 🏆</h1>
+        <p class="hall-subtitle">Legends of the Journey</p>
+
+        <!-- Leaderboard Tabs -->
+        <div class="leaderboard-tabs">
+            <button class="leaderboard-tab active" data-category="overall">Overall</button>
+            <button class="leaderboard-tab" data-category="level">Highest Level</button>
+            <button class="leaderboard-tab" data-category="puzzles">Puzzles Solved</button>
+            <button class="leaderboard-tab" data-category="discoveries">Discoveries</button>
+            <button class="leaderboard-tab" data-category="pvp">PvP Wins</button>
+            <button class="leaderboard-tab" data-category="time">Time Spent</button>
+        </div>
+
+        <!-- Overall Leaderboard -->
+        <div class="leaderboard-content active" id="leaderboard-overall">
+            <div class="leaderboard-table">
+                <div class="loading-spinner">Loading Hall of Fame</div>
+            </div>
+        </div>
+
+        <!-- Level Leaderboard -->
+        <div class="leaderboard-content" id="leaderboard-level">
+            <div class="leaderboard-table">
+                <div class="loading-spinner">Loading Leaderboard</div>
+            </div>
+        </div>
+
+        <!-- Puzzles Leaderboard -->
+        <div class="leaderboard-content" id="leaderboard-puzzles">
+            <div class="leaderboard-table">
+                <div class="loading-spinner">Loading Leaderboard</div>
+            </div>
+        </div>
+
+        <!-- Discoveries Leaderboard -->
+        <div class="leaderboard-content" id="leaderboard-discoveries">
+            <div class="leaderboard-table">
+                <div class="loading-spinner">Loading Leaderboard</div>
+            </div>
+        </div>
+
+        <!-- PvP Leaderboard -->
+        <div class="leaderboard-content" id="leaderboard-pvp">
+            <div class="leaderboard-table">
+                <div class="loading-spinner">Loading Leaderboard</div>
+            </div>
+        </div>
+
+        <!-- Time Spent Leaderboard -->
+        <div class="leaderboard-content" id="leaderboard-time">
+            <div class="leaderboard-table">
+                <div class="loading-spinner">Loading Leaderboard</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/features/hall-of-fame.js"></script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Sheet - Terrell K. Flautt</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/character-sheet.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body class="character-page">
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html"><span class="logo-text">Terrell K. Flautt</span></a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html#home" class="nav-link">Home</a>
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="index.html#projects" class="nav-link">Projects</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+                <a href="character.html" class="nav-link active">Character</a>
+                <a href="hall-of-fame.html" class="nav-link">Hall of Fame</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Character Sheet Container -->
+    <div class="character-container">
+        <!-- Parchment Background -->
+        <div class="parchment-bg"></div>
+
+        <!-- Character Portrait -->
+        <div class="character-portrait-section">
+            <div class="portrait-frame">
+                <div class="portrait-image" id="characterPortrait">
+                    <div class="portrait-placeholder">?</div>
+                </div>
+                <div class="portrait-level">
+                    Level <span id="playerLevel">1</span>
+                </div>
+            </div>
+            <div class="character-name-section">
+                <h1 id="characterName" class="character-name">Unknown Seeker</h1>
+                <div id="characterTitle" class="character-title">Novice Explorer</div>
+                <div id="characterClass" class="character-class">Wanderer</div>
+            </div>
+        </div>
+
+        <!-- Stats Grid (QFG Style) -->
+        <div class="stats-grid">
+            <!-- Primary Stats -->
+            <div class="stat-category">
+                <h2 class="category-title">Primary Attributes</h2>
+                <div class="stat-bars">
+                    <div class="stat-bar" data-stat="strength">
+                        <div class="stat-label">
+                            <span class="stat-icon">💪</span>
+                            <span>Strength</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill strength-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="intelligence">
+                        <div class="stat-label">
+                            <span class="stat-icon">🧠</span>
+                            <span>Intelligence</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill intelligence-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="agility">
+                        <div class="stat-label">
+                            <span class="stat-icon">⚡</span>
+                            <span>Agility</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill agility-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="vitality">
+                        <div class="stat-label">
+                            <span class="stat-icon">❤️</span>
+                            <span>Vitality</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill vitality-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="luck">
+                        <div class="stat-label">
+                            <span class="stat-icon">🍀</span>
+                            <span>Luck</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill luck-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Knowledge Skills -->
+            <div class="stat-category">
+                <h2 class="category-title">Knowledge</h2>
+                <div class="stat-bars">
+                    <div class="stat-bar" data-stat="wisdom">
+                        <div class="stat-label">
+                            <span class="stat-icon">📚</span>
+                            <span>Wisdom</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill wisdom-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="curiosity">
+                        <div class="stat-label">
+                            <span class="stat-icon">🔍</span>
+                            <span>Curiosity</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill curiosity-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="attention">
+                        <div class="stat-label">
+                            <span class="stat-icon">👁️</span>
+                            <span>Attention</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill attention-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Behavioral Skills -->
+            <div class="stat-category">
+                <h2 class="category-title">Behavioral</h2>
+                <div class="stat-bars">
+                    <div class="stat-bar" data-stat="patience">
+                        <div class="stat-label">
+                            <span class="stat-icon">⏳</span>
+                            <span>Patience</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill patience-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="speed">
+                        <div class="stat-label">
+                            <span class="stat-icon">🏃</span>
+                            <span>Speed</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill speed-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="precision">
+                        <div class="stat-label">
+                            <span class="stat-icon">🎯</span>
+                            <span>Precision</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill precision-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="creativity">
+                        <div class="stat-label">
+                            <span class="stat-icon">🎨</span>
+                            <span>Creativity</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill creativity-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Skills -->
+            <div class="stat-category">
+                <h2 class="category-title">Technical</h2>
+                <div class="stat-bars">
+                    <div class="stat-bar" data-stat="codeReading">
+                        <div class="stat-label">
+                            <span class="stat-icon">💻</span>
+                            <span>Code Reading</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill codeReading-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="problemSolving">
+                        <div class="stat-label">
+                            <span class="stat-icon">🧩</span>
+                            <span>Problem Solving</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill problemSolving-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-bar" data-stat="patternRecognition">
+                        <div class="stat-label">
+                            <span class="stat-icon">🔢</span>
+                            <span>Pattern Recognition</span>
+                        </div>
+                        <div class="stat-value-container">
+                            <div class="stat-progress">
+                                <div class="stat-fill patternRecognition-fill" data-value="0"></div>
+                            </div>
+                            <div class="stat-number">0/100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+            <div class="summary-card">
+                <h3>Journey Statistics</h3>
+                <div class="stat-row">
+                    <span>Time Spent:</span>
+                    <span id="timeSpent">0 hours</span>
+                </div>
+                <div class="stat-row">
+                    <span>Total Visits:</span>
+                    <span id="totalVisits">0</span>
+                </div>
+                <div class="stat-row">
+                    <span>Discoveries:</span>
+                    <span id="totalDiscoveries">0</span>
+                </div>
+                <div class="stat-row">
+                    <span>Puzzles Solved:</span>
+                    <span id="puzzlesSolved">0</span>
+                </div>
+                <div class="stat-row">
+                    <span>Current Phase:</span>
+                    <span id="currentPhase">Phase 1: Awakening</span>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <h3>Achievements</h3>
+                <div id="achievementsList" class="achievements-list">
+                    <div class="achievement locked">
+                        <span class="achievement-icon">🔒</span>
+                        <span>Discover your first secret</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PvP Section -->
+        <div class="pvp-section">
+            <h2 class="pvp-title">⚔️ Player vs Player Arena</h2>
+            <div class="pvp-container">
+                <div class="pvp-info">
+                    <p>Challenge other players to test your skills in combat!</p>
+                    <p>Your stats determine your strength in battle.</p>
+                </div>
+                <button id="findOpponentBtn" class="pvp-button">Find Opponent</button>
+                <div id="pvpBattleArea" class="pvp-battle-area" style="display: none;">
+                    <!-- Battle UI will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/core/adaptive-rpg-system.js"></script>
+    <script src="js/core/skill-system.js"></script>
+    <script src="js/core/puzzle-system.js"></script>
+    <script src="js/core/content-scheduler.js"></script>
+    <script src="js/features/character-sheet.js"></script>
+    <script src="js/features/pvp-system.js"></script>
+</body>
+</html>

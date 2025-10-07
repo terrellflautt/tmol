@@ -1,0 +1,565 @@
+/* Quest for Glory Character Sheet Styling */
+
+.character-page {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #e8d5b7;
+    font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+/* Character Container */
+.character-container {
+    max-width: 1400px;
+    margin: 80px auto 40px;
+    padding: 40px 20px;
+    position: relative;
+}
+
+/* Parchment Background Effect */
+.parchment-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(ellipse at top, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom, rgba(101, 67, 33, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+/* Character Portrait Section */
+.character-portrait-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+}
+
+.portrait-frame {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border: 6px solid #8b6914;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2c1810 0%, #4a2c1a 100%);
+    box-shadow:
+        0 0 20px rgba(139, 105, 20, 0.4),
+        inset 0 0 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.portrait-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, #3a2618 0%, #1a1410 100%);
+}
+
+.portrait-placeholder {
+    font-size: 80px;
+    color: #8b6914;
+    text-shadow: 0 0 20px rgba(139, 105, 20, 0.6);
+    animation: mysterySpin 8s ease-in-out infinite;
+}
+
+@keyframes mysterySpin {
+    0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.7; }
+    50% { transform: rotate(180deg) scale(1.1); opacity: 1; }
+}
+
+.portrait-level {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #8b6914 0%, #d4af37 100%);
+    color: #1a1410;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    border: 2px solid #d4af37;
+}
+
+/* Character Name Section */
+.character-name-section {
+    text-align: center;
+}
+
+.character-name {
+    font-size: 48px;
+    font-weight: bold;
+    color: #d4af37;
+    text-shadow:
+        0 0 10px rgba(212, 175, 55, 0.5),
+        2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin: 0 0 10px 0;
+    letter-spacing: 2px;
+}
+
+.character-title {
+    font-size: 24px;
+    color: #c9a961;
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.character-class {
+    font-size: 18px;
+    color: #9b8654;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Stat Category */
+.stat-category {
+    background: linear-gradient(135deg, rgba(44, 24, 16, 0.8) 0%, rgba(74, 44, 26, 0.8) 100%);
+    border: 3px solid #8b6914;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 0 20px rgba(139, 105, 20, 0.1);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-category:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 12px 40px rgba(139, 105, 20, 0.3),
+        inset 0 0 30px rgba(139, 105, 20, 0.15);
+}
+
+.category-title {
+    font-size: 28px;
+    color: #d4af37;
+    text-align: center;
+    margin: 0 0 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #8b6914;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    letter-spacing: 2px;
+}
+
+/* Stat Bars */
+.stat-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.stat-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #e8d5b7;
+    font-weight: 600;
+}
+
+.stat-icon {
+    font-size: 24px;
+    width: 30px;
+    text-align: center;
+}
+
+.stat-value-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-progress {
+    flex: 1;
+    height: 24px;
+    background: linear-gradient(135deg, #1a1410 0%, #2c1810 100%);
+    border: 2px solid #8b6914;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    position: relative;
+}
+
+.stat-progress::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
+    pointer-events: none;
+}
+
+.stat-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 1s ease-out, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Individual Stat Colors */
+.strength-fill {
+    background: linear-gradient(90deg, #8b0000 0%, #ff4444 50%, #ff6666 100%);
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.4);
+}
+
+.intelligence-fill {
+    background: linear-gradient(90deg, #000080 0%, #4444ff 50%, #6666ff 100%);
+    box-shadow: 0 0 10px rgba(68, 68, 255, 0.4);
+}
+
+.agility-fill {
+    background: linear-gradient(90deg, #008000 0%, #44ff44 50%, #66ff66 100%);
+    box-shadow: 0 0 10px rgba(68, 255, 68, 0.4);
+}
+
+.vitality-fill {
+    background: linear-gradient(90deg, #8b008b 0%, #ff44ff 50%, #ff66ff 100%);
+    box-shadow: 0 0 10px rgba(255, 68, 255, 0.4);
+}
+
+.luck-fill {
+    background: linear-gradient(90deg, #ffd700 0%, #ffed4e 50%, #fff176 100%);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.wisdom-fill {
+    background: linear-gradient(90deg, #4b0082 0%, #9370db 50%, #ba55d3 100%);
+    box-shadow: 0 0 10px rgba(147, 112, 219, 0.4);
+}
+
+.curiosity-fill {
+    background: linear-gradient(90deg, #ff8c00 0%, #ffa500 50%, #ffb347 100%);
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.4);
+}
+
+.attention-fill {
+    background: linear-gradient(90deg, #00ced1 0%, #40e0d0 50%, #7fffd4 100%);
+    box-shadow: 0 0 10px rgba(64, 224, 208, 0.4);
+}
+
+.patience-fill {
+    background: linear-gradient(90deg, #556b2f 0%, #6b8e23 50%, #9acd32 100%);
+    box-shadow: 0 0 10px rgba(107, 142, 35, 0.4);
+}
+
+.speed-fill {
+    background: linear-gradient(90deg, #ff1493 0%, #ff69b4 50%, #ffb6c1 100%);
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+}
+
+.precision-fill {
+    background: linear-gradient(90deg, #dc143c 0%, #ff6347 50%, #ff7f50 100%);
+    box-shadow: 0 0 10px rgba(255, 99, 71, 0.4);
+}
+
+.creativity-fill {
+    background: linear-gradient(90deg, #9932cc 0%, #da70d6 50%, #ee82ee 100%);
+    box-shadow: 0 0 10px rgba(218, 112, 214, 0.4);
+}
+
+.codeReading-fill {
+    background: linear-gradient(90deg, #2f4f4f 0%, #708090 50%, #778899 100%);
+    box-shadow: 0 0 10px rgba(112, 128, 144, 0.4);
+}
+
+.problemSolving-fill {
+    background: linear-gradient(90deg, #b8860b 0%, #daa520 50%, #f0e68c 100%);
+    box-shadow: 0 0 10px rgba(218, 165, 32, 0.4);
+}
+
+.patternRecognition-fill {
+    background: linear-gradient(90deg, #008b8b 0%, #20b2aa 50%, #48d1cc 100%);
+    box-shadow: 0 0 10px rgba(32, 178, 170, 0.4);
+}
+
+/* Animated shimmer effect on stat fills */
+.stat-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.stat-number {
+    font-size: 16px;
+    font-weight: bold;
+    color: #d4af37;
+    min-width: 60px;
+    text-align: right;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+}
+
+/* Progress Summary */
+.progress-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.summary-card {
+    background: linear-gradient(135deg, rgba(44, 24, 16, 0.9) 0%, rgba(74, 44, 26, 0.9) 100%);
+    border: 3px solid #8b6914;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 0 20px rgba(139, 105, 20, 0.1);
+}
+
+.summary-card h3 {
+    font-size: 26px;
+    color: #d4af37;
+    margin: 0 0 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #8b6914;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(139, 105, 20, 0.3);
+    font-size: 16px;
+}
+
+.stat-row:last-child {
+    border-bottom: none;
+}
+
+.stat-row span:first-child {
+    color: #c9a961;
+}
+
+.stat-row span:last-child {
+    color: #d4af37;
+    font-weight: bold;
+}
+
+/* Achievements */
+.achievements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.achievement {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    background: rgba(26, 20, 16, 0.5);
+    border: 2px solid #654321;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.achievement.locked {
+    opacity: 0.5;
+}
+
+.achievement.unlocked {
+    background: linear-gradient(135deg, rgba(139, 105, 20, 0.2) 0%, rgba(212, 175, 55, 0.2) 100%);
+    border-color: #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+.achievement-icon {
+    font-size: 28px;
+}
+
+.achievement span:last-child {
+    flex: 1;
+    color: #e8d5b7;
+}
+
+/* PvP Section */
+.pvp-section {
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.2) 0%, rgba(74, 44, 26, 0.9) 100%);
+    border: 3px solid #8b0000;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow:
+        0 8px 32px rgba(139, 0, 0, 0.3),
+        inset 0 0 30px rgba(139, 0, 0, 0.1);
+}
+
+.pvp-title {
+    font-size: 32px;
+    color: #ff4444;
+    text-align: center;
+    margin: 0 0 30px 0;
+    text-shadow:
+        0 0 10px rgba(255, 68, 68, 0.5),
+        2px 2px 4px rgba(0, 0, 0, 0.8);
+    letter-spacing: 2px;
+}
+
+.pvp-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pvp-info {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #e8d5b7;
+}
+
+.pvp-info p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.pvp-button {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 18px 40px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #1a1410;
+    background: linear-gradient(135deg, #ff4444 0%, #ff6666 50%, #ff8888 100%);
+    border: 3px solid #8b0000;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow:
+        0 6px 20px rgba(255, 68, 68, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.pvp-button:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 30px rgba(255, 68, 68, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    background: linear-gradient(135deg, #ff5555 0%, #ff7777 50%, #ff9999 100%);
+}
+
+.pvp-button:active {
+    transform: translateY(0);
+    box-shadow:
+        0 4px 15px rgba(255, 68, 68, 0.4),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.pvp-battle-area {
+    margin-top: 30px;
+    padding: 30px;
+    background: rgba(26, 20, 16, 0.8);
+    border: 2px solid #8b6914;
+    border-radius: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .character-container {
+        padding: 30px 15px;
+    }
+
+    .character-name {
+        font-size: 36px;
+    }
+
+    .stats-grid {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .character-portrait-section {
+        gap: 20px;
+    }
+
+    .portrait-frame {
+        width: 150px;
+        height: 150px;
+    }
+
+    .portrait-placeholder {
+        font-size: 60px;
+    }
+
+    .character-name {
+        font-size: 28px;
+    }
+
+    .character-title {
+        font-size: 18px;
+    }
+
+    .category-title {
+        font-size: 22px;
+    }
+
+    .stat-category {
+        padding: 20px;
+    }
+
+    .progress-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .pvp-section {
+        padding: 25px 15px;
+    }
+
+    .pvp-title {
+        font-size: 24px;
+    }
+}
+
+/* Loading State */
+.stat-fill.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
