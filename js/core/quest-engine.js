@@ -29,6 +29,11 @@ class QuestEngine {
             this.showContinuePrompt();
         }
 
+        // Check if navigation items should be visible
+        if (this.gameState.riddleSolved) {
+            this.unlockNavigationItems();
+        }
+
         // Periodic state save
         setInterval(() => this.saveGameState(), 30000); // Every 30 seconds
     }
@@ -218,10 +223,176 @@ class QuestEngine {
     }
 
     /**
+     * PHASE 2: AZIZA NAME GREETING
+     * Aziza asks the traveler's name at the door
+     */
+    async showAzizaNameGreeting() {
+        const container = this.createGameContainer();
+
+        container.innerHTML = `
+            <div class="aziza-name-greeting" style="
+                width: 100%;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(180deg, #1a0033 0%, #330066 100%);
+                padding: 40px 20px;
+            ">
+                <div style="max-width: 700px; width: 100%;">
+                    <div style="text-align: center; margin-bottom: 40px;">
+                        <img src="images/game/aziza-portrait.webp"
+                             alt="Aziza"
+                             style="width: 180px; height: 180px; object-fit: cover;
+                                    border-radius: 15px; border: 3px solid #ffd700;
+                                    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+                                    animation: azizaAppear 1.5s ease-out;">
+                    </div>
+
+                    <div style="
+                        background: rgba(0, 0, 0, 0.85);
+                        border: 2px solid #ffd700;
+                        border-radius: 15px;
+                        padding: 40px;
+                        color: #fff;
+                        font-family: 'Georgia', serif;
+                    ">
+                        <h2 style="color: #ffd700; margin-bottom: 25px; font-size: 2rem; text-align: center;">
+                            At the Door
+                        </h2>
+
+                        <div style="font-size: 1.15rem; line-height: 1.9; margin-bottom: 30px;">
+                            <p style="margin-bottom: 20px; color: #a0a0ff;">
+                                <em>The sphinx's golden eyes study you from beyond the threshold...</em>
+                            </p>
+                            <p style="margin-bottom: 20px;">
+                                "You have found the door. Few see it. Fewer still dare to knock."
+                            </p>
+                            <p style="margin-bottom: 20px; color: #ffd700;">
+                                "But before Aziza grants you entry... tell me, traveler..."
+                            </p>
+                            <p style="margin-bottom: 30px; font-size: 1.3rem; text-align: center; color: #fff; font-weight: bold;">
+                                "What is your name?"
+                            </p>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <input
+                                type="text"
+                                id="player-name-input"
+                                placeholder="Enter your name..."
+                                style="
+                                    padding: 15px 20px;
+                                    font-size: 1.1rem;
+                                    background: rgba(255, 255, 255, 0.05);
+                                    border: 2px solid #667eea;
+                                    border-radius: 8px;
+                                    color: #fff;
+                                    font-family: 'Georgia', serif;
+                                    text-align: center;
+                                "
+                            />
+                            <button id="submit-name-btn" style="
+                                padding: 15px 40px;
+                                font-size: 1.15rem;
+                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: all 0.3s;
+                                font-family: 'Georgia', serif;
+                            ">
+                                Speak Your Name
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                @keyframes azizaAppear {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.8);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+
+                #submit-name-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+                }
+
+                #player-name-input:focus {
+                    outline: none;
+                    border-color: #ffd700;
+                    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+                }
+            </style>
+        `;
+
+        // Handle name submission
+        const input = document.getElementById('player-name-input');
+        const submitBtn = document.getElementById('submit-name-btn');
+
+        const submitName = async () => {
+            const name = input.value.trim();
+
+            if (!name || name.length < 1) {
+                input.style.borderColor = '#f44336';
+                input.placeholder = 'Please enter a name...';
+                return;
+            }
+
+            // Save player name
+            this.gameState.playerName = name;
+            this.saveGameState();
+
+            // Track name collection
+            await this.trackEvent('player_name_provided', {
+                name,
+                providedAt: 'aziza_door'
+            });
+
+            // Save to DynamoDB with full user profile
+            await this.saveUserProfile();
+
+            // Show brief acknowledgment
+            submitBtn.textContent = 'Welcome, ' + name + '...';
+            submitBtn.disabled = true;
+            submitBtn.style.background = 'rgba(76, 175, 80, 0.5)';
+
+            setTimeout(() => {
+                this.showAzizaIntroduction();
+            }, 1500);
+        };
+
+        submitBtn.addEventListener('click', submitName);
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitName();
+            }
+        });
+
+        // Focus the input
+        setTimeout(() => input.focus(), 500);
+    }
+
+    /**
      * PHASE 2: AZIZA'S RIDDLE
      * First NPC encounter - introduces the world
      */
     async showAzizaIntroduction() {
+        // If player hasn't provided their name yet, ask for it first
+        if (!this.gameState.playerName) {
+            this.showAzizaNameGreeting();
+            return;
+        }
+
         const container = this.createGameContainer();
 
         // Track NPC encounter
@@ -682,6 +853,9 @@ class QuestEngine {
             // Award wisdom based on performance
             const wisdomGained = hintsUsed === 0 ? 3 : (hintsUsed === 1 ? 2 : 1);
             this.updateAlignment({ wisdom: wisdomGained });
+
+            // Unlock navigation items
+            this.unlockNavigationItems();
 
             await this.trackEvent('riddle_solved', {
                 riddleId: 'aziza_elemental',
@@ -1301,6 +1475,43 @@ class QuestEngine {
         this.saveGameState();
     }
 
+    unlockNavigationItems() {
+        // Show Skills and Hall of Fame navigation links with animation
+        const skillsNav = document.getElementById('nav-skills');
+        const hallOfFameNav = document.getElementById('nav-hall-of-fame');
+
+        if (skillsNav && skillsNav.style.display === 'none') {
+            skillsNav.style.display = 'block';
+            skillsNav.style.opacity = '0';
+            skillsNav.style.transform = 'translateY(-10px)';
+            skillsNav.style.transition = 'all 0.6s ease';
+
+            setTimeout(() => {
+                skillsNav.style.opacity = '1';
+                skillsNav.style.transform = 'translateY(0)';
+            }, 100);
+        }
+
+        if (hallOfFameNav && hallOfFameNav.style.display === 'none') {
+            hallOfFameNav.style.display = 'block';
+            hallOfFameNav.style.opacity = '0';
+            hallOfFameNav.style.transform = 'translateY(-10px)';
+            hallOfFameNav.style.transition = 'all 0.6s ease';
+
+            setTimeout(() => {
+                hallOfFameNav.style.opacity = '1';
+                hallOfFameNav.style.transform = 'translateY(0)';
+            }, 200);
+        }
+
+        // Show notification
+        this.showAzizaNotification(
+            'New paths have opened... Check the navigation menu.',
+            [],
+            3000
+        );
+    }
+
     async trackEvent(eventType, data) {
         try {
             const response = await fetch(`${this.apiEndpoint}/track`, {
@@ -1318,6 +1529,55 @@ class QuestEngine {
             }
         } catch (error) {
             console.warn('Tracking error:', error);
+            // Non-critical - game continues
+        }
+    }
+
+    async saveUserProfile() {
+        try {
+            // Collect comprehensive user data for AI Genie personalization
+            const location = this.gameState.userLocation || await this.getUserLocation();
+            const deviceInfo = this.getDeviceInfo();
+
+            const userProfile = {
+                userId: this.userId,
+                playerName: this.gameState.playerName,
+                location: {
+                    city: location.city,
+                    region: location.region,
+                    country: location.country,
+                    timezone: location.timezone
+                },
+                device: {
+                    userAgent: deviceInfo.userAgent,
+                    platform: deviceInfo.platform,
+                    screen: deviceInfo.screen,
+                    language: deviceInfo.language
+                },
+                gameProgress: {
+                    discovered: this.gameState.discovered,
+                    discoveryMethod: this.gameState.discoveryMethod,
+                    riddleSolved: this.gameState.riddleSolved,
+                    azizaMet: this.gameState.azizaMet,
+                    act: this.gameState.act
+                },
+                alignment: this.gameState.alignment || { wisdom: 0, chaos: 0, mercy: 0, curiosity: 0 },
+                timestamp: Date.now()
+            };
+
+            const response = await fetch('https://api.terrellflautt.com/user-profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userProfile)
+            });
+
+            if (!response.ok) {
+                console.warn('Failed to save user profile');
+            }
+
+            return userProfile;
+        } catch (error) {
+            console.warn('Error saving user profile:', error);
             // Non-critical - game continues
         }
     }
