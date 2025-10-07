@@ -218,12 +218,294 @@ class QuestEngine {
             referrer: document.referrer
         });
 
-        // Show Aziza's name greeting at the door
-        this.showAzizaNameGreeting();
+        // Show the door riddle first - must solve to enter
+        this.showDoorRiddle();
     }
 
     /**
-     * PHASE 2: AZIZA NAME GREETING
+     * PHASE 2: THE DOOR RIDDLE
+     * Must answer correctly to enter
+     */
+    showDoorRiddle() {
+        const container = this.createGameContainer();
+        this.gameState.riddleStartTime = Date.now();
+
+        container.innerHTML = `
+            <div class="riddle-scene" style="
+                width: 100%;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(180deg, #1a0033 0%, #330066 100%);
+                padding: 40px 20px;
+            ">
+                <div style="max-width: 750px; width: 100%;">
+                    <div style="text-align: center; margin-bottom: 40px;">
+                        <img src="images/game/aziza-portrait.webp"
+                             alt="Aziza"
+                             style="width: 180px; height: 180px; object-fit: cover;
+                                    border-radius: 15px; border: 3px solid #ffd700;
+                                    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+                                    animation: azizaAppear 1.5s ease-out;">
+                    </div>
+
+                    <div class="riddle-box" style="
+                        background: rgba(0, 0, 0, 0.92);
+                        border: 3px solid #ffd700;
+                        border-radius: 15px;
+                        padding: 40px;
+                        color: #fff;
+                        font-family: 'Georgia', serif;
+                        box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+                    ">
+                        <div style="margin-bottom: 30px;">
+                            <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 15px; color: #e8e8ff;">
+                                A voice speaks from beyond the door...
+                            </p>
+                            <p style="font-size: 1.15rem; line-height: 1.8; color: #ffd700; font-style: italic;">
+                                "You wish to enter? Then answer me this..."
+                            </p>
+                        </div>
+
+                        <div style="background: rgba(255, 215, 0, 0.12); padding: 30px;
+                             border-radius: 12px; margin-bottom: 35px; border-left: 4px solid #ffd700;">
+                            <p style="font-size: 1.25rem; line-height: 2; font-style: italic; color: #ffd700; text-align: center;">
+                                "My first is the first.<br>
+                                My second is the last.<br>
+                                Next comes myself.<br>
+                                Then back to the end,<br>
+                                and to the beginning again.<br><br>
+                                <span style="color: #fff; font-weight: bold; font-size: 1.35rem;">Who am I?"</span>
+                            </p>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <input type="text"
+                                   id="door-riddle-answer"
+                                   placeholder="Speak your answer..."
+                                   autocomplete="off"
+                                   style="
+                                       width: 100%;
+                                       padding: 16px;
+                                       font-size: 1.15rem;
+                                       background: rgba(255, 255, 255, 0.08);
+                                       border: 2px solid #667eea;
+                                       border-radius: 8px;
+                                       color: #fff;
+                                       font-family: 'Georgia', serif;
+                                   ">
+                        </div>
+
+                        <div id="door-hint-area" style="display: none; min-height: 60px; margin-bottom: 25px;
+                             padding: 16px; background: rgba(102, 126, 234, 0.25); border-radius: 8px;">
+                            <p style="color: #88b3ff; font-size: 1rem;">
+                                💡 <span id="door-hint-text"></span>
+                            </p>
+                        </div>
+
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <button class="submit-door-answer-btn" style="
+                                padding: 16px 45px;
+                                font-size: 1.15rem;
+                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: all 0.3s;
+                                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+                            ">
+                                Answer
+                            </button>
+                            <button class="door-hint-btn" style="
+                                padding: 16px 35px;
+                                font-size: 1.05rem;
+                                background: rgba(102, 126, 234, 0.25);
+                                color: white;
+                                border: 2px solid #667eea;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                transition: all 0.3s;
+                            ">
+                                Hint (<span id="door-hints-remaining">3</span> left)
+                            </button>
+                        </div>
+
+                        <div id="door-result-area" style="margin-top: 25px; text-align: center;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                @keyframes azizaAppear {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.8);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+
+                .submit-door-answer-btn:hover, .door-hint-btn:hover {
+                    transform: translateY(-2px);
+                }
+
+                #door-riddle-answer:focus {
+                    outline: none;
+                    border-color: #ffd700;
+                    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+                }
+            </style>
+        `;
+
+        const answerInput = container.querySelector('#door-riddle-answer');
+        const submitBtn = container.querySelector('.submit-door-answer-btn');
+        const hintBtn = container.querySelector('.door-hint-btn');
+
+        let hintsUsed = 0;
+        let attempts = 0;
+
+        answerInput.focus();
+
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitBtn.click();
+            }
+        });
+
+        submitBtn.addEventListener('click', async () => {
+            const answer = answerInput.value.trim();
+            attempts++;
+            await this.checkDoorRiddleAnswer(answer, attempts, hintsUsed);
+        });
+
+        hintBtn.addEventListener('click', () => {
+            if (hintsUsed < 3) {
+                this.showDoorHint(hintsUsed);
+                hintsUsed++;
+                container.querySelector('#door-hints-remaining').textContent = 3 - hintsUsed;
+
+                if (hintsUsed >= 3) {
+                    hintBtn.disabled = true;
+                    hintBtn.style.opacity = '0.5';
+                    hintBtn.style.cursor = 'not-allowed';
+                }
+            }
+        });
+    }
+
+    showDoorHint(hintLevel) {
+        const hintArea = document.querySelector('#door-hint-area');
+        const hintText = document.querySelector('#door-hint-text');
+
+        const hints = [
+            "Think about letters. The first and last of the alphabet...",
+            "A is first. Z is last. What letter means 'myself'?",
+            "A-Z-I-Z-A... Does that spell something?"
+        ];
+
+        hintArea.style.display = 'block';
+        hintArea.style.animation = 'fadeIn 0.4s';
+        hintText.textContent = hints[hintLevel] || "It's the name of who guards this door...";
+    }
+
+    async checkDoorRiddleAnswer(answer, attempts, hintsUsed) {
+        const normalized = answer.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
+
+        const correctAnswers = [
+            'aziza', 'terrell', 'tk', 'sphinx', 'enchantress'
+        ];
+
+        const isCorrect = correctAnswers.some(correct =>
+            normalized === correct || normalized.includes(correct)
+        );
+
+        const resultArea = document.querySelector('#door-result-area');
+
+        await this.trackEvent('door_riddle_attempt', {
+            answer: answer,
+            isCorrect,
+            hintsUsed,
+            attemptNumber: attempts
+        });
+
+        if (isCorrect) {
+            this.gameState.riddleSolved = true;
+            this.gameState.riddleAttempts = attempts;
+            this.gameState.riddleHintsUsed = hintsUsed;
+            this.saveGameState();
+
+            const wisdomGained = hintsUsed === 0 ? 3 : (hintsUsed === 1 ? 2 : 1);
+            this.updateAlignment({ wisdom: wisdomGained });
+
+            this.unlockNavigationItems();
+
+            await this.trackEvent('door_riddle_solved', {
+                attemptCount: attempts,
+                hintsUsed,
+                timeTaken: Math.floor((Date.now() - this.gameState.riddleStartTime) / 1000)
+            });
+
+            resultArea.innerHTML = `
+                <div style="
+                    padding: 25px;
+                    background: rgba(76, 175, 80, 0.25);
+                    border: 2px solid #4CAF50;
+                    border-radius: 10px;
+                    animation: fadeIn 0.5s;
+                ">
+                    <p style="color: #4CAF50; font-size: 1.4rem; font-weight: bold; margin-bottom: 12px;">
+                        The door opens...
+                    </p>
+                    <p style="color: #ffd700; font-size: 1.1rem; line-height: 1.7; font-style: italic;">
+                        "You may enter."
+                    </p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                this.showAzizaNameGreeting();
+            }, 2000);
+
+        } else {
+            resultArea.innerHTML = `
+                <div style="
+                    padding: 20px;
+                    background: rgba(244, 67, 54, 0.2);
+                    border: 2px solid #f44336;
+                    border-radius: 10px;
+                    animation: shake 0.5s;
+                ">
+                    <p style="color: #f44336; font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">
+                        The door remains closed.
+                    </p>
+                    <p style="color: #fff; font-size: 1rem; font-style: italic;">
+                        "Think more carefully..."
+                    </p>
+                </div>
+
+                <style>
+                    @keyframes shake {
+                        0%, 100% { transform: translateX(0); }
+                        25% { transform: translateX(-10px); }
+                        75% { transform: translateX(10px); }
+                    }
+                </style>
+            `;
+
+            setTimeout(() => {
+                resultArea.innerHTML = '';
+                document.querySelector('#door-riddle-answer').value = '';
+                document.querySelector('#door-riddle-answer').focus();
+            }, 3000);
+        }
+    }
+
+    /**
+     * PHASE 3: AZIZA NAME GREETING
      * Aziza asks the traveler's name at the door
      */
     async showAzizaNameGreeting() {
